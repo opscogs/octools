@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed 1.2.0
 
 - `OCTool`, `validate_tool`, `to_mcp_tool` and `to_anthropic_tool` reject a tool name that ends in a newline, which the name patterns accepted (OCI-640)
-- `scripts/sync_claude_config.py` reads a `globs` value wrapped over several lines (flow or block list) and fails on front matter it cannot assign, instead of writing an always-on rule (OCI-640)
+- `scripts/sync_claude_config.py` reads a `globs` value wrapped over several lines (flow or block list) and fails on front matter it cannot assign, instead of writing an always-on rule (OCI-640) (BKP-UR-0001)
 
 ## [1.1.0] - 2026-09-27
 
