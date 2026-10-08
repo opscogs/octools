@@ -1,0 +1,981 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://octools.docs.opscogs.com/octools_typescript/">
+      
+      
+        <link rel="prev" href="../octools_listing/">
+      
+      
+        <link rel="next" href="../api/typescript/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>The TypeScript package - octools</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+3:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans 3";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/brand-theme.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-typescript-package" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="octools" class="md-header__button md-logo" aria-label="octools" data-md-component="logo">
+      
+  <img src="../assets/img/opscogs-logo-lockup-color-light.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            octools
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The TypeScript package
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to auto mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to auto mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/opscogs/octools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    opscogs/octools
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="octools" class="md-nav__button md-logo" aria-label="octools" data-md-component="logo">
+      
+  <img src="../assets/img/opscogs-logo-lockup-color-light.svg" alt="logo">
+
+    </a>
+    octools
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/opscogs/octools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    opscogs/octools
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    octools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../octools_descriptor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The OCTool descriptor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../octools_converters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Converters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../octools_listing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Listing tools for people
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TypeScript package
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TypeScript package
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-and-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install and runtime
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schemas-from-zod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schemas from zod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#envelopes-are-parses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Envelopes are parses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#language-differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language differences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TypeScript API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#install-and-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install and runtime
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Names
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schemas-from-zod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schemas from zod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#envelopes-are-parses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Envelopes are parses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#language-differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language differences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="the-typescript-package">The TypeScript package</h1>
+<p>Version: <strong>1.2.0</strong> · Date: 2026-10-08</p>
+<p><code>@opscogs/octools</code> is <code>octools</code> for TypeScript and JavaScript. It covers
+the whole public API of the Python package: the <code>OCTool</code> descriptor, the
+result envelopes and their tolerant reader, the validators, the MCP and
+Anthropic converters, the listing helpers, the schema helpers, and the
+vocabularies, fallbacks and constants. Both packages pass the same
+<code>spec/</code> conformance fixtures and are released together at the same
+version (see <a href="../#one-contract-two-languages">One contract, two languages</a>).</p>
+<p>Every page of this site shows each example in both languages. This page
+covers what is specific to TypeScript: the runtime, the names, schemas
+from zod, and the few places where the two languages behave differently.
+The generated <a href="../api/typescript/">TypeScript API reference</a>
+documents every export.</p>
+<h2 id="install-and-runtime">Install and runtime</h2>
+<pre class="bash"><code>npm install @opscogs/octools zod</code></pre>
+<ul>
+<li><strong>Node 22.18 or newer.</strong> The package declares <code>engines.node &gt;= 22.18.0</code>.</li>
+<li><strong>ESM only.</strong> Load it with <code>import</code>; there is no CommonJS build, so a
+  CommonJS module uses a dynamic <code>import()</code>. Type declarations ship in the
+  package.</li>
+<li><strong>zod 4 is a peer dependency</strong> (<code>^4.4.0</code>) and the only runtime
+  dependency, so the zod your project already uses is the one the
+  envelopes and schema helpers run on. Import it as
+  <code>import * as z from "zod"</code>.</li>
+<li><strong>No SDK.</strong> The package never depends on <code>@modelcontextprotocol/sdk</code>,
+  <code>@anthropic-ai/sdk</code> or <code>openai</code>; the converters return plain objects.</li>
+</ul>
+<h2 id="names">Names</h2>
+<p>API names follow TypeScript idiom: functions and fields in camelCase,
+types in PascalCase, constants in upper snake case. Wire keys never
+change: every key a descriptor, envelope, finding, listing row or
+converter emits or reads is spelled exactly as the spec spells it
+(<code>column_kinds</code>, <code>next_cursor</code>, <code>inputSchema</code>, <code>result_kind</code>). Each name
+maps one to one onto a name in the Python package's <code>__all__</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Python</th>
+<th>TypeScript</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OCTool(name=..., input_schema=..., ...)</code></td>
+<td><code>new OCTool({ name, inputSchema, ... })</code>, every field in camelCase</td>
+</tr>
+<tr>
+<td><code>ToolProvider</code> (<code>all_tools()</code>)</td>
+<td>interface <code>ToolProvider</code> (<code>allTools()</code>)</td>
+</tr>
+<tr>
+<td><code>RecordsEnvelope[T]</code></td>
+<td><code>RecordsEnvelope(item)</code>, a zod schema; type <code>RecordsEnvelope&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>TabularEnvelope</code>, <code>ArtifactEnvelope</code>, <code>ArtifactRef</code></td>
+<td>the same names: a zod schema and its output type</td>
+</tr>
+<tr>
+<td><code>Model.model_validate(data)</code></td>
+<td><code>Model.parse(data)</code></td>
+</tr>
+<tr>
+<td><code>read_envelope</code>, <code>validate_tabular</code></td>
+<td><code>readEnvelope</code>, <code>validateTabular</code></td>
+</tr>
+<tr>
+<td><code>records_schema</code>, <code>tabular_schema</code>, <code>artifact_schema</code></td>
+<td><code>recordsSchema</code>, <code>tabularSchema</code>, <code>artifactSchema</code></td>
+</tr>
+<tr>
+<td><code>schema_for(Model, mode=...)</code>, <code>input_schema_for</code>, <code>output_schema_for</code></td>
+<td><code>schemaFor(schema, { io })</code>, <code>inputSchemaFor</code>, <code>outputSchemaFor</code>, taking zod schemas</td>
+</tr>
+<tr>
+<td><code>strict_clean</code>, <code>strip_keys(schema, keys=..., prefixes=...)</code></td>
+<td><code>strictClean</code>, <code>stripKeys(schema, { keys, prefixes })</code></td>
+</tr>
+<tr>
+<td><code>strip_titles</code>, <code>close_objects</code></td>
+<td><code>stripTitles</code>, <code>closeObjects</code></td>
+</tr>
+<tr>
+<td><code>NoTitleGenerator</code></td>
+<td>none: <code>schemaFor</code> strips titles itself</td>
+</tr>
+<tr>
+<td><code>validate_tool</code>, <code>validate_provider</code>, <code>count_sentences</code></td>
+<td><code>validateTool</code>, <code>validateProvider</code>, <code>countSentences</code></td>
+</tr>
+<tr>
+<td><code>merge_providers</code>, <code>check_tool_listing</code></td>
+<td><code>mergeProviders</code>, <code>checkToolListing</code></td>
+</tr>
+<tr>
+<td><code>to_mcp_tool(tool, name_prefix=...)</code>, <code>to_anthropic_tool</code></td>
+<td><code>toMcpTool(tool, { namePrefix })</code>, <code>toAnthropicTool</code></td>
+</tr>
+<tr>
+<td><code>summarize_tool</code>, <code>summarize_provider(provider, access=...)</code></td>
+<td><code>summarizeTool</code>, <code>summarizeProvider(provider, { access })</code></td>
+</tr>
+<tr>
+<td><code>render_listing(provider, style=..., access=..., pretty=...)</code></td>
+<td><code>renderListing(provider, { style, access, pretty })</code></td>
+</tr>
+<tr>
+<td><code>render_markdown_table</code>, <code>ToolSummary.as_row()</code>, <code>InputSummary</code></td>
+<td><code>renderMarkdownTable</code>, <code>ToolSummary.asRow()</code>, <code>InputSummary</code></td>
+</tr>
+<tr>
+<td><code>Cell</code>, <code>ColumnKind</code>, <code>ColumnScale</code>, <code>Sensitivity</code></td>
+<td>the same type names</td>
+</tr>
+<tr>
+<td><code>Access</code>, <code>ResultKind</code>, <code>ListingStyle</code></td>
+<td>the same type names</td>
+</tr>
+<tr>
+<td><code>Finding</code>, <code>OCToolError</code></td>
+<td>the same class names</td>
+</tr>
+<tr>
+<td>constants such as <code>SPEC_VERSION</code>, <code>COLUMN_KINDS</code>, <code>NAME_RE</code></td>
+<td>the same names</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>*_RE</code> constants are <code>RegExp</code> objects, the <code>STRICT_*</code> sets are
+<code>ReadonlySet&lt;string&gt;</code>, and the vocabulary values are readonly arrays. Keyword
+arguments become one options object (<code>{ namePrefix }</code>, <code>{ access }</code>,
+<code>{ style, access, pretty }</code>). The public API is exactly the package
+root's export list; a module path inside the package carries no
+compatibility promise.</p>
+<h2 id="schemas-from-zod">Schemas from zod</h2>
+<p>The schema helpers take zod schemas where the Python helpers take
+pydantic models, and emit the same JSON Schema 2020-12 dialect and the
+same strict-clean output. zod metadata plays the role of pydantic field
+extras:</p>
+<ul>
+<li><code>.describe("...")</code> or <code>.meta({ description })</code> sets a field's
+  <code>description</code>.</li>
+<li><code>.meta({ "x-sensitivity": "identifier" })</code> on a result field emits the
+  <code>x-sensitivity</code> extension key.</li>
+<li><code>.meta({ format: "date-time" })</code> on a <code>z.string()</code> emits a <code>format</code>.</li>
+<li><code>.meta({ id: "Name" })</code> on a model puts it in <code>$defs</code> under that name
+  wherever it is nested and refers to it by <code>$ref</code>, as pydantic does for
+  every nested model. The envelopes carry their own ids, so a
+  <code>TabularEnvelope</code> field in an argument model becomes
+  <code>{"$ref": "#/$defs/TabularEnvelope"}</code>.</li>
+</ul>
+<p><code>inputSchemaFor</code> closes every object with <code>additionalProperties: false</code>.
+<code>outputSchemaFor</code> keeps each object as the schema declares it: a
+<code>z.object</code> stays open, as a pydantic model does by default, and a
+<code>z.strictObject</code> is closed. A schema describes what a parse accepts (the
+wire shape), so a <code>.default()</code> over a schema with a transform states its
+default only as <code>.prefault()</code>.</p>
+<p>There is no <code>NoTitleGenerator</code>: the Python class exists only to steer
+pydantic's schema generator, and <code>schemaFor</code> removes every <code>title</code>
+itself.</p>
+<h2 id="envelopes-are-parses">Envelopes are parses</h2>
+<p>Each envelope is a zod schema whose output type has the same name.
+<code>TabularEnvelope.parse(data)</code> is the strict producer path: an unknown key
+or vocabulary value throws <code>ZodError</code>, and the value it returns is the
+envelope's wire form, ready for <code>JSON.stringify</code>, with unset optional
+fields left out and <code>resumable</code> present only on a truncated list.
+<code>readEnvelope(model, data)</code> is the tolerant reader for an envelope from
+another process, with the same fallbacks as Python's <code>read_envelope</code>
+(see <a href="../octools_descriptor/#reading-envelopes-from-another-process">Reading envelopes from another process</a>).</p>
+<div class="language-ts highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">TabularEnvelope</span><span class="p">,</span><span class="w"> </span><span class="nx">readEnvelope</span><span class="p">,</span><span class="w"> </span><span class="nx">validateTabular</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@opscogs/octools"</span><span class="p">;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">TabularEnvelope</span><span class="p">.</span><span class="nx">parse</span><span class="p">({</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nx">columns</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"host"</span><span class="p">,</span><span class="w"> </span><span class="s2">"hits"</span><span class="p">],</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nx">column_kinds</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"fqdn"</span><span class="p">,</span><span class="w"> </span><span class="s2">"integer"</span><span class="p">],</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nx">rows</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="s2">"a.demo.example"</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">]],</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nx">row_count</span><span class="o">:</span><span class="w"> </span><span class="kt">1</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nx">truncated</span><span class="o">:</span><span class="w"> </span><span class="kt">false</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">});</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nx">validateTabular</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span><span class="w"> </span><span class="c1">// []</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kd">const</span><span class="w"> </span><span class="nx">read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">readEnvelope</span><span class="p">(</span><span class="nx">TabularEnvelope</span><span class="p">,</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">result</span><span class="p">));</span>
+</code></pre></div>
+<h2 id="language-differences">Language differences</h2>
+<p>Both packages pass every <code>spec/</code> fixture, so they agree on everything the
+fixtures pin down. Where JavaScript and Python differ underneath, the
+packages differ as follows.</p>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Python <code>octools</code></th>
+<th>TypeScript <code>@opscogs/octools</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JSON <code>1.0</code> and <code>1</code></td>
+<td><code>1.0</code> stays a float: a <code>1.0</code> cell fails the <code>integer</code> and <code>big_integer</code> kinds</td>
+<td><code>JSON.parse</code> reads both as the number <code>1</code>: an integral cell fits <code>integer</code> and <code>big_integer</code> however it was written</td>
+</tr>
+<tr>
+<td>Integers above 2^53 − 1</td>
+<td>Read exactly in every integer field and cell</td>
+<td>An integer field (<code>count</code>, <code>row_count</code>, <code>total_count</code>, <code>bytes</code>, <code>width</code>, <code>height</code>) beyond it fails the parse; a numeric cell is already rounded by <code>JSON.parse</code></td>
+</tr>
+<tr>
+<td>Type coercion</td>
+<td>pydantic's lax mode converts <code>"3"</code> to <code>3</code> and <code>"false"</code> to <code>false</code></td>
+<td>No coercion: a value of the wrong JSON type throws <code>ZodError</code>, in <code>.parse</code> and in <code>readEnvelope</code></td>
+</tr>
+<tr>
+<td>Bytes in <code>readEnvelope</code></td>
+<td>UTF-8, UTF-16 or UTF-32, detected</td>
+<td>A <code>Uint8Array</code> is decoded as UTF-8, the JSON wire encoding, only; UTF-16 or UTF-32 bytes fail to read</td>
+</tr>
+<tr>
+<td>String formats in schemas</td>
+<td>A pydantic format emits <code>format</code> only</td>
+<td>A zod format such as <code>z.iso.datetime()</code> also emits a <code>pattern</code>, which <code>strictClean</code> reports in an input schema; use <code>z.string().meta({ format: "date-time" })</code></td>
+</tr>
+<tr>
+<td>Foreign items in a listing</td>
+<td>Labelled with Python type names: <code>&lt;int&gt;</code>, <code>&lt;str&gt;</code>, <code>&lt;NoneType&gt;</code>, <code>&lt;list&gt;</code></td>
+<td>Labelled with JavaScript type names: <code>&lt;number&gt;</code>, <code>&lt;string&gt;</code>, <code>&lt;null&gt;</code>, <code>&lt;array&gt;</code></td>
+</tr>
+<tr>
+<td>Schema helpers</td>
+<td>Take pydantic models; field extras via <code>json_schema_extra</code></td>
+<td>Take zod schemas; field extras via <code>.meta()</code></td>
+</tr>
+<tr>
+<td><code>NoTitleGenerator</code></td>
+<td>Exported</td>
+<td>No counterpart</td>
+</tr>
+</tbody>
+</table>
+<p>What these mean in practice:</p>
+<ul>
+<li><strong>Send big integers as strings.</strong> <code>total_count</code> and <code>big_integer</code>
+  cells accept a decimal string, which both languages read exactly. A
+  TypeScript reader cannot recover an integer cell beyond 2^53 − 1 that
+  arrived as a JSON number, because the rounding happens in <code>JSON.parse</code>
+  before <code>octools</code> sees the value.</li>
+<li><strong>Send the right JSON types.</strong> An envelope a Python reader accepts
+  through coercion (<code>"count": "3"</code>) fails in TypeScript. A producer's own
+  strict parse in its tests catches this, in either language.</li>
+<li><strong>Foreign-item labels</strong> appear in <code>not_octool</code> messages and in the
+  <code>tool</code> field of a <code>duplicate_name</code> finding raised over two non-tool
+  items, so a test that asserts on that <code>tool</code> value is language-specific.</li>
+</ul>
+<p>Errors are JavaScript errors: <code>OCToolError</code> extends <code>Error</code>, an envelope
+that fails a parse throws <code>ZodError</code>, malformed JSON text throws
+<code>SyntaxError</code>, and <code>renderListing</code> throws <code>RangeError</code> for an unknown
+style where Python raises <code>ValueError</code>.</p>
+<p>The <code>octools list</code> command and the <code>octools.example</code> demo provider ship
+with the Python package only. A TypeScript CLI renders the same listing
+with <code>renderListing</code> (see
+<a href="../octools_listing/#wiring-render_listing-into-your-own-cli">Listing tools for people</a>).</p>
+<h2 id="api-reference">API reference</h2>
+<p>The <a href="../api/typescript/">TypeScript API reference</a> is generated
+by TypeDoc from the package's declarations and doc comments, for the
+release this site documents.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.tabs.link", "navigation.indexes", "navigation.instant", "navigation.path", "navigation.tracking"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

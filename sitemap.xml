@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://octools.docs.opscogs.com/</loc>
+         <lastmod>2026-10-08</lastmod>
+    </url>
+    <url>
+         <loc>https://octools.docs.opscogs.com/octools_converters/</loc>
+         <lastmod>2026-10-08</lastmod>
+    </url>
+    <url>
+         <loc>https://octools.docs.opscogs.com/octools_descriptor/</loc>
+         <lastmod>2026-10-08</lastmod>
+    </url>
+    <url>
+         <loc>https://octools.docs.opscogs.com/octools_listing/</loc>
+         <lastmod>2026-10-08</lastmod>
+    </url>
+    <url>
+         <loc>https://octools.docs.opscogs.com/octools_typescript/</loc>
+         <lastmod>2026-10-08</lastmod>
+    </url>
+</urlset>

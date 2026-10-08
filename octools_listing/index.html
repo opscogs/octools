@@ -1,0 +1,1387 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://octools.docs.opscogs.com/octools_listing/">
+      
+      
+        <link rel="prev" href="../octools_converters/">
+      
+      
+        <link rel="next" href="../octools_typescript/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Listing tools for people - octools</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+3:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans 3";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/brand-theme.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#listing-tools-for-people" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="octools" class="md-header__button md-logo" aria-label="octools" data-md-component="logo">
+      
+  <img src="../assets/img/opscogs-logo-lockup-color-light.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            octools
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Listing tools for people
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to auto mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to auto mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/opscogs/octools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    opscogs/octools
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="octools" class="md-nav__button md-logo" aria-label="octools" data-md-component="logo">
+      
+  <img src="../assets/img/opscogs-logo-lockup-color-light.svg" alt="logo">
+
+    </a>
+    octools
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/opscogs/octools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    opscogs/octools
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    octools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../octools_descriptor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The OCTool descriptor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../octools_converters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Converters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Listing tools for people
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Listing tools for people
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-octools-list-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The octools list command
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The octools list command">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exit-codes-and-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit codes and errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#providers-that-need-a-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Providers that need a client
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#md" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        json
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Library API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolsummary-and-inputsummary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolSummary and InputSummary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summarize_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        summarize_provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render_markdown_table-and-render_listing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        render_markdown_table and render_listing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wiring-render_listing-into-your-own-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wiring render_listing into your own CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../octools_typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The TypeScript package
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TypeScript API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-octools-list-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The octools list command
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The octools list command">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exit-codes-and-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit codes and errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#providers-that-need-a-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Providers that need a client
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Formats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#md" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        md
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        json
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Library API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolsummary-and-inputsummary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ToolSummary and InputSummary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summarize_provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        summarize_provider
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#render_markdown_table-and-render_listing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        render_markdown_table and render_listing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wiring-render_listing-into-your-own-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wiring render_listing into your own CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="listing-tools-for-people">Listing tools for people</h1>
+<p>Version: <strong>1.2.0</strong> · Date: 2026-10-08</p>
+<p>The listing helpers turn a provider's tools into a listing a person can
+read: a terminal command (<code>octools list</code>) for anyone with the Python
+package installed, and a small library API (<code>summarize_provider</code> and
+<code>render_listing</code> in Python, <code>summarizeProvider</code> and <code>renderListing</code> in
+TypeScript) for a library that wants the same listing inside its own CLI.
+Both packages render the same text, byte for byte. Nothing here changes
+the descriptor or the envelopes; it only reads them.</p>
+<p>The Python package ships a demo provider, <code>octools.example</code>, so
+<code>octools list octools.example</code> works wherever the package is installed: a
+smoke test that the command runs, and a small conformant provider to read.
+Its tools may change in any release, and it is not part of the public API.</p>
+<h2 id="the-octools-list-command">The <code>octools list</code> command</h2>
+<p>The command ships with the Python package. The TypeScript package has no
+command of its own; a TypeScript CLI renders the same listing through
+<code>renderListing</code> (see
+<a href="#wiring-render_listing-into-your-own-cli">Wiring <code>render_listing</code> into your own CLI</a>).</p>
+<pre class="bash"><code>octools list SPEC [--access ACCESS] [-o PATH|-] [--output-format FORMAT] [--pretty | --no-pretty]
+python -m octools list SPEC [...]
+octools --version</code></pre>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SPEC</code></td>
+<td>The provider to list: a module, a <code>module:attr</code> object or a zero-argument factory.</td>
+</tr>
+<tr>
+<td><code>--access ACCESS</code></td>
+<td>Only list tools with this access, <code>local</code> or <code>remote</code>; omitted lists every tool.</td>
+</tr>
+<tr>
+<td><code>-o</code>, <code>--output-file PATH\|-</code></td>
+<td>Write the listing to <code>PATH</code> instead of stdout; <code>-</code> or omitted means stdout. The file is written as UTF-8 and replaced atomically.</td>
+</tr>
+<tr>
+<td><code>--output-format FORMAT</code></td>
+<td><code>table</code>, <code>md</code> (<code>markdown</code> is accepted as an alias), <code>txt</code> or <code>json</code>. Omitted, it follows the <code>-o</code> extension, else <code>table</code>.</td>
+</tr>
+<tr>
+<td><code>--pretty</code>, <code>--no-pretty</code></td>
+<td>Indent <code>json</code> output or print it on one line. The default is indented when stdout is a terminal and compact when it is piped or <code>-o</code> is set.</td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>-V</code>, <code>--version</code></td>
+<td>Print <code>octools &lt;version&gt;</code> and exit <code>0</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>With <code>-o</code> and no <code>--output-format</code>, the extension picks the format:
+<code>.md</code> and <code>.markdown</code> write <code>md</code>, <code>.json</code> writes <code>json</code>, <code>.txt</code> writes
+<code>txt</code>, and any other extension writes <code>table</code>. An explicit
+<code>--output-format</code> always wins. An <code>-o</code> whose directory does not exist or
+is not writable, or that names a directory, is a usage error before
+anything is listed. Option names are never abbreviated: <code>--output</code> is an
+unknown option, not a short form of <code>--output-file</code>.</p>
+<p><code>SPEC</code> names the provider to list, as <code>package.module</code> or
+<code>package.module:attr</code> (<code>attr</code> may itself be dotted, <code>a.b</code>). The working
+directory is importable, as it is under <code>python -m</code>, so a local module
+lists without installing it. Resolution:</p>
+<ol>
+<li>Import the module.</li>
+<li>With no <code>:attr</code>, the module itself is the candidate target; with
+   <code>:attr</code>, resolve that attribute on it.</li>
+<li>A target that already satisfies <code>ToolProvider</code> (it has an <code>all_tools</code>
+   method) is used as-is.</li>
+<li>Otherwise, a callable target is called with no arguments, and its
+   return value must satisfy <code>ToolProvider</code>.</li>
+<li>Anything else is an error.</li>
+<li>The provider's <code>all_tools()</code> is called once, and every item it returns
+   must be an <code>OCTool</code>.</li>
+</ol>
+<h3 id="exit-codes-and-errors">Exit codes and errors</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>The listing was printed or written.</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>The listing could not be read or written: a factory raised or returned a non-provider, <code>all_tools()</code> raised or returned a non-<code>OCTool</code>, or the output file could not be written.</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Usage error: an unknown option or value, an unusable <code>-o</code> path, or a <code>SPEC</code> whose module does not import, whose attribute is missing, or that names neither a provider nor a callable.</td>
+</tr>
+<tr>
+<td><code>130</code></td>
+<td>Interrupted.</td>
+</tr>
+</tbody>
+</table>
+<p>stdout carries the listing or nothing: on any failure it is empty. A
+usage error prints the command's usage and one
+<code>octools list: error: &lt;message&gt;</code> line to stderr; any other failure prints
+one <code>error: &lt;message&gt;</code> line:</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$ octools list no_such_tools
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>usage: octools list [-h] [--access ACCESS] [-o PATH|-]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                    [--output-format FORMAT] [--pretty | --no-pretty]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                    SPEC
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>octools list: error: cannot import 'no_such_tools': No module named 'no_such_tools'
+</code></pre></div>
+<p>An <code>all_tools()</code> that raises reads
+<code>'&lt;SPEC&gt;': all_tools raised &lt;Type&gt;: &lt;message&gt;</code>. A SPEC that names a
+module-level <code>all_tools</code> function is called as a factory, and the tuple it
+returns is not a provider; the error names the fix:</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ octools list octools.example:all_tools
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>error: 'octools.example:all_tools': factory returned tuple, not a tool provider; name the module 'octools.example' to use its all_tools
+</code></pre></div>
+<p>When the output format is <code>json</code>, given or inferred from <code>-o</code>, stderr
+instead ends with exactly one JSON object on one line. <code>type</code> is <code>usage</code>
+for exit <code>2</code> and <code>api_failure</code> for exit <code>1</code>; <code>reason</code>, <code>status_code</code> and
+<code>details</code> are always <code>null</code>, and <code>hint</code> carries the fix when there is one:</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ octools list octools.example:all_tools --output-format json
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>{"error": {"type": "api_failure", "exit_code": 1, "message": "'octools.example:all_tools': factory returned tuple, not a tool provider", "reason": null, "status_code": null, "details": null, "hint": "name the module 'octools.example' to use its all_tools"}}
+</code></pre></div>
+<p>The machine contract is <code>--output-format json</code>: the listing on stdout,
+and nothing else there. Pipe it straight into <code>jq</code>:</p>
+<pre class="bash"><code>octools list SPEC --output-format json | jq '.[].name'</code></pre>
+<h3 id="providers-that-need-a-client">Providers that need a client</h3>
+<p>A provider reachable as a module with a module-level <code>all_tools()</code>
+works directly. A provider whose tools need a live client or
+configuration to construct needs a client-less, zero-argument factory
+function to be listed this way - one that builds the tools without
+reaching a real system, for example by passing <code>None</code> as the injected
+dependency.</p>
+<h2 id="formats">Formats</h2>
+<p><code>table</code>, <code>md</code> and <code>txt</code> are for a person reading a terminal or a chat
+reply. <code>json</code> is the machine-readable form, for a script or another tool
+to parse: a plain list of dicts, one per tool, in the same key order every
+time.</p>
+<p>The examples below list the demo provider, <code>octools.example</code>, with four
+tools: <code>echo_records</code> (reads input back as records, one page at a
+time), <code>echo</code> (its deprecated alias), <code>block_sizes</code> (address block sizes)
+and <code>render_badge</code> (writes a badge image through an injected sink).</p>
+<h3 id="table"><code>table</code></h3>
+<p>One line per tool, columns padded to width with a two-space gutter, no
+header. <code>mode</code> is <code>destructive</code> when the tool's destructive hint is set,
+<code>write</code> when it is not read-only, otherwise <code>read</code>. A deprecated tool
+appends <code>[deprecated; use &lt;alias_of&gt;]</code>, or <code>[deprecated]</code> when it names no
+replacement.</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ octools list octools.example
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>echo_records  local  read  Return each input string as one record with its position.
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>echo          local  read  Deprecated alias of echo_records kept for one major version. [deprecated; use echo_records]
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>block_sizes   local  read  Return each CIDR prefix normalized, with its length and address count.
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>render_badge  local  read  Render a two-part SVG badge and write it through the injected sink.
+</code></pre></div>
+<h3 id="md"><code>md</code></h3>
+<p>A GitHub-flavored Markdown table over the same rows, with columns <code>name</code>,
+<code>access</code>, <code>mode</code>, <code>result_kind</code>, <code>pages</code>, <code>deprecated</code>, <code>summary</code>. <code>pages</code>
+is <code>yes</code> when the tool takes a <code>cursor</code> input, the paging convention in
+<a href="../octools_descriptor/">Descriptor and envelopes</a>.</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ octools list octools.example --output-format md
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>| name         | access | mode | result_kind | pages | deprecated | summary                                                                |
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>| ------------ | ------ | ---- | ----------- | ----- | ---------- | ---------------------------------------------------------------------- |
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>| echo_records | local  | read | records     | yes   | no         | Return each input string as one record with its position.              |
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>| echo         | local  | read | records     | yes   | yes        | Deprecated alias of echo_records kept for one major version.           |
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>| block_sizes  | local  | read | records     | no    | no         | Return each CIDR prefix normalized, with its length and address count. |
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>| render_badge | local  | read | artifact    | no    | no         | Render a two-part SVG badge and write it through the injected sink.    |
+</code></pre></div>
+<p><code>-o tools.md</code> writes the same table to <code>tools.md</code>.</p>
+<h3 id="txt"><code>txt</code></h3>
+<p>One block per tool, blocks separated by a blank line: the name (and
+<code>- &lt;title&gt;</code> when the tool has one), the full description wrapped at 88
+columns, an <code>access</code> / <code>target</code> / <code>result</code> line, a <code>hints</code> line (ending
+in <code>pages</code> when the tool takes a <code>cursor</code> input), a <code>deprecated</code> line
+when the tool is deprecated, and the tool's inputs as plain aligned
+columns of <code>name</code>, <code>type</code>, <code>required</code> and <code>description</code> (or
+<code>inputs: none</code>). The columns are text for a terminal, not Markdown, so a
+type such as <code>string|null</code> prints as is. The first two blocks:</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ octools list octools.example --output-format txt --access local
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>echo_records - Echo strings as records
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  Return each input string as one record with its position. Use it to check that a tool
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  round-trip works before calling anything real. Returns a records envelope; when limit
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  cut the list, truncated is true and next_cursor fetches the next page.
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  access: local  target: -  result: records
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>  hints: read-only, idempotent, pages
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>  inputs:
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    name    type           required  description
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    values  array[string]  yes       Strings to echo back, one record each.
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    limit   integer        no        Maximum records to return, 1 to 100; the tool enforces it.
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    cursor  string|null    no        next_cursor from a previous page; omit for the first page.
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>echo
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>  Deprecated alias of echo_records kept for one major version. Call echo_records
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>  instead.
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>  access: local  target: -  result: records
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>  hints: read-only, idempotent, pages
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>  deprecated: use echo_records
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>  inputs:
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>    name    type           required  description
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>    values  array[string]  yes       Strings to echo back, one record each.
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>    limit   integer        no        Maximum records to return, 1 to 100; the tool enforces it.
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>    cursor  string|null    no        next_cursor from a previous page; omit for the first page.
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>...
+</code></pre></div>
+<h3 id="json"><code>json</code></h3>
+<p><code>json.dumps([summary.as_row() for summary in summaries], indent=2)</code> with
+<code>--pretty</code> (the default on a terminal), or on one line with
+<code>separators=(",", ":")</code> otherwise; one flat dict per tool (the first shown
+here):</p>
+<div class="language-text highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ octools list octools.example --output-format json --pretty
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>[
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  {
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    "name": "echo_records",
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    "title": "Echo strings as records",
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    "summary": "Return each input string as one record with its position.",
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    "description": "Return each input string as one record with its position. Use it to check that a tool round-trip works before calling anything real. Returns a records envelope; when limit cut the list, truncated is true and next_cursor fetches the next page.",
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    "access": "local",
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    "target": null,
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    "result_kind": "records",
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    "read_only": true,
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    "destructive": false,
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    "idempotent": true,
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    "pages": true,
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    "deprecated": false,
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    "alias_of": null,
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    "inputs": [
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>      {
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>        "name": "values",
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>        "type": "array[string]",
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>        "required": true,
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>        "description": "Strings to echo back, one record each."
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>      },
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>      {
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>        "name": "limit",
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>        "type": "integer",
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>        "required": false,
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>        "description": "Maximum records to return, 1 to 100; the tool enforces it."
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>      },
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>      {
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>        "name": "cursor",
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>        "type": "string|null",
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>        "required": false,
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>        "description": "next_cursor from a previous page; omit for the first page."
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>      }
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>    ]
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>  },
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>  ...
+<a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>]
+</code></pre></div>
+<h2 id="library-api">Library API</h2>
+<p>Both packages export the pieces above so a producer's own CLI can render
+the same listing without shelling out to <code>octools list</code>. The TypeScript
+names are camelCase: <code>summarizeTool</code>, <code>summarizeProvider</code>,
+<code>renderMarkdownTable</code>, <code>renderListing</code>.</p>
+<h3 id="toolsummary-and-inputsummary"><code>ToolSummary</code> and <code>InputSummary</code></h3>
+<p><code>summarize_tool(tool)</code> returns a <code>ToolSummary</code>: <code>name</code>, <code>title</code>,
+<code>summary</code> (the first sentence of <code>description</code>, or the whole description
+when no sentence boundary is found), <code>description</code>, <code>access</code>, <code>target</code>,
+<code>result_kind</code>, <code>read_only</code>, <code>destructive</code>, <code>idempotent</code>, <code>pages</code> (true
+when the input schema's properties include <code>cursor</code>), <code>deprecated</code>,
+<code>alias_of</code> (the tool's <code>meta["alias_of"]</code> when it is a non-empty string,
+else <code>None</code>), and <code>inputs</code>, a tuple of <code>InputSummary</code>. In TypeScript the
+<code>ToolSummary</code> properties are camelCase (<code>resultKind</code>, <code>readOnly</code>,
+<code>aliasOf</code>) and <code>inputs</code> is a readonly array.</p>
+<p>Each <code>InputSummary</code> describes one property of the tool's input schema:
+<code>name</code>, <code>type</code> (rendered from the property's JSON Schema, see below),
+<code>required</code>, and <code>description</code> (the property's own <code>description</code> when it
+is a string, else <code>None</code>). Inputs are read in the schema's own property
+order.</p>
+<p><code>ToolSummary.as_row()</code> (<code>asRow()</code>) returns a flat, JSON-ready dict in a
+fixed key
+order - <code>name</code>, <code>title</code>, <code>summary</code>, <code>description</code>, <code>access</code>, <code>target</code>,
+<code>result_kind</code>, <code>read_only</code>, <code>destructive</code>, <code>idempotent</code>, <code>pages</code>,
+<code>deprecated</code>, <code>alias_of</code>, <code>inputs</code> (each input as a dict of <code>name</code>,
+<code>type</code>, <code>required</code>, <code>description</code>) - the shape the <code>json</code> format
+serializes. The row keys are the same snake_case keys in both packages.</p>
+<p>Type rendering never raises, for any input mapping:</p>
+<table>
+<thead>
+<tr>
+<th>Property shape</th>
+<th>Rendered type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"type": "string"</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>"type"</code> is a list</td>
+<td>member types joined with <code>\|</code> (<code>string\|null</code>)</td>
+</tr>
+<tr>
+<td><code>"type": "array"</code> with <code>"items"</code></td>
+<td><code>array[&lt;items type&gt;]</code></td>
+</tr>
+<tr>
+<td><code>"enum"</code> present, with or without <code>"type"</code></td>
+<td><code>enum(a\|b\|c)</code>; past 40 characters, the values that fit then <code>\|...</code></td>
+</tr>
+<tr>
+<td><code>"const"</code></td>
+<td><code>const(&lt;value&gt;)</code></td>
+</tr>
+<tr>
+<td><code>"$ref"</code></td>
+<td>the last path segment (<code>#/$defs/Mode</code> -&gt; <code>Mode</code>)</td>
+</tr>
+<tr>
+<td><code>"anyOf"</code> or <code>"oneOf"</code></td>
+<td>member types joined with <code>\|</code> (<code>enum(a\|b)\|null</code>)</td>
+</tr>
+<tr>
+<td>anything else</td>
+<td><code>any</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>enum</code> and <code>const</code> take precedence over the other keys, since their values
+are what a reader needs. A string value renders bare and any other value
+as JSON (<code>enum(null|true|1.5)</code>).</p>
+<h3 id="summarize_provider"><code>summarize_provider</code></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label><label for="__tabbed_1_2">TypeScript</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">summarize_provider</span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">provider</span><span class="p">:</span> <span class="n">ToolProvider</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">access</span><span class="p">:</span> <span class="n">Access</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ToolSummary</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span> <span class="o">...</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-ts highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">summarizeProvider</span><span class="p">(</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nx">provider</span><span class="o">:</span><span class="w"> </span><span class="kt">ListedToolProvider</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nx">options?</span><span class="o">:</span><span class="w"> </span><span class="kt">SummarizeOptions</span><span class="p">,</span><span class="w"> </span><span class="c1">// { access? }</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">ToolSummary</span><span class="p">[];</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Summarizes every tool <code>provider.all_tools()</code> returns, in that order,
+filtered to <code>access</code> ("local" or "remote") when given.</p>
+<h3 id="render_markdown_table-and-render_listing"><code>render_markdown_table</code> and <code>render_listing</code></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Python</label><label for="__tabbed_2_2">TypeScript</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">render_markdown_table</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">rows</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]],</span> <span class="n">columns</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">render_listing</span><span class="p">(</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">provider</span><span class="p">:</span> <span class="n">ToolProvider</span><span class="p">,</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="o">*</span><span class="p">,</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="n">style</span><span class="p">:</span> <span class="n">ListingStyle</span> <span class="o">=</span> <span class="s2">"table"</span><span class="p">,</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="n">access</span><span class="p">:</span> <span class="n">Access</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="n">pretty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-ts highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">function</span><span class="w"> </span><span class="nx">renderMarkdownTable</span><span class="p">(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nx">rows</span><span class="o">:</span><span class="w"> </span><span class="kt">readonly</span><span class="w"> </span><span class="nx">Readonly</span><span class="o">&lt;</span><span class="nx">Record</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">unknown</span><span class="o">&gt;&gt;</span><span class="p">[],</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nx">columns</span><span class="o">:</span><span class="w"> </span><span class="kt">readonly</span><span class="w"> </span><span class="kt">string</span><span class="p">[],</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="kd">function</span><span class="w"> </span><span class="nx">renderListing</span><span class="p">(</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nx">provider</span><span class="o">:</span><span class="w"> </span><span class="kt">ListedToolProvider</span><span class="p">,</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nx">options?</span><span class="o">:</span><span class="w"> </span><span class="kt">RenderListingOptions</span><span class="p">,</span><span class="w"> </span><span class="c1">// { style?, access?, pretty? }</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+</code></pre></div>
+<p><code>ListedToolProvider</code> is any object whose <code>allTools()</code> lists tools;
+every <code>ToolProvider</code> is one.</p>
+</div>
+</div>
+</div>
+<p><code>render_markdown_table</code> pads a GitHub-flavored table over any rows and
+column names: a <code>bool</code> cell renders as <code>yes</code> / <code>no</code>, <code>None</code> or a missing
+key as an empty cell, anything else via <code>str()</code>; a literal <code>|</code> in a cell
+is escaped as <code>\|</code> and a newline becomes a space. With no rows it renders
+the header and divider only. The result always ends with a newline.</p>
+<p><code>render_listing</code> is the one call behind the <code>octools list</code> command:
+given a provider and a style (one of the formats above), it summarizes
+and renders in one step. An unknown style raises <code>ValueError</code> (a
+<code>RangeError</code> in TypeScript) naming the valid ones, <code>LISTING_STYLES</code> (<code>"table"</code>, <code>"md"</code>, <code>"txt"</code>, <code>"json"</code>, also
+exported as the <code>ListingStyle</code> literal); <code>markdown</code> is a CLI alias only.
+<code>pretty</code> applies to <code>json</code> alone: indented when true (the default),
+compact on one line when false. The result ends with a newline, except
+that an empty listing renders as an empty string for <code>table</code> and <code>txt</code>;
+<code>md</code> then renders the header and divider only, and <code>json</code> renders
+<code>[]\n</code>.</p>
+<h2 id="wiring-render_listing-into-your-own-cli">Wiring <code>render_listing</code> into your own CLI</h2>
+<p>A library that already ships a CLI can add its own <code>tools list</code> command
+by delegating straight to <code>render_listing</code> (<code>renderListing</code>), instead of
+building rows by hand:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Python</label><label for="__tabbed_3_2">TypeScript</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-python highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">octools</span><span class="w"> </span><span class="kn">import</span> <span class="n">LISTING_STYLES</span><span class="p">,</span> <span class="n">render_listing</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">octools</span><span class="w"> </span><span class="kn">import</span> <span class="n">example</span> <span class="k">as</span> <span class="n">my_tools</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">cmd_tools_list</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">text</span> <span class="o">=</span> <span class="n">render_listing</span><span class="p">(</span><span class="n">my_tools</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_format</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">access</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="n">subcommands</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s2">"command"</span><span class="p">)</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="n">tools_list</span> <span class="o">=</span> <span class="n">subcommands</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">"tools-list"</span><span class="p">)</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="n">tools_list</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    <span class="s2">"--output-format"</span><span class="p">,</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>    <span class="n">metavar</span><span class="o">=</span><span class="s2">"FORMAT"</span><span class="p">,</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    <span class="n">choices</span><span class="o">=</span><span class="n">LISTING_STYLES</span><span class="p">,</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>    <span class="n">default</span><span class="o">=</span><span class="s2">"table"</span><span class="p">,</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>    <span class="n">help</span><span class="o">=</span><span class="s2">"Render the listing in this format."</span><span class="p">,</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="p">)</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="n">tools_list</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>    <span class="s2">"--access"</span><span class="p">,</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>    <span class="n">metavar</span><span class="o">=</span><span class="s2">"ACCESS"</span><span class="p">,</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>    <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">"local"</span><span class="p">,</span> <span class="s2">"remote"</span><span class="p">],</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>    <span class="n">help</span><span class="o">=</span><span class="s2">"Only list tools with this access."</span><span class="p">,</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="p">)</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="n">tools_list</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">cmd_tools_list</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="language-ts highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">parseArgs</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"node:util"</span><span class="p">;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nx">ACCESS_KINDS</span><span class="p">,</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nx">LISTING_STYLES</span><span class="p">,</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="kr">type</span><span class="w"> </span><span class="nx">Access</span><span class="p">,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="kr">type</span><span class="w"> </span><span class="nx">ListingStyle</span><span class="p">,</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">  </span><span class="nx">renderListing</span><span class="p">,</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"@opscogs/octools"</span><span class="p">;</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">myTools</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">"./my_tools.js"</span><span class="p">;</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="kd">function</span><span class="w"> </span><span class="nx">oneOf</span><span class="o">&lt;</span><span class="nx">T</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span><span class="p">(</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">  </span><span class="nx">value</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">undefined</span><span class="p">,</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">  </span><span class="nx">allowed</span><span class="o">:</span><span class="w"> </span><span class="kt">readonly</span><span class="w"> </span><span class="nx">T</span><span class="p">[],</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">  </span><span class="nx">option</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">T</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">undefined</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="kc">undefined</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="p">(</span><span class="nx">allowed</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">string</span><span class="p">[]).</span><span class="nx">includes</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">RangeError</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">option</span><span class="si">}</span><span class="sb"> must be one of </span><span class="si">${</span><span class="nx">allowed</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">", "</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">value</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">T</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="p">}</span>
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">cmdToolsList</span><span class="p">(</span><span class="nx">args</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[])</span><span class="o">:</span><span class="w"> </span><span class="ow">void</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">values</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">parseArgs</span><span class="p">({</span>
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a><span class="w">    </span><span class="nx">args</span><span class="p">,</span>
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a><span class="w">    </span><span class="nx">options</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a><span class="w">      </span><span class="s2">"output-format"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w"> </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="s2">"table"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a><span class="w">      </span><span class="nx">access</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kr">type</span><span class="o">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a><span class="w">  </span><span class="p">});</span>
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">style</span><span class="o">:</span><span class="w"> </span><span class="kt">ListingStyle</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">oneOf</span><span class="p">(</span>
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a><span class="w">    </span><span class="nx">values</span><span class="p">[</span><span class="s2">"output-format"</span><span class="p">],</span>
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a><span class="w">    </span><span class="nx">LISTING_STYLES</span><span class="p">,</span>
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a><span class="w">    </span><span class="s2">"--output-format"</span><span class="p">,</span>
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a><span class="w">  </span><span class="p">);</span>
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">access</span><span class="o">:</span><span class="w"> </span><span class="kt">Access</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">undefined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">oneOf</span><span class="p">(</span>
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a><span class="w">    </span><span class="nx">values</span><span class="p">.</span><span class="nx">access</span><span class="p">,</span>
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a><span class="w">    </span><span class="nx">ACCESS_KINDS</span><span class="p">,</span>
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a><span class="w">    </span><span class="s2">"--access"</span><span class="p">,</span>
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a><span class="w">  </span><span class="p">);</span>
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a><span class="w">  </span><span class="nx">process</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">renderListing</span><span class="p">(</span><span class="nx">myTools</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">style</span><span class="p">,</span><span class="w"> </span><span class="nx">access</span><span class="w"> </span><span class="p">}));</span>
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a><span class="p">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Every producer's <code>tools list</code> command then supports the same four formats
+with no per-library formatting code, and stays in sync with the
+descriptor whenever a tool's description, hints or inputs change.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.tabs.link", "navigation.indexes", "navigation.instant", "navigation.path", "navigation.tracking"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
