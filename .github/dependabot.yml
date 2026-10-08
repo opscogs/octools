@@ -6,6 +6,13 @@ updates:
       interval: weekly
     cooldown:
       default-days: 14
+    ignore:
+      # typescript-eslint and TypeDoc support TypeScript up to 6.0.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      # Types track the oldest supported Node (engines.node), not the newest.
+      - dependency-name: "@types/node"
+        update-types: [version-update:semver-major]
     groups:
       npm-minor-patch:
         update-types: [minor, patch]
