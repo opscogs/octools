@@ -538,12 +538,24 @@ jobs:
           path: release
           merge-multiple: true
 
-      - name: Release
+      # Assets attach to a draft, then the release is published: an immutable
+      # release accepts no new assets once published.
+      - name: Draft Release
         uses: softprops/action-gh-release@v3
         with:
+          draft: true
           prerelease: ${{ needs.build_package.outputs.prerelease == 'true' }}
           fail_on_unmatched_files: true
           files: release/*
+
+      - name: Publish Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PRERELEASE: ${{ needs.build_package.outputs.prerelease }}
+        run: |
+          latest="--latest"
+          if [ "$PRERELEASE" = "true" ]; then latest="--latest=false"; fi
+          gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft=false "$latest"
 
   # The published site documents the latest final release, so a pre-release
   # tag leaves it unchanged.
