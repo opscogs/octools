@@ -1,0 +1,7 @@
+{
+  "description": "An abbreviation followed by a space counts as a sentence end.",
+  "input": {
+    "text": "Pass a filter, e.g. a name. Done."
+  },
+  "expected": 3
+}

@@ -1,0 +1,17 @@
+{
+  "description": "additionalProperties true is open.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {}
+    }
+  },
+  "expected": [
+    {
+      "rule": "open_object",
+      "tool": null,
+      "path": ""
+    }
+  ]
+}

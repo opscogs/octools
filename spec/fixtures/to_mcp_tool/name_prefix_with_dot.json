@@ -1,0 +1,37 @@
+{
+  "description": "MCP names may contain a dot.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote"
+    },
+    "name_prefix": "site.a."
+  },
+  "expected": {
+    "name": "site.a.cluster_info",
+    "description": "Return the cluster identity and versions. Use it before any other call.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true
+    },
+    "_meta": {
+      "com.opscogs.octools/spec_version": "1.1",
+      "com.opscogs.octools/access": "remote",
+      "com.opscogs.octools/result_kind": "records",
+      "com.opscogs.octools/deprecated": false,
+      "com.opscogs.octools/meta": {}
+    }
+  }
+}

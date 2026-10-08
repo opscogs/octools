@@ -1,0 +1,10 @@
+{
+  "description": "A malformed JSON text is rejected.",
+  "input": {
+    "model": "records",
+    "data": "{"
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "description": "A newline after a full stop ends a sentence.",
+  "input": {
+    "text": "One.\nTwo.\nThree."
+  },
+  "expected": 3
+}

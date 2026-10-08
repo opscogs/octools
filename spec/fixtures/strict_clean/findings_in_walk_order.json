@@ -1,0 +1,56 @@
+{
+  "description": "Several findings come back in walk order: root keywords, then properties, then $defs.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "title": "Args",
+      "properties": {
+        "a": {
+          "type": "string",
+          "maxLength": 3
+        },
+        "b": {
+          "type": "tuple"
+        }
+      },
+      "$defs": {
+        "D": {
+          "type": "object",
+          "x-note": 1
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "title_present",
+      "tool": null,
+      "path": ""
+    },
+    {
+      "rule": "open_object",
+      "tool": null,
+      "path": ""
+    },
+    {
+      "rule": "unsupported_keyword",
+      "tool": null,
+      "path": "/properties/a"
+    },
+    {
+      "rule": "unsupported_type",
+      "tool": null,
+      "path": "/properties/b"
+    },
+    {
+      "rule": "extension_key",
+      "tool": null,
+      "path": "/$defs/D"
+    },
+    {
+      "rule": "open_object",
+      "tool": null,
+      "path": "/$defs/D"
+    }
+  ]
+}

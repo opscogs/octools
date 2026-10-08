@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Columns and rows for results whose shape is only known at run time.",
+  "properties": {
+    "columns": {
+      "description": "Column names, in row order.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "rows": {
+      "description": "Rows of scalar cells; each row has one cell per column.",
+      "items": {
+        "items": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": "array"
+      },
+      "type": "array"
+    },
+    "row_count": {
+      "description": "Number of rows returned, after any cap; equals len(rows).",
+      "type": "integer"
+    },
+    "truncated": {
+      "description": "True when a cap, a stop or an interrupted read cut the result short. A truncated read whose resumable is false is the terminal case: it ended for good and there is nothing left to follow.",
+      "type": "boolean"
+    },
+    "column_kinds": {
+      "anyOf": [
+        {
+          "items": {
+            "enum": [
+              "text",
+              "number",
+              "integer",
+              "boolean",
+              "timestamp",
+              "ip",
+              "fqdn",
+              "mac",
+              "ip_block",
+              "big_integer"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional per-column kind, one per column, from COLUMN_KINDS: text, number, integer, boolean, timestamp (RFC 3339 date-time), ip (v4 or v6), fqdn, mac, ip_block (address, CIDR prefix or first-last range), big_integer (integer, or a decimal string beyond 2^53 - 1)."
+    },
+    "column_scales": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "enum": ["linear", "log10", "log2"],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional per-column chart scale hint, one per column, from COLUMN_SCALES: linear, log10, log2; only on number, integer and big_integer columns, null for no hint."
+    },
+    "column_descriptions": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "One short description per column, in column order; null where a column has none."
+    },
+    "total_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Exact size of the full result when the source knows it, as an integer, or as a decimal string when above 2^53 - 1; omitted when unknown or approximate."
+    },
+    "next_cursor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Opaque token that resumes the read where it stopped, present only when resumable is true; pass it back as the tool's cursor argument, unchanged."
+    },
+    "stop_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Why the read stopped early. Well-known values include run_deadline, page_count, record_limit, interrupted and cursor_stalled; omitted when the read ended naturally or the limit simply cut it. A cursor_stalled read publishes no next_cursor, because following it would serve the same rows again."
+    },
+    "warnings": {
+      "description": "Non-fatal problems the caller should relay, one per entry.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "resumable": {
+      "description": "True when next_cursor is present and following it reads more rows; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",
+      "type": "boolean"
+    }
+  },
+  "required": ["columns", "rows", "row_count", "truncated"],
+  "type": "object"
+}

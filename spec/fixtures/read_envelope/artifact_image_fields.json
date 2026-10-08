@@ -1,0 +1,30 @@
+{
+  "description": "width, height and role are kept when set.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120,
+        "width": 120,
+        "height": 20,
+        "role": "summary"
+      },
+      "warnings": ["clipped"]
+    }
+  },
+  "expected": {
+    "artifact": {
+      "reference": "mem://0.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 120,
+      "width": 120,
+      "height": 20,
+      "role": "summary"
+    },
+    "artifacts": [],
+    "warnings": ["clipped"],
+    "sensitivity": "inherits_input"
+  }
+}

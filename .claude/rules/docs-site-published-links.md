@@ -1,0 +1,41 @@
+---
+paths:
+  - "docs/site/**/*.md"
+---
+<!-- Generated from .cursor/rules/docs-site-published-links.mdc by scripts/sync_claude_config.py; edit the source. -->
+
+# Published-site links stay in `docs/site/`
+
+MkDocs `docs_dir` is `docs/site/`. Relative markdown links that leave that
+tree (for example `../../design/...` or `../../decisions/...`) 404 on the
+published site. Do not add them.
+
+## Allowed relative targets
+
+- Other pages under `docs/site/`.
+- Assets under `docs/site/assets/` (e.g. `../assets/diagram.svg`).
+- In-page anchors on those files.
+
+## Out of tree (do not link)
+
+- `docs/design/`, `docs/decisions/` and any other folder
+  under `docs/` except `docs/site/`. They are internal and never
+  published.
+- Repo-root files (`CHANGELOG.md`, `README.md`), `.cursor/`,
+  `python/src/`, and any other path outside `docs/site/`.
+
+**Prefer omitting the reference.** If the internal doc is important for
+a reader, mention it in prose with no link:
+
+```markdown
+# ❌ BAD — unpublished path
+
+See the tolerant-reader contract ([OCTL-0006](../../decisions/OCTL-0006-tolerant-readers.md)).
+
+# ✅ GOOD — omit, or name without a link
+
+Readers check the major of `SPEC_VERSION` only (see the project's decision records for the full rationale).
+```
+
+Do not "fix" this with a GitHub or raw URL to the same unpublished file.
+External `https://` links to third-party docs are fine.

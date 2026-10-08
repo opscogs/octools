@@ -1,0 +1,16 @@
+{
+  "description": "A JSON text is parsed before reading.",
+  "input": {
+    "model": "records",
+    "data": "{\"records\": [{\"name\": \"a\"}], \"count\": 1, \"truncated\": false}"
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a"
+      }
+    ],
+    "count": 1,
+    "truncated": false
+  }
+}

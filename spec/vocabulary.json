@@ -1,0 +1,102 @@
+{
+  "constants": {
+    "ALIAS_OF_KEY": "alias_of",
+    "ANTHROPIC_NAME_RE": "^[a-zA-Z0-9_-]{1,128}$",
+    "LISTING_STYLES": ["table", "md", "txt", "json"],
+    "MAX_SENTENCES": 4,
+    "MCP_META_NAMESPACE": "com.opscogs.octools/",
+    "MCP_NAME_RE": "^[A-Za-z0-9_.-]{1,128}$",
+    "MIN_SENTENCES": 2,
+    "NAME_RE": "^[a-z][a-z0-9_]{0,47}$",
+    "SCHEMA_DIALECT": "https://json-schema.org/draft/2020-12/schema",
+    "SCHEMA_ESCAPE_KEY": "schema_escape",
+    "STRICT_FORMATS": [
+      "date",
+      "date-time",
+      "duration",
+      "email",
+      "hostname",
+      "ipv4",
+      "ipv6",
+      "time",
+      "uri",
+      "uuid"
+    ],
+    "STRICT_KEYWORDS": [
+      "$defs",
+      "$ref",
+      "additionalProperties",
+      "allOf",
+      "anyOf",
+      "const",
+      "default",
+      "description",
+      "enum",
+      "format",
+      "items",
+      "minItems",
+      "properties",
+      "required",
+      "type"
+    ],
+    "STRICT_TYPES": [
+      "array",
+      "boolean",
+      "integer",
+      "null",
+      "number",
+      "object",
+      "string"
+    ],
+    "TABULAR_DEF_NAME": "TabularEnvelope"
+  },
+  "spec_version": "1.1",
+  "vocabularies": {
+    "access": {
+      "fallback": "remote",
+      "fallback_constant": "ACCESS_FALLBACK",
+      "type": "Access",
+      "values": ["local", "remote"],
+      "values_constant": "ACCESS_KINDS"
+    },
+    "column_kinds": {
+      "fallback": "text",
+      "fallback_constant": "COLUMN_KIND_FALLBACK",
+      "type": "ColumnKind",
+      "values": [
+        "text",
+        "number",
+        "integer",
+        "boolean",
+        "timestamp",
+        "ip",
+        "fqdn",
+        "mac",
+        "ip_block",
+        "big_integer"
+      ],
+      "values_constant": "COLUMN_KINDS"
+    },
+    "column_scales": {
+      "fallback": null,
+      "fallback_constant": "COLUMN_SCALE_FALLBACK",
+      "type": "ColumnScale",
+      "values": ["linear", "log10", "log2"],
+      "values_constant": "COLUMN_SCALES"
+    },
+    "result_kind": {
+      "fallback": "records",
+      "fallback_constant": "RESULT_KIND_FALLBACK",
+      "type": "ResultKind",
+      "values": ["records", "artifact"],
+      "values_constant": "RESULT_KINDS"
+    },
+    "sensitivity": {
+      "fallback": "inherits_input",
+      "fallback_constant": "SENSITIVITY_FALLBACK",
+      "type": "Sensitivity",
+      "values": ["inherits_input"],
+      "values_constant": null
+    }
+  }
+}

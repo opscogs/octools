@@ -1,0 +1,19 @@
+{
+  "description": "A contradicting resumable fails strict parsing too.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "resumable": true
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

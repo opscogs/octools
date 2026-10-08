@@ -1,0 +1,94 @@
+{
+  "description": "Only keys with the prefix are removed.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "title": "Args",
+      "x-owner": "demo",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title",
+          "x-sensitivity": "free_text"
+        },
+        "x-raw": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": ["title", "x-a"],
+          "default": {
+            "title": "kept"
+          },
+          "examples": [
+            {
+              "x-b": 1
+            }
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "Item",
+            "properties": {}
+          }
+        }
+      },
+      "$defs": {
+        "D": {
+          "title": "D",
+          "anyOf": [
+            {
+              "type": "string",
+              "title": "S"
+            }
+          ]
+        }
+      }
+    },
+    "prefixes": ["x-"]
+  },
+  "expected": {
+    "type": "object",
+    "title": "Args",
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "Title"
+      },
+      "x-raw": {
+        "type": "string"
+      },
+      "mode": {
+        "enum": ["title", "x-a"],
+        "default": {
+          "title": "kept"
+        },
+        "examples": [
+          {
+            "x-b": 1
+          }
+        ]
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "title": "Item",
+          "properties": {}
+        }
+      }
+    },
+    "$defs": {
+      "D": {
+        "title": "D",
+        "anyOf": [
+          {
+            "type": "string",
+            "title": "S"
+          }
+        ]
+      }
+    }
+  }
+}

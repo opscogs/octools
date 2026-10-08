@@ -1,0 +1,33 @@
+{
+  "dictionaries": ["custom-words-octools"],
+  "dictionaryDefinitions": [
+    {
+      "name": "custom-words-octools",
+      "path": "./.cspell/custom-words.txt",
+      "addWords": true
+    }
+  ],
+  "ignorePaths": [
+    "cspell.json",
+    "htmlcov/*",
+    "python/dist/**",
+    "python/build/**",
+    "node_modules",
+    "typescript/dist/**",
+    "typescript/coverage/**",
+    "typescript/docs/**",
+    "docs/site/api/**",
+    "pyproject.toml",
+    "site/**",
+    "PKG-INFO",
+    "requires.txt",
+    "requirements.txt"
+  ],
+  "ignoreRegExpList": ["/```[\\s\\S]*?```/g"],
+  "languageSettings": [
+    {
+      "languageId": "markdown",
+      "ignoreRegExpList": ["/```[\\s\\S]*?```/g"]
+    }
+  ]
+}

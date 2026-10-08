@@ -1,0 +1,46 @@
+{
+  "description": "Hints map to read_only, destructive and idempotent; title and target are carried.",
+  "input": {
+    "tool": {
+      "name": "purge_cache",
+      "description": "Purge the cluster cache. It cannot be undone.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote",
+      "title": "Purge the cache",
+      "target": "cluster",
+      "read_only_hint": false,
+      "destructive_hint": true,
+      "idempotent_hint": false
+    }
+  },
+  "expected": {
+    "name": "purge_cache",
+    "title": "Purge the cache",
+    "summary": "Purge the cluster cache.",
+    "description": "Purge the cluster cache. It cannot be undone.",
+    "access": "remote",
+    "target": "cluster",
+    "result_kind": "records",
+    "read_only": false,
+    "destructive": true,
+    "idempotent": false,
+    "pages": false,
+    "deprecated": false,
+    "alias_of": null,
+    "inputs": []
+  }
+}

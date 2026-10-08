@@ -1,0 +1,7 @@
+{
+  "description": "Two full stops each followed by a space or the end.",
+  "input": {
+    "text": "Return the identity. Use it first."
+  },
+  "expected": 2
+}

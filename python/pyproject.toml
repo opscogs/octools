@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=77.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "octools"
+description = "OpsCogs standard interface for AI agent tools: the OCTool descriptor, result envelopes, conformance validator, and vendor-neutral converters."
+authors = [
+    {name = "OpsCogs Inc.", email = "support@opscogs.com"},
+]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.12.0"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dynamic = ["version"]
+
+dependencies = [
+    "pydantic >= 2.12, < 3",
+]
+
+[project.scripts]
+octools = "octools.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/opscogs/octools"
+Documentation = "https://octools.docs.opscogs.com"
+Source = "https://github.com/opscogs/octools"
+Changelog = "https://github.com/opscogs/octools/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = [
+    "build == 1.6.1",
+    "ruff == 0.16.9",
+    "black == 26.5.1",
+    "mypy == 2.3.1",
+]
+doc = [
+    "mkdocs-material == 9.7.7",
+    "mkdocs-awesome-pages-plugin == 2.10.1",
+    "mkdocs-macros-plugin == 1.5.0",
+]
+test = [
+    "pytest == 9.1.1",
+    "pytest-cov == 7.1.0",
+]
+all = [
+    "octools[dev,doc,test]",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.dynamic]
+version = { file = "src/octools/VERSION" }
+
+[tool.setuptools.package-data]
+octools = [
+    "VERSION",
+    "py.typed",
+]

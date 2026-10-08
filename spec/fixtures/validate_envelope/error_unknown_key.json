@@ -1,0 +1,19 @@
+{
+  "description": "Strict parsing rejects an unknown key.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "role": "list"
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "description": "With no sentence end the summary is the whole description.",
+  "input": {
+    "tool": {
+      "name": "no_end",
+      "description": "Return the identity without a sentence end",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": {
+    "name": "no_end",
+    "title": null,
+    "summary": "Return the identity without a sentence end",
+    "description": "Return the identity without a sentence end",
+    "access": "remote",
+    "target": null,
+    "result_kind": "records",
+    "read_only": true,
+    "destructive": false,
+    "idempotent": true,
+    "pages": false,
+    "deprecated": false,
+    "alias_of": null,
+    "inputs": []
+  }
+}

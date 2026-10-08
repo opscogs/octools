@@ -1,0 +1,17 @@
+{
+  "description": "$defs must be an object.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "$defs": []
+    }
+  },
+  "expected": [
+    {
+      "rule": "bad_defs",
+      "tool": null,
+      "path": "/$defs"
+    }
+  ]
+}

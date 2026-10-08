@@ -1,0 +1,25 @@
+{
+  "description": "name_prefix is prepended to the name.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote"
+    },
+    "name_prefix": "demo_"
+  },
+  "expected": {
+    "name": "demo_cluster_info",
+    "description": "Return the cluster identity and versions. Use it before any other call.",
+    "input_schema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "description": "A strict parse of a truncated dump, resumable included, gives the same dump.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": true,
+      "next_cursor": "1",
+      "resumable": true
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a"
+      }
+    ],
+    "count": 1,
+    "truncated": true,
+    "next_cursor": "1",
+    "resumable": true
+  }
+}

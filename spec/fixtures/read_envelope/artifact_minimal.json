@@ -1,0 +1,23 @@
+{
+  "description": "Defaults fill in: empty artifacts and warnings, sensitivity inherits_input.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120
+      }
+    }
+  },
+  "expected": {
+    "artifact": {
+      "reference": "mem://0.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 120
+    },
+    "artifacts": [],
+    "warnings": [],
+    "sensitivity": "inherits_input"
+  }
+}

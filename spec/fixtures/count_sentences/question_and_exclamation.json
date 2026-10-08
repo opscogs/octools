@@ -1,0 +1,7 @@
+{
+  "description": "? and ! end sentences too.",
+  "input": {
+    "text": "Is it up? Check it! Then go."
+  },
+  "expected": 3
+}

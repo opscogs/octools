@@ -1,0 +1,27 @@
+{
+  "description": "A truncated read without next_cursor dumps resumable false; stop_reason is kept.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": true,
+      "stop_reason": "run_deadline"
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a"
+      }
+    ],
+    "count": 1,
+    "truncated": true,
+    "stop_reason": "run_deadline",
+    "resumable": false
+  }
+}

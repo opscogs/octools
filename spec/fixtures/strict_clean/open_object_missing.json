@@ -1,0 +1,16 @@
+{
+  "description": "An object without additionalProperties is open.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "expected": [
+    {
+      "rule": "open_object",
+      "tool": null,
+      "path": ""
+    }
+  ]
+}

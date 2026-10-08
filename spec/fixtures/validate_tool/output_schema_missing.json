@@ -1,0 +1,22 @@
+{
+  "description": "A missing output schema needs meta.schema_escape.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": [
+    {
+      "rule": "output_schema_escape",
+      "tool": "cluster_info",
+      "path": null
+    }
+  ]
+}

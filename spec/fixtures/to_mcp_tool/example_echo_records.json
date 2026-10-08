@@ -1,0 +1,279 @@
+{
+  "description": "The demo records tool, with verbatim schemas.",
+  "input": {
+    "tool": {
+      "name": "echo_records",
+      "description": "Return each input string as one record with its position. Use it to check that a tool round-trip works before calling anything real. Returns a records envelope; when limit cut the list, truncated is true and next_cursor fetches the next page.",
+      "input_schema": {
+        "description": "Input of ``echo_records``.",
+        "properties": {
+          "values": {
+            "description": "Strings to echo back, one record each.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "limit": {
+            "default": 10,
+            "description": "Maximum records to return, 1 to 100; the tool enforces it.",
+            "type": "integer"
+          },
+          "cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "next_cursor from a previous page; omit for the first page."
+          }
+        },
+        "required": ["values"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": {
+        "$defs": {
+          "EchoRecord": {
+            "description": "One record of ``echo_records``: an input string and its position.",
+            "properties": {
+              "value": {
+                "description": "The echoed string.",
+                "type": "string",
+                "x-sensitivity": "free_text"
+              },
+              "position": {
+                "description": "Zero-based position in the input.",
+                "type": "integer"
+              }
+            },
+            "required": ["value", "position"],
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "description": "Result records; keys and order follow the item schema.",
+            "items": {
+              "$ref": "#/$defs/EchoRecord"
+            },
+            "type": "array"
+          },
+          "count": {
+            "description": "Number of records returned, after any cap; equals len(records).",
+            "type": "integer"
+          },
+          "truncated": {
+            "description": "True when a cap, a stop or an interrupted read cut the result short. A truncated read whose resumable is false is the terminal case: it ended for good and there is nothing left to follow.",
+            "type": "boolean"
+          },
+          "total_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Exact size of the full result when the source knows it, as an integer, or as a decimal string when above 2^53 - 1; omitted when unknown or approximate."
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Opaque token that resumes the read where it stopped, present only when resumable is true; pass it back as the tool's cursor argument, unchanged."
+          },
+          "stop_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Why the read stopped early. Well-known values include run_deadline, page_count, record_limit, interrupted and cursor_stalled; omitted when the read ended naturally or the limit simply cut it. A cursor_stalled read publishes no next_cursor, because following it would serve the same records again."
+          },
+          "warnings": {
+            "description": "Non-fatal problems the caller should relay, one per entry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "resumable": {
+            "description": "True when next_cursor is present and following it reads more records; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",
+            "type": "boolean"
+          }
+        },
+        "required": ["records", "count", "truncated"],
+        "type": "object"
+      },
+      "result_kind": "records",
+      "title": "Echo strings as records",
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {}
+    }
+  },
+  "expected": {
+    "name": "echo_records",
+    "title": "Echo strings as records",
+    "description": "Return each input string as one record with its position. Use it to check that a tool round-trip works before calling anything real. Returns a records envelope; when limit cut the list, truncated is true and next_cursor fetches the next page.",
+    "inputSchema": {
+      "description": "Input of ``echo_records``.",
+      "properties": {
+        "values": {
+          "description": "Strings to echo back, one record each.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "limit": {
+          "default": 10,
+          "description": "Maximum records to return, 1 to 100; the tool enforces it.",
+          "type": "integer"
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "next_cursor from a previous page; omit for the first page."
+        }
+      },
+      "required": ["values"],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$defs": {
+        "EchoRecord": {
+          "description": "One record of ``echo_records``: an input string and its position.",
+          "properties": {
+            "value": {
+              "description": "The echoed string.",
+              "type": "string",
+              "x-sensitivity": "free_text"
+            },
+            "position": {
+              "description": "Zero-based position in the input.",
+              "type": "integer"
+            }
+          },
+          "required": ["value", "position"],
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "records": {
+          "description": "Result records; keys and order follow the item schema.",
+          "items": {
+            "$ref": "#/$defs/EchoRecord"
+          },
+          "type": "array"
+        },
+        "count": {
+          "description": "Number of records returned, after any cap; equals len(records).",
+          "type": "integer"
+        },
+        "truncated": {
+          "description": "True when a cap, a stop or an interrupted read cut the result short. A truncated read whose resumable is false is the terminal case: it ended for good and there is nothing left to follow.",
+          "type": "boolean"
+        },
+        "total_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exact size of the full result when the source knows it, as an integer, or as a decimal string when above 2^53 - 1; omitted when unknown or approximate."
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Opaque token that resumes the read where it stopped, present only when resumable is true; pass it back as the tool's cursor argument, unchanged."
+        },
+        "stop_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Why the read stopped early. Well-known values include run_deadline, page_count, record_limit, interrupted and cursor_stalled; omitted when the read ended naturally or the limit simply cut it. A cursor_stalled read publishes no next_cursor, because following it would serve the same records again."
+        },
+        "warnings": {
+          "description": "Non-fatal problems the caller should relay, one per entry.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resumable": {
+          "description": "True when next_cursor is present and following it reads more records; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",
+          "type": "boolean"
+        }
+      },
+      "required": ["records", "count", "truncated"],
+      "type": "object"
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true
+    },
+    "_meta": {
+      "com.opscogs.octools/spec_version": "1.1",
+      "com.opscogs.octools/access": "local",
+      "com.opscogs.octools/result_kind": "records",
+      "com.opscogs.octools/deprecated": false,
+      "com.opscogs.octools/meta": {}
+    }
+  }
+}

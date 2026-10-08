@@ -1,0 +1,24 @@
+---
+description: Keep tests and docs examples free of production data
+globs:
+  [
+    "python/tests/**/*.py",
+    "python/tests/**/*.json",
+    "python/tests/**/*.csv",
+    "scripts/tests/**/*.py",
+    "spec/fixtures/**/*.json",
+    "docs/**/*.md",
+  ]
+alwaysApply: false
+---
+
+# No production data in tests or docs examples
+
+Do not copy strings from a real system, export, or customer environment.
+
+## Tests and docs examples
+
+- Do not copy names, values, host names, comments, or other labels from real data. Distinctive "anonymized" strings still leak.
+- Use synthetic tokens: names `Zone` / `Region` / `Site`; values `GOLD` / `SILVER` / `BLUE`; environments `alpha` / `other`; hosts `demo.invalid` / `demo.example`.
+- Fine to keep: RFC 1918 / documentation IPs (`10.0.0.0/8`, `2001:db8::/32`), flag letters, CSV tokens, clearly fake tokens (`foo`, `unused`).
+- Examples name no customer data and no private repositories.

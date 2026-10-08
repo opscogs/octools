@@ -1,0 +1,33 @@
+{
+  "description": "Each bad column yields one finding, in column order, pointing at its first bad cell.",
+  "input": {
+    "envelope": {
+      "columns": ["host", "count", "seen"],
+      "column_kinds": ["fqdn", "integer", "timestamp"],
+      "rows": [
+        ["a.demo.example", 1, "yesterday"],
+        ["bad host", "n/a", null],
+        ["b.demo.example", 3, "today"]
+      ],
+      "row_count": 3,
+      "truncated": false
+    }
+  },
+  "expected": [
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/1/0"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/1/1"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/2"
+    }
+  ]
+}

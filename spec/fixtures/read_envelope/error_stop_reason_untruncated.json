@@ -1,0 +1,16 @@
+{
+  "description": "stop_reason is only given when truncated is true.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "stop_reason": "page_count"
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

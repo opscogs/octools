@@ -1,0 +1,17 @@
+{
+  "description": "Strict parsing rejects an unknown key inside an artifact reference.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120,
+        "checksum": "abc"
+      }
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

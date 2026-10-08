@@ -1,0 +1,14 @@
+{
+  "description": "Keys outside the columns are not rendered; columns keep their given order.",
+  "input": {
+    "columns": ["b", "a"],
+    "rows": [
+      {
+        "a": 1,
+        "b": 2,
+        "c": 3
+      }
+    ]
+  },
+  "expected": "| b   | a   |\n| --- | --- |\n| 2   | 1   |\n"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "artifact is required.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifacts": []
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

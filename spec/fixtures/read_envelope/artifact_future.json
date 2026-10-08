@@ -1,0 +1,42 @@
+{
+  "description": "Unknown keys drop at every level; an unknown sensitivity reads as inherits_input.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "r",
+        "media_type": "image/png",
+        "bytes": 1,
+        "checksum": "abc"
+      },
+      "artifacts": [
+        {
+          "reference": "s",
+          "media_type": "image/png",
+          "bytes": 2,
+          "dpi": 1,
+          "role": "csv"
+        }
+      ],
+      "sensitivity": "public_derived",
+      "role": "chart"
+    }
+  },
+  "expected": {
+    "artifact": {
+      "reference": "r",
+      "media_type": "image/png",
+      "bytes": 1
+    },
+    "artifacts": [
+      {
+        "reference": "s",
+        "media_type": "image/png",
+        "bytes": 2,
+        "role": "csv"
+      }
+    ],
+    "warnings": [],
+    "sensitivity": "inherits_input"
+  }
+}

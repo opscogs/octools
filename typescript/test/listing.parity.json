@@ -1,0 +1,380 @@
+{
+  "description": "Listing inputs and the output the Python implementation renders for them, beyond the spec fixtures: non-ASCII text, Python whitespace, long and hyphenated words, and Python str() of non-string cells.",
+  "fill": [
+    ["Short text.", 88, "  ", "  Short text."],
+    [
+      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      88,
+      "  ",
+      "  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n  xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    ],
+    [
+      "A yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy tail words here.",
+      88,
+      "  ",
+      "  A yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy\n  yyyyyyyyyyyyyyyy tail words here."
+    ],
+    [
+      "well-known self-describing state-of-the-art multi-word-hyphenated-compound well-known self-describing state-of-the-art multi-word-hyphenated-compound well-known self-describing state-of-the-art multi-word-hyphenated-compound ",
+      40,
+      "  ",
+      "  well-known self-describing state-of-\n  the-art multi-word-hyphenated-compound\n  well-known self-describing state-of-\n  the-art multi-word-hyphenated-compound\n  well-known self-describing state-of-\n  the-art multi-word-hyphenated-compound"
+    ],
+    [
+      "aa-bb-cc-dd-ee-ff-gg-hh-ii-jj-kk-ll-mm-nn-oo-pp-qq-rr",
+      20,
+      "",
+      "aa-bb-cc-dd-ee-ff-\ngg-hh-ii-jj-kk-ll-\nmm-nn-oo-pp-qq-rr"
+    ],
+    [
+      "---------------------------------x",
+      10,
+      "",
+      "----------\n----------\n----------\n---x"
+    ],
+    [
+      "a------------------------------b",
+      10,
+      "",
+      "a---------\n----------\n----------\n-b"
+    ],
+    [
+      "Wait--what? Yes -- really--truly, ok.",
+      12,
+      "",
+      "Wait--what?\nYes --\nreally--\ntruly, ok."
+    ],
+    [
+      "  leading space and\ttabs\there\nnew line\r\nand\u000bvt\fff end ",
+      30,
+      "  ",
+      "    leading space and     tabs\n  here new line  and vt ff end"
+    ],
+    [
+      "Tab\tat\tcolumns\n\tafter newline",
+      30,
+      "",
+      "Tab     at      columns\nafter newline"
+    ],
+    [
+      "non\u00a0breaking\u00a0space \u00a0 alone and \u3000 ideographic",
+      16,
+      "  ",
+      "  non\u00a0breaking\u00a0s\n  pace \u00a0 alone\n  and \u3000\n  ideographic"
+    ],
+    [
+      "Caf\u00e9 na\u00efve r\u00e9sum\u00e9 \u00fcber stra\u00dfe co\u00f6perate fa\u00e7ade se\u00f1or",
+      20,
+      "  ",
+      "  Caf\u00e9 na\u00efve r\u00e9sum\u00e9\n  \u00fcber stra\u00dfe\n  co\u00f6perate fa\u00e7ade\n  se\u00f1or"
+    ],
+    [
+      "\u65e5\u672c\u8a9e\u306e\u30c6\u30ad\u30b9\u30c8\u306f\u7a7a\u767d\u304c\u3042\u308a\u307e\u305b\u3093\u306e\u3067\u9577\u3044\u5358\u8a9e\u3068\u3057\u3066\u6271\u308f\u308c\u307e\u3059",
+      12,
+      "  ",
+      "  \u65e5\u672c\u8a9e\u306e\u30c6\u30ad\u30b9\u30c8\u306f\u7a7a\n  \u767d\u304c\u3042\u308a\u307e\u305b\u3093\u306e\u3067\u9577\n  \u3044\u5358\u8a9e\u3068\u3057\u3066\u6271\u308f\u308c\u307e\n  \u3059"
+    ],
+    [
+      "emoji \ud83d\ude00\ud83d\ude01\ud83d\ude02\ud83d\ude03\ud83d\ude04\ud83d\ude05\ud83d\ude06\ud83d\ude07 wrap \ud83d\ude00-\ud83d\ude01-\ud83d\ude02 x",
+      10,
+      "",
+      "emoji\n\ud83d\ude00\ud83d\ude01\ud83d\ude02\ud83d\ude03\ud83d\ude04\ud83d\ude05\ud83d\ude06\ud83d\ude07\nwrap \ud83d\ude00-\ud83d\ude01-\ud83d\ude02\nx"
+    ],
+    [
+      "\u00e9t\u00e9-\u00e9t\u00e9-\u00e9t\u00e9-\u00e9t\u00e9 \u03b1\u03b2-\u03b3\u03b4-\u03b5\u03b6 12-34-56-78",
+      9,
+      "",
+      "\u00e9t\u00e9-\u00e9t\u00e9-\n\u00e9t\u00e9-\u00e9t\u00e9\n\u03b1\u03b2-\u03b3\u03b4-\u03b5\u03b6 \n12-34-56-\n78"
+    ],
+    [
+      "word_under-score_x-y_z a1-b2-c3",
+      8,
+      "",
+      "word_und\ner-\nscore_x-\ny_z\na1-b2-c3"
+    ],
+    ["", 88, "  ", ""],
+    ["   ", 88, "  ", ""],
+    ["abc def", 2, "  ", "  a\n  b\n  c\n  d\n  e\n  f"],
+    ["abcdef", 3, "  ", "  a\n  b\n  c\n  d\n  e\n  f"]
+  ],
+  "md": [
+    [
+      {
+        "v": 3,
+        "w": "x"
+      },
+      {
+        "v": -7,
+        "w": "x"
+      },
+      {
+        "v": 1.5,
+        "w": "x"
+      },
+      {
+        "v": -0.25,
+        "w": "x"
+      },
+      {
+        "v": 0.0001,
+        "w": "x"
+      },
+      {
+        "v": 1e-5,
+        "w": "x"
+      },
+      {
+        "v": 1e-7,
+        "w": "x"
+      },
+      {
+        "v": 123.456,
+        "w": "x"
+      },
+      {
+        "v": 2.5e-10,
+        "w": "x"
+      },
+      {
+        "v": 0.3333333333333333,
+        "w": "x"
+      },
+      {
+        "v": 12345678.9,
+        "w": "x"
+      },
+      {
+        "v": ["a", 1, true, null, 2.5],
+        "w": "x"
+      },
+      {
+        "v": {
+          "k": "v",
+          "n": [false]
+        },
+        "w": "x"
+      },
+      {
+        "v": [
+          "it's",
+          "say \"hi\"",
+          "both ' \"",
+          "back\\slash",
+          "nl\nx",
+          "tab\tx",
+          "cr\rx"
+        ],
+        "w": "x"
+      },
+      {
+        "v": [
+          "\u007f\u0000\u001b",
+          "\u00a0\u200b\u2028",
+          "caf\u00e9 \u65e5\u672c \ud83d\ude00",
+          "\ue000\u0378\udb40\udc80"
+        ],
+        "w": "x"
+      },
+      {
+        "v": {
+          "caf\u00e9": {
+            "'": "\""
+          }
+        },
+        "w": "x"
+      },
+      {
+        "v": [],
+        "w": "x"
+      },
+      {
+        "v": {},
+        "w": "x"
+      },
+      {
+        "v": "a\u2028b\u0085c\r\nd\u001ce\u001df\u001eg\u000bh\fi",
+        "w": "x"
+      },
+      {
+        "v": "trailing\n",
+        "w": "x"
+      },
+      {
+        "v": "\ud83d\ude00\ud83d\ude00",
+        "w": "x"
+      },
+      {
+        "v": "p|q|",
+        "w": "x"
+      }
+    ],
+    "| v                                                                            | w   | absent |\n| ---------------------------------------------------------------------------- | --- | ------ |\n| 3                                                                            | x   |        |\n| -7                                                                           | x   |        |\n| 1.5                                                                          | x   |        |\n| -0.25                                                                        | x   |        |\n| 0.0001                                                                       | x   |        |\n| 1e-05                                                                        | x   |        |\n| 1e-07                                                                        | x   |        |\n| 123.456                                                                      | x   |        |\n| 2.5e-10                                                                      | x   |        |\n| 0.3333333333333333                                                           | x   |        |\n| 12345678.9                                                                   | x   |        |\n| ['a', 1, True, None, 2.5]                                                    | x   |        |\n| {'k': 'v', 'n': [False]}                                                     | x   |        |\n| [\"it's\", 'say \"hi\"', 'both \\' \"', 'back\\\\slash', 'nl\\nx', 'tab\\tx', 'cr\\rx'] | x   |        |\n| ['\\x7f\\x00\\x1b', '\\xa0\\u200b\\u2028', 'caf\u00e9 \u65e5\u672c \ud83d\ude00', '\\ue000\\u0378\\U000e0080']  | x   |        |\n| {'caf\u00e9': {\"'\": '\"'}}                                                         | x   |        |\n| []                                                                           | x   |        |\n| {}                                                                           | x   |        |\n| a b c d e f g h i                                                            | x   |        |\n| trailing                                                                     | x   |        |\n| \ud83d\ude00\ud83d\ude00                                                                           | x   |        |\n| p\\|q\\|                                                                       | x   |        |\n"
+  ],
+  "summ": [
+    {
+      "name": "unicode_desc",
+      "title": "Caf\u00e9 \ud83d\ude00 tool",
+      "summary": "R\u00e9sum\u00e9 the caf\u00e9\u2014ok.",
+      "description": "R\u00e9sum\u00e9 the caf\u00e9\u2014ok. Then a very-long-hyphenated-word-that-goes-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-forever plus zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz and \ud83d\ude00 emoji \u65e5\u672c\u8a9e text \"quoted\" back\\slash\ttab.",
+      "access": "local",
+      "target": null,
+      "result_kind": "records",
+      "read_only": true,
+      "destructive": false,
+      "idempotent": true,
+      "pages": false,
+      "deprecated": true,
+      "alias_of": "caf\u00e9",
+      "inputs": [
+        {
+          "name": "mode",
+          "type": "enum(caf\u00e9|{\"a\": [1, 2.5, null]}|[\"\\u65e5\"]|...)",
+          "required": true,
+          "description": "Pick \u00e9\nnext line"
+        },
+        {
+          "name": "wide",
+          "type": "enum(\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00|\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00|...)",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "c",
+          "type": "const({\"\\u00e9\": \"\\ud83d\\ude00\"})",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "t",
+          "type": "string|3|None",
+          "required": false,
+          "description": null
+        }
+      ]
+    },
+    {
+      "name": "sentence_ws",
+      "title": null,
+      "summary": "First sentence ends here.",
+      "description": "First sentence ends here.\u001cSecond\u00a0sentence.",
+      "access": "remote",
+      "target": null,
+      "result_kind": "records",
+      "read_only": true,
+      "destructive": false,
+      "idempotent": true,
+      "pages": false,
+      "deprecated": false,
+      "alias_of": null,
+      "inputs": []
+    },
+    {
+      "name": "sentence_ws2",
+      "title": null,
+      "summary": "Ends.\ufeffNot a break.",
+      "description": "\u3000Ends.\ufeffNot a break. Real end.",
+      "access": "local",
+      "target": null,
+      "result_kind": "records",
+      "read_only": true,
+      "destructive": false,
+      "idempotent": true,
+      "pages": false,
+      "deprecated": false,
+      "alias_of": null,
+      "inputs": []
+    }
+  ],
+  "listing": {
+    "table": "unicode_desc  local   read  R\u00e9sum\u00e9 the caf\u00e9\u2014ok. [deprecated; use caf\u00e9]\nsentence_ws   remote  read  First sentence ends here.\nsentence_ws2  local   read  Ends.\ufeffNot a break.\n",
+    "md": "| name         | access | mode | result_kind | pages | deprecated | summary                   |\n| ------------ | ------ | ---- | ----------- | ----- | ---------- | ------------------------- |\n| unicode_desc | local  | read | records     | no    | yes        | R\u00e9sum\u00e9 the caf\u00e9\u2014ok.       |\n| sentence_ws  | remote | read | records     | no    | no         | First sentence ends here. |\n| sentence_ws2 | local  | read | records     | no    | no         | Ends.\ufeffNot a break.        |\n",
+    "txt": "unicode_desc - Caf\u00e9 \ud83d\ude00 tool\n  R\u00e9sum\u00e9 the caf\u00e9\u2014ok. Then a very-long-hyphenated-word-that-goes-on-and-on-and-on-and-\n  on-and-on-and-on-and-on-and-on-forever plus zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz and \ud83d\ude00 emoji \u65e5\u672c\u8a9e text \"quoted\"\n  back\\slash        tab.\n  access: local  target: -  result: records\n  hints: read-only, idempotent\n  deprecated: use caf\u00e9\n  inputs:\n    name  type                                                required  description\n    mode  enum(caf\u00e9|{\"a\": [1, 2.5, null]}|[\"\\u65e5\"]|...)     yes       Pick \u00e9 next line\n    wide  enum(\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00|\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00|...)  no\n    c     const({\"\\u00e9\": \"\\ud83d\\ude00\"})                   no\n    t     string|3|None                                       no\n\nsentence_ws\n  First sentence ends here.\u001cSecond\u00a0sentence.\n  access: remote  target: -  result: records\n  hints: read-only, idempotent\n  inputs: none\n\nsentence_ws2\n  \u3000Ends.\ufeffNot a break. Real end.\n  access: local  target: -  result: records\n  hints: read-only, idempotent\n  inputs: none\n",
+    "json": "[\n  {\n    \"name\": \"unicode_desc\",\n    \"title\": \"Caf\\u00e9 \\ud83d\\ude00 tool\",\n    \"summary\": \"R\\u00e9sum\\u00e9 the caf\\u00e9\\u2014ok.\",\n    \"description\": \"R\\u00e9sum\\u00e9 the caf\\u00e9\\u2014ok. Then a very-long-hyphenated-word-that-goes-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-forever plus zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz and \\ud83d\\ude00 emoji \\u65e5\\u672c\\u8a9e text \\\"quoted\\\" back\\\\slash\\ttab.\",\n    \"access\": \"local\",\n    \"target\": null,\n    \"result_kind\": \"records\",\n    \"read_only\": true,\n    \"destructive\": false,\n    \"idempotent\": true,\n    \"pages\": false,\n    \"deprecated\": true,\n    \"alias_of\": \"caf\\u00e9\",\n    \"inputs\": [\n      {\n        \"name\": \"mode\",\n        \"type\": \"enum(caf\\u00e9|{\\\"a\\\": [1, 2.5, null]}|[\\\"\\\\u65e5\\\"]|...)\",\n        \"required\": true,\n        \"description\": \"Pick \\u00e9\\nnext line\"\n      },\n      {\n        \"name\": \"wide\",\n        \"type\": \"enum(\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00|\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00|...)\",\n        \"required\": false,\n        \"description\": null\n      },\n      {\n        \"name\": \"c\",\n        \"type\": \"const({\\\"\\\\u00e9\\\": \\\"\\\\ud83d\\\\ude00\\\"})\",\n        \"required\": false,\n        \"description\": null\n      },\n      {\n        \"name\": \"t\",\n        \"type\": \"string|3|None\",\n        \"required\": false,\n        \"description\": null\n      }\n    ]\n  },\n  {\n    \"name\": \"sentence_ws\",\n    \"title\": null,\n    \"summary\": \"First sentence ends here.\",\n    \"description\": \"First sentence ends here.\\u001cSecond\\u00a0sentence.\",\n    \"access\": \"remote\",\n    \"target\": null,\n    \"result_kind\": \"records\",\n    \"read_only\": true,\n    \"destructive\": false,\n    \"idempotent\": true,\n    \"pages\": false,\n    \"deprecated\": false,\n    \"alias_of\": null,\n    \"inputs\": []\n  },\n  {\n    \"name\": \"sentence_ws2\",\n    \"title\": null,\n    \"summary\": \"Ends.\\ufeffNot a break.\",\n    \"description\": \"\\u3000Ends.\\ufeffNot a break. Real end.\",\n    \"access\": \"local\",\n    \"target\": null,\n    \"result_kind\": \"records\",\n    \"read_only\": true,\n    \"destructive\": false,\n    \"idempotent\": true,\n    \"pages\": false,\n    \"deprecated\": false,\n    \"alias_of\": null,\n    \"inputs\": []\n  }\n]\n",
+    "compact": "[{\"name\":\"unicode_desc\",\"title\":\"Caf\\u00e9 \\ud83d\\ude00 tool\",\"summary\":\"R\\u00e9sum\\u00e9 the caf\\u00e9\\u2014ok.\",\"description\":\"R\\u00e9sum\\u00e9 the caf\\u00e9\\u2014ok. Then a very-long-hyphenated-word-that-goes-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-forever plus zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz and \\ud83d\\ude00 emoji \\u65e5\\u672c\\u8a9e text \\\"quoted\\\" back\\\\slash\\ttab.\",\"access\":\"local\",\"target\":null,\"result_kind\":\"records\",\"read_only\":true,\"destructive\":false,\"idempotent\":true,\"pages\":false,\"deprecated\":true,\"alias_of\":\"caf\\u00e9\",\"inputs\":[{\"name\":\"mode\",\"type\":\"enum(caf\\u00e9|{\\\"a\\\": [1, 2.5, null]}|[\\\"\\\\u65e5\\\"]|...)\",\"required\":true,\"description\":\"Pick \\u00e9\\nnext line\"},{\"name\":\"wide\",\"type\":\"enum(\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00|\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00\\ud83d\\ude00|...)\",\"required\":false,\"description\":null},{\"name\":\"c\",\"type\":\"const({\\\"\\\\u00e9\\\": \\\"\\\\ud83d\\\\ude00\\\"})\",\"required\":false,\"description\":null},{\"name\":\"t\",\"type\":\"string|3|None\",\"required\":false,\"description\":null}]},{\"name\":\"sentence_ws\",\"title\":null,\"summary\":\"First sentence ends here.\",\"description\":\"First sentence ends here.\\u001cSecond\\u00a0sentence.\",\"access\":\"remote\",\"target\":null,\"result_kind\":\"records\",\"read_only\":true,\"destructive\":false,\"idempotent\":true,\"pages\":false,\"deprecated\":false,\"alias_of\":null,\"inputs\":[]},{\"name\":\"sentence_ws2\",\"title\":null,\"summary\":\"Ends.\\ufeffNot a break.\",\"description\":\"\\u3000Ends.\\ufeffNot a break. Real end.\",\"access\":\"local\",\"target\":null,\"result_kind\":\"records\",\"read_only\":true,\"destructive\":false,\"idempotent\":true,\"pages\":false,\"deprecated\":false,\"alias_of\":null,\"inputs\":[]}]\n"
+  },
+  "tools": [
+    {
+      "name": "unicode_desc",
+      "description": "R\u00e9sum\u00e9 the caf\u00e9\u2014ok. Then a very-long-hyphenated-word-that-goes-on-and-on-and-on-and-on-and-on-and-on-and-on-and-on-forever plus zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz and \ud83d\ude00 emoji \u65e5\u672c\u8a9e text \"quoted\" back\\slash\ttab.",
+      "input_schema": {
+        "type": "object",
+        "required": ["mode"],
+        "properties": {
+          "mode": {
+            "enum": [
+              "caf\u00e9",
+              {
+                "a": [1, 2.5, null]
+              },
+              ["\u65e5"],
+              1e-7,
+              "\ud83d\ude00\ud83d\ude00\ud83d\ude00"
+            ],
+            "description": "Pick \u00e9\nnext line"
+          },
+          "wide": {
+            "enum": [
+              "\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00",
+              "\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00",
+              "b"
+            ]
+          },
+          "c": {
+            "const": {
+              "\u00e9": "\ud83d\ude00"
+            }
+          },
+          "t": {
+            "type": ["string", 3, null]
+          }
+        }
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": "Caf\u00e9 \ud83d\ude00 tool",
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": true,
+      "meta": {
+        "alias_of": "caf\u00e9"
+      }
+    },
+    {
+      "name": "sentence_ws",
+      "description": "First sentence ends here.\u001cSecond\u00a0sentence.",
+      "input_schema": {
+        "type": "object"
+      },
+      "access": "remote",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {}
+    },
+    {
+      "name": "sentence_ws2",
+      "description": "\u3000Ends.\ufeffNot a break. Real end.",
+      "input_schema": {
+        "type": "object"
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {}
+    }
+  ]
+}

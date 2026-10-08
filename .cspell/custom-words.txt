@@ -1,0 +1,41 @@
+# OpsCogs custom words
+opscogs
+octools
+# python
+pydantic
+setuptools
+pytest
+pyflakes
+pydocstyle
+pyupgrade
+docstrings
+pythonpath
+addopts
+mypy
+mkdocs
+kwonly
+dataclass
+dataclasses
+mappingproxy
+behaviour
+# protocols and vendors
+anthropic
+openai
+mcp
+modelcontextprotocol
+# spec vocabulary
+jsonschema
+# decision records
+OCTL
+octool
+# upstream request mirror
+jsonl
+# environment
+venv
+# typescript package
+hextet
+hostmask
+subschema
+prefault
+sdist
+pypi

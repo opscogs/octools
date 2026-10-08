@@ -1,0 +1,17 @@
+{
+  "description": "A scale applies to number, integer and big_integer columns only.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "column_kinds": ["fqdn", "integer"],
+      "column_scales": ["log10", null]
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

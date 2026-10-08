@@ -1,0 +1,25 @@
+{
+  "description": "A truncated tabular page dumps resumable.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": true,
+      "total_count": 2,
+      "next_cursor": "p2",
+      "warnings": ["slow source"]
+    }
+  },
+  "expected": {
+    "columns": ["host", "count"],
+    "rows": [["a.demo.example", 1]],
+    "row_count": 1,
+    "truncated": true,
+    "total_count": 2,
+    "next_cursor": "p2",
+    "warnings": ["slow source"],
+    "resumable": true
+  }
+}

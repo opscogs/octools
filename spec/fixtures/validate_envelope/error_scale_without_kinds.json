@@ -1,0 +1,16 @@
+{
+  "description": "A non-null scale needs column_kinds.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "column_scales": [null, "log10"]
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

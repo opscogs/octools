@@ -1,0 +1,122 @@
+{
+  "description": "Write and destructive modes, a bare deprecation, pipes, a title and target, in the txt style.",
+  "input": {
+    "tools": [
+      {
+        "name": "purge_cache",
+        "description": "Purge the cluster cache. It cannot be undone.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote",
+        "title": "Purge the cache",
+        "target": "cluster",
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false
+      },
+      {
+        "name": "set_label",
+        "description": "Set a label on the cluster. Safe to repeat.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label"],
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "New label,\nshown in lists."
+            }
+          }
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote",
+        "read_only_hint": false
+      },
+      {
+        "name": "old_info",
+        "description": "Old way to read the identity. Do not use it.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote",
+        "deprecated": true
+      },
+      {
+        "name": "pipe_text",
+        "description": "Return a|b values. Then stop.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote"
+      },
+      {
+        "name": "no_end",
+        "description": "Return the identity without a sentence end",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote"
+      }
+    ],
+    "style": "txt"
+  },
+  "expected": "purge_cache - Purge the cache\n  Purge the cluster cache. It cannot be undone.\n  access: remote  target: cluster  result: records\n  hints: writes, destructive\n  inputs: none\n\nset_label\n  Set a label on the cluster. Safe to repeat.\n  access: remote  target: -  result: records\n  hints: writes, idempotent\n  inputs:\n    name   type    required  description\n    label  string  yes       New label, shown in lists.\n\nold_info\n  Old way to read the identity. Do not use it.\n  access: remote  target: -  result: records\n  hints: read-only, idempotent\n  deprecated: yes\n  inputs: none\n\npipe_text\n  Return a|b values. Then stop.\n  access: remote  target: -  result: records\n  hints: read-only, idempotent\n  inputs: none\n\nno_end\n  Return the identity without a sentence end\n  access: remote  target: -  result: records\n  hints: read-only, idempotent\n  inputs: none\n"
+}

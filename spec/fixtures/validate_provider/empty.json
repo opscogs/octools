@@ -1,0 +1,7 @@
+{
+  "description": "An empty listing conforms.",
+  "input": {
+    "tools": []
+  },
+  "expected": []
+}

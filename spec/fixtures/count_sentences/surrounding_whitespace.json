@@ -1,0 +1,7 @@
+{
+  "description": "Leading and trailing whitespace is ignored.",
+  "input": {
+    "text": "  One sentence.  \n"
+  },
+  "expected": 1
+}

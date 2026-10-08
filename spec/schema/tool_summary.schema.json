@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "InputSummary": {
+      "description": "One top-level argument of a tool: name, rendered type, requiredness.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": ["name", "type", "required", "description"],
+      "type": "object"
+    }
+  },
+  "description": "The listing-relevant facts of one ``OCTool``, without func or schemas.",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "access": {
+      "enum": ["local", "remote"],
+      "type": "string"
+    },
+    "target": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "result_kind": {
+      "enum": ["records", "artifact"],
+      "type": "string"
+    },
+    "read_only": {
+      "type": "boolean"
+    },
+    "destructive": {
+      "type": "boolean"
+    },
+    "idempotent": {
+      "type": "boolean"
+    },
+    "pages": {
+      "type": "boolean"
+    },
+    "deprecated": {
+      "type": "boolean"
+    },
+    "alias_of": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "inputs": {
+      "items": {
+        "$ref": "#/$defs/InputSummary"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "title",
+    "summary",
+    "description",
+    "access",
+    "target",
+    "result_kind",
+    "read_only",
+    "destructive",
+    "idempotent",
+    "pages",
+    "deprecated",
+    "alias_of",
+    "inputs"
+  ],
+  "type": "object"
+}

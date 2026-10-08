@@ -1,0 +1,19 @@
+{
+  "description": "A column_descriptions of the wrong length is dropped.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "column_descriptions": ["Host name."]
+    }
+  },
+  "expected": {
+    "columns": ["host", "count"],
+    "rows": [["a.demo.example", 1]],
+    "row_count": 1,
+    "truncated": false
+  }
+}

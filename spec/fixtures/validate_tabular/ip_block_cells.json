@@ -1,0 +1,48 @@
+{
+  "description": "One ip_block column per candidate cell: the first fits, every other column has one finding.",
+  "input": {
+    "envelope": {
+      "columns": ["c0", "c1", "c2", "c3", "c4"],
+      "column_kinds": [
+        "ip_block",
+        "ip_block",
+        "ip_block",
+        "ip_block",
+        "ip_block"
+      ],
+      "rows": [
+        [
+          "10.0.0.0/8",
+          "10.0.0.9-10.0.0.1",
+          "10.0.0.1-2001:db8::1",
+          "10.0.0.0/33",
+          "net"
+        ]
+      ],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": [
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/1"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/2"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/3"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/4"
+    }
+  ]
+}

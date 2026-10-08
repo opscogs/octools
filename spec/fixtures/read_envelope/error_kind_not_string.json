@@ -1,0 +1,16 @@
+{
+  "description": "A kind that is not a string is corrupt, not unknown.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "column_kinds": [1, "integer"]
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

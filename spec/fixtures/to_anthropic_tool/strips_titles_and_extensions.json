@@ -1,0 +1,57 @@
+{
+  "description": "Every title and x- key goes at schema level and additionalProperties false is added to the root.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "title": "Args",
+        "x-owner": "demo",
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "x-sensitivity": "free_text",
+            "description": "A property named title stays."
+          },
+          "mode": {
+            "enum": ["a", "b"],
+            "default": "a"
+          }
+        },
+        "required": ["title"]
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": {
+    "name": "cluster_info",
+    "description": "Return the cluster identity and versions. Use it before any other call.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "A property named title stays."
+        },
+        "mode": {
+          "enum": ["a", "b"],
+          "default": "a"
+        }
+      },
+      "required": ["title"],
+      "additionalProperties": false
+    }
+  }
+}

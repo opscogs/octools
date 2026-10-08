@@ -1,0 +1,28 @@
+{
+  "description": "Only listing rules run: a non-conformant tool is not reported here.",
+  "input": {
+    "tools": [
+      {
+        "name": "cluster_info",
+        "description": "One.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote"
+      }
+    ]
+  },
+  "expected": []
+}

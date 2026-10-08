@@ -1,0 +1,16 @@
+{
+  "description": "A string total_count may not be negative.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "total_count": "-1"
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

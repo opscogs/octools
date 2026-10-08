@@ -1,0 +1,34 @@
+{
+  "description": "Only the required fields; every optional field takes its default.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": {
+    "name": "cluster_info",
+    "description": "Return the cluster identity and versions. Use it before any other call.",
+    "input_schema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "access": "remote",
+    "target": null,
+    "output_schema": null,
+    "result_kind": "records",
+    "title": null,
+    "read_only_hint": true,
+    "destructive_hint": false,
+    "idempotent_hint": true,
+    "deprecated": false,
+    "meta": {}
+  }
+}

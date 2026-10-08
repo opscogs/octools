@@ -1,0 +1,19 @@
+{
+  "description": "A resumable that contradicts next_cursor is corrupt data, not version skew.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": true,
+      "resumable": true
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

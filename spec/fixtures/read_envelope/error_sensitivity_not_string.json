@@ -1,0 +1,17 @@
+{
+  "description": "A sensitivity that is not a string is corrupt.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120
+      },
+      "sensitivity": 3
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

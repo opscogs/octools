@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/opscogs/octools/security/policy
+    about: Report vulnerabilities privately; do not open a public issue.
+  - name: Documentation
+    url: https://octools.docs.opscogs.com
+    about: Read the docs before filing a question or bug.

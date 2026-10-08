@@ -1,0 +1,24 @@
+{
+  "description": "One boolean column per candidate cell: the first fits, every other column has one finding.",
+  "input": {
+    "envelope": {
+      "columns": ["c0", "c1", "c2"],
+      "column_kinds": ["boolean", "boolean", "boolean"],
+      "rows": [[true, 0, "true"]],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": [
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/1"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/2"
+    }
+  ]
+}

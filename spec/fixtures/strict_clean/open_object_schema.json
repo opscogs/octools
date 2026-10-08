@@ -1,0 +1,24 @@
+{
+  "description": "additionalProperties as a schema is open, and the schema is checked too.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "title": "Value"
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "open_object",
+      "tool": null,
+      "path": ""
+    },
+    {
+      "rule": "title_present",
+      "tool": null,
+      "path": "/additionalProperties"
+    }
+  ]
+}

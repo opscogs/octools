@@ -1,0 +1,15 @@
+{
+  "description": "An envelope that fails strict parsing is an error.",
+  "input": {
+    "envelope": {
+      "columns": ["a"],
+      "column_kinds": ["decimal"],
+      "rows": [],
+      "row_count": 0,
+      "truncated": false
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

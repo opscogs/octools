@@ -1,0 +1,8 @@
+{
+  "description": "An empty listing as JSON.",
+  "input": {
+    "tools": [],
+    "style": "json"
+  },
+  "expected": "[]\n"
+}

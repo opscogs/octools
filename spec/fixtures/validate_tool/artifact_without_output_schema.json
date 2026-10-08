@@ -1,0 +1,26 @@
+{
+  "description": "An escaped artifact tool with no output schema still needs the artifact property.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote",
+      "result_kind": "artifact",
+      "meta": {
+        "schema_escape": "renderer decides"
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "artifact_envelope",
+      "tool": "cluster_info",
+      "path": null
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "description": "truncated is required.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["a"],
+      "rows": [],
+      "row_count": 0
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

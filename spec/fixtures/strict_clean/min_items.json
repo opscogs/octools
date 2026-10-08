@@ -1,0 +1,25 @@
+{
+  "description": "minItems is only 0 or 1.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pair": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "min_items",
+      "tool": null,
+      "path": "/properties/pair"
+    }
+  ]
+}

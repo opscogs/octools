@@ -1,0 +1,30 @@
+{
+  "description": "$ref must point at a root $defs entry that exists.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "a": {
+          "$ref": "#/definitions/A"
+        },
+        "b": {
+          "$ref": "#/$defs/Missing"
+        }
+      },
+      "$defs": {}
+    }
+  },
+  "expected": [
+    {
+      "rule": "unknown_ref",
+      "tool": null,
+      "path": "/properties/a"
+    },
+    {
+      "rule": "unknown_ref",
+      "tool": null,
+      "path": "/properties/b"
+    }
+  ]
+}

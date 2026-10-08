@@ -1,0 +1,15 @@
+{
+  "description": "Every row has one cell per column.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a"]],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

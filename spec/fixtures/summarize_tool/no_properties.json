@@ -1,0 +1,39 @@
+{
+  "description": "An input schema without properties has no inputs.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object"
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": {
+    "name": "cluster_info",
+    "title": null,
+    "summary": "Return the cluster identity and versions.",
+    "description": "Return the cluster identity and versions. Use it before any other call.",
+    "access": "remote",
+    "target": null,
+    "result_kind": "records",
+    "read_only": true,
+    "destructive": false,
+    "idempotent": true,
+    "pages": false,
+    "deprecated": false,
+    "alias_of": null,
+    "inputs": []
+  }
+}

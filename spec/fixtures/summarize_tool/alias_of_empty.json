@@ -1,0 +1,45 @@
+{
+  "description": "An empty alias_of reads as null.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote",
+      "deprecated": true,
+      "meta": {
+        "alias_of": ""
+      }
+    }
+  },
+  "expected": {
+    "name": "cluster_info",
+    "title": null,
+    "summary": "Return the cluster identity and versions.",
+    "description": "Return the cluster identity and versions. Use it before any other call.",
+    "access": "remote",
+    "target": null,
+    "result_kind": "records",
+    "read_only": true,
+    "destructive": false,
+    "idempotent": true,
+    "pages": false,
+    "deprecated": true,
+    "alias_of": null,
+    "inputs": []
+  }
+}

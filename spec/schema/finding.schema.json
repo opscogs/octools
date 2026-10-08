@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "One conformance problem.\n\n``rule`` is a stable snake_case identifier for the rule that fired,\n``message`` explains it for a person, ``tool`` names the descriptor it\nconcerns (``None`` for a bare schema check), and ``path`` is a JSON\npointer into the schema where that applies.",
+  "properties": {
+    "rule": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "tool": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": ["rule", "message"],
+  "type": "object"
+}

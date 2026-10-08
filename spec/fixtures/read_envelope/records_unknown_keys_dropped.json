@@ -1,0 +1,30 @@
+{
+  "description": "Unknown envelope keys are dropped; keys inside records are left to the record model.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a",
+          "added": 1
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "role": "list",
+      "future_field": {
+        "a": 1
+      }
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a",
+        "added": 1
+      }
+    ],
+    "count": 1,
+    "truncated": false
+  }
+}

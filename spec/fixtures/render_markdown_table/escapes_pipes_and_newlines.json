@@ -1,0 +1,15 @@
+{
+  "description": "A pipe is escaped and a newline becomes a space.",
+  "input": {
+    "columns": ["text"],
+    "rows": [
+      {
+        "text": "a|b"
+      },
+      {
+        "text": "line one\nline two"
+      }
+    ]
+  },
+  "expected": "| text              |\n| ----------------- |\n| a\\|b              |\n| line one line two |\n"
+}

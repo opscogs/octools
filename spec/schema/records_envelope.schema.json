@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "records": {
+      "description": "Result records; keys and order follow the item schema.",
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "count": {
+      "description": "Number of records returned, after any cap; equals len(records).",
+      "type": "integer"
+    },
+    "truncated": {
+      "description": "True when a cap, a stop or an interrupted read cut the result short. A truncated read whose resumable is false is the terminal case: it ended for good and there is nothing left to follow.",
+      "type": "boolean"
+    },
+    "total_count": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Exact size of the full result when the source knows it, as an integer, or as a decimal string when above 2^53 - 1; omitted when unknown or approximate."
+    },
+    "next_cursor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Opaque token that resumes the read where it stopped, present only when resumable is true; pass it back as the tool's cursor argument, unchanged."
+    },
+    "stop_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Why the read stopped early. Well-known values include run_deadline, page_count, record_limit, interrupted and cursor_stalled; omitted when the read ended naturally or the limit simply cut it. A cursor_stalled read publishes no next_cursor, because following it would serve the same records again."
+    },
+    "warnings": {
+      "description": "Non-fatal problems the caller should relay, one per entry.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "resumable": {
+      "description": "True when next_cursor is present and following it reads more records; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",
+      "type": "boolean"
+    }
+  },
+  "required": ["records", "count", "truncated"],
+  "type": "object"
+}

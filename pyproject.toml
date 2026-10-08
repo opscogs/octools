@@ -1,0 +1,128 @@
+# Repository tooling configuration. The octools package is defined in
+# python/pyproject.toml.
+
+[tool.black]
+# Don't forget to align this with isort, .flake8
+line-length = 88
+target-version = ['py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+# Don't forget to align this with black, .flake8
+line_length = 88
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+src = ["python/src", "python", "."]
+extend-exclude = [
+    ".venv",
+    ".claude",  # generated from .cursor; rule examples show unformatted code
+]
+
+[tool.ruff.lint]
+extend-select = [
+    "ANN", # flake8 annotations
+    "ARG", # flake8 unused argument checks
+    "D", # pydocstyle
+    "E", 'W',  # pydocstyle style checks
+    "F", # pyflakes
+    "I", # isort import checks
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP", # pyupgrade
+    "RUF", # ruff dev's own rules
+    "SIM", # simplifies code
+    "C90", # more complexity rules
+]
+
+[tool.ruff.lint.pydocstyle]
+# Use pep257 style docstrings.
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+# exclude tests from listed checks
+"**/tests/*" = ["ANN", "D"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+split-on-trailing-comma = false
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+plugins = ["pydantic.mypy"]
+
+[tool.pyright]
+include = ["python/src/octools"]
+extraPaths = ["python/src/octools"]
+pythonVersion = "3.12"
+typeCheckingMode = "basic"
+
+[tool.coverage.run]
+#https://coverage.readthedocs.io/en/latest/config.html
+relative_files = true
+# Library code under python/src/ is the coverage gate. scripts/ have their own
+# tests and stay outside this list.
+source = ["python/src"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    ".venv/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+precision = 0
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "pass",
+    "ABCmeta",
+    "abstractmethod",
+    "warnings.warn",
+    "^\\s*\\.\\.\\.$",
+]
+fail_under = 100
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.pytest.ini_options]
+testpaths = [
+  "python/tests",
+  "scripts/tests",
+]
+pythonpath = [
+  ".",
+  "python",
+  "python/src",
+]
+addopts = [
+    "--cov=python/src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]

@@ -1,0 +1,53 @@
+name: Bug report
+description: Something in octools behaves incorrectly
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: package
+    validations:
+      required: true
+    attributes:
+      label: Package
+      options:
+        - Python (octools on PyPI)
+        - TypeScript (@opscogs/octools on npm)
+        - Both
+        - Spec (spec/ schemas or fixtures)
+  - type: input
+    id: version
+    validations:
+      required: true
+    attributes:
+      label: Version
+      description: The octools version, e.g. 1.2.0, and your Python or Node version.
+  - type: textarea
+    id: reproduction
+    validations:
+      required: true
+    attributes:
+      label: Reproduction
+      description: The smallest snippet or failing test that shows the problem.
+      render: text
+  - type: textarea
+    id: expected
+    validations:
+      required: true
+    attributes:
+      label: Expected behavior
+  - type: textarea
+    id: actual
+    validations:
+      required: true
+    attributes:
+      label: Actual behavior
+      description: Include the full error output or the wrong result.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched open and closed issues for this problem
+          required: true
+        - label: This is not a security vulnerability (those go through the security policy)
+          required: true

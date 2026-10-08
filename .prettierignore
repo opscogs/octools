@@ -1,0 +1,11 @@
+# Build and environment output; never hand-formatted.
+.venv/
+node_modules/
+site/
+htmlcov/
+python/dist/
+python/build/
+typescript/dist/
+typescript/coverage/
+typescript/docs/
+docs/site/api/

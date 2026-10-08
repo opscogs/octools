@@ -1,0 +1,25 @@
+{
+  "description": "A blank meta.schema_escape is no escape.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote",
+      "meta": {
+        "schema_escape": " "
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "output_schema_escape",
+      "tool": "cluster_info",
+      "path": null
+    }
+  ]
+}

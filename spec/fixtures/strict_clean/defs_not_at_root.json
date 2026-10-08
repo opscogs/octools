@@ -1,0 +1,24 @@
+{
+  "description": "$defs is allowed only at the root.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inner": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {},
+          "$defs": {}
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "defs_not_at_root",
+      "tool": null,
+      "path": "/properties/inner"
+    }
+  ]
+}

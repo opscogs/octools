@@ -1,0 +1,29 @@
+{
+  "description": "One ip column per candidate cell: the first fits, every other column has one finding.",
+  "input": {
+    "envelope": {
+      "columns": ["c0", "c1", "c2", "c3"],
+      "column_kinds": ["ip", "ip", "ip", "ip"],
+      "rows": [["192.0.2.1", "192.0.2.256", "010.0.0.1", "192.0.2.0/24"]],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": [
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/1"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/2"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/3"
+    }
+  ]
+}

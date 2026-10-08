@@ -1,0 +1,90 @@
+{
+  "description": "Named keys and prefixed keys go at every schema level; property names and data values stay.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "title": "Args",
+      "x-owner": "demo",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title",
+          "x-sensitivity": "free_text"
+        },
+        "x-raw": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": ["title", "x-a"],
+          "default": {
+            "title": "kept"
+          },
+          "examples": [
+            {
+              "x-b": 1
+            }
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "Item",
+            "properties": {}
+          }
+        }
+      },
+      "$defs": {
+        "D": {
+          "title": "D",
+          "anyOf": [
+            {
+              "type": "string",
+              "title": "S"
+            }
+          ]
+        }
+      }
+    },
+    "keys": ["title"],
+    "prefixes": ["x-"]
+  },
+  "expected": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "x-raw": {
+        "type": "string"
+      },
+      "mode": {
+        "enum": ["title", "x-a"],
+        "default": {
+          "title": "kept"
+        },
+        "examples": [
+          {
+            "x-b": 1
+          }
+        ]
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "$defs": {
+      "D": {
+        "anyOf": [
+          {
+            "type": "string"
+          }
+        ]
+      }
+    }
+  }
+}

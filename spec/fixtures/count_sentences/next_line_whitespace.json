@@ -1,0 +1,7 @@
+{
+  "description": "U+0085 counts as whitespace and is stripped from the ends.",
+  "input": {
+    "text": "\u0085Done.\u0085"
+  },
+  "expected": 1
+}

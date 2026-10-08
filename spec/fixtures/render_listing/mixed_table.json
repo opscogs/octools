@@ -1,0 +1,122 @@
+{
+  "description": "Write and destructive modes, a bare deprecation, pipes, a title and target, in the table style.",
+  "input": {
+    "tools": [
+      {
+        "name": "purge_cache",
+        "description": "Purge the cluster cache. It cannot be undone.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote",
+        "title": "Purge the cache",
+        "target": "cluster",
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false
+      },
+      {
+        "name": "set_label",
+        "description": "Set a label on the cluster. Safe to repeat.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label"],
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "New label,\nshown in lists."
+            }
+          }
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote",
+        "read_only_hint": false
+      },
+      {
+        "name": "old_info",
+        "description": "Old way to read the identity. Do not use it.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote",
+        "deprecated": true
+      },
+      {
+        "name": "pipe_text",
+        "description": "Return a|b values. Then stop.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote"
+      },
+      {
+        "name": "no_end",
+        "description": "Return the identity without a sentence end",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": ["version"],
+          "additionalProperties": false
+        },
+        "access": "remote"
+      }
+    ],
+    "style": "table"
+  },
+  "expected": "purge_cache  remote  destructive  Purge the cluster cache.\nset_label    remote  write        Set a label on the cluster.\nold_info     remote  read         Old way to read the identity. [deprecated]\npipe_text    remote  read         Return a|b values.\nno_end       remote  read         Return the identity without a sentence end\n"
+}

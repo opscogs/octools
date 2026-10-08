@@ -1,0 +1,17 @@
+{
+  "description": "Strict parsing rejects an unknown scale.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "column_kinds": ["text", "integer"],
+      "column_scales": [null, "ln"]
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

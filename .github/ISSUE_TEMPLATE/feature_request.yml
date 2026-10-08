@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose a change or addition to octools
+title: "Feature: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    validations:
+      required: true
+    attributes:
+      label: Problem
+      description: What you cannot do today, or what it costs you.
+  - type: textarea
+    id: proposal
+    validations:
+      required: true
+    attributes:
+      label: Proposal
+      description: The behavior or API you would like, and any alternatives you considered.
+  - type: dropdown
+    id: language
+    validations:
+      required: true
+    attributes:
+      label: Language
+      options:
+        - Python
+        - TypeScript
+        - Both
+        - Spec only
+  - type: dropdown
+    id: wire_format
+    validations:
+      required: true
+    attributes:
+      label: Does it change the wire format?
+      description: The descriptor, envelopes, vocabularies, validator findings or converter output. A wire change ships in both languages and needs a decision record.
+      options:
+        - "No"
+        - "Yes"
+        - Not sure
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched open and closed issues for this idea
+          required: true

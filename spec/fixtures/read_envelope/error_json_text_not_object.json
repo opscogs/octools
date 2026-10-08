@@ -1,0 +1,10 @@
+{
+  "description": "A JSON text that is not an object is rejected.",
+  "input": {
+    "model": "tabular",
+    "data": "[1]"
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

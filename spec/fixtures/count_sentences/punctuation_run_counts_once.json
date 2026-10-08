@@ -1,0 +1,7 @@
+{
+  "description": "A run of terminal punctuation counts once.",
+  "input": {
+    "text": "Wait... what?! Go."
+  },
+  "expected": 3
+}

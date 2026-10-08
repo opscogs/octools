@@ -1,0 +1,51 @@
+{
+  "description": "A closed schema inside the strict subset has no findings.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "enum": ["a", "b", null],
+          "description": "Mode."
+        },
+        "when": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Item"
+          }
+        },
+        "flag": {
+          "const": true
+        }
+      },
+      "$defs": {
+        "Item": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            }
+          },
+          "required": ["id"],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "expected": []
+}

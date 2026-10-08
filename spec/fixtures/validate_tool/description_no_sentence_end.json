@@ -1,0 +1,32 @@
+{
+  "description": "A description with no sentence end has zero sentences.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the identity",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": [
+    {
+      "rule": "description_sentences",
+      "tool": "cluster_info",
+      "path": null
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "description": "Empty text counts zero.",
+  "input": {
+    "text": ""
+  },
+  "expected": 0
+}

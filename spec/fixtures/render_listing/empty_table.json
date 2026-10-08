@@ -1,0 +1,8 @@
+{
+  "description": "An empty listing in the table style.",
+  "input": {
+    "tools": [],
+    "style": "table"
+  },
+  "expected": ""
+}

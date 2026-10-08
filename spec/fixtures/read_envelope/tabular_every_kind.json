@@ -1,0 +1,66 @@
+{
+  "description": "Every known kind and scale is kept.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+      "rows": [],
+      "row_count": 0,
+      "truncated": false,
+      "column_kinds": [
+        "text",
+        "number",
+        "integer",
+        "boolean",
+        "timestamp",
+        "ip",
+        "fqdn",
+        "mac",
+        "ip_block",
+        "big_integer"
+      ],
+      "column_scales": [
+        null,
+        "linear",
+        "log10",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "log2"
+      ]
+    }
+  },
+  "expected": {
+    "columns": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+    "rows": [],
+    "row_count": 0,
+    "truncated": false,
+    "column_kinds": [
+      "text",
+      "number",
+      "integer",
+      "boolean",
+      "timestamp",
+      "ip",
+      "fqdn",
+      "mac",
+      "ip_block",
+      "big_integer"
+    ],
+    "column_scales": [
+      null,
+      "linear",
+      "log10",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "log2"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "description": "A total_count above 2^53 - 1 is a decimal string and stays one.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "total_count": "18446744073709551616"
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a"
+      }
+    ],
+    "count": 1,
+    "truncated": false,
+    "total_count": "18446744073709551616"
+  }
+}

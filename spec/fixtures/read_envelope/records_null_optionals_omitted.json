@@ -1,0 +1,27 @@
+{
+  "description": "Optional fields given as null are left out of the dump.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "total_count": null,
+      "next_cursor": null,
+      "stop_reason": null
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a"
+      }
+    ],
+    "count": 1,
+    "truncated": false
+  }
+}

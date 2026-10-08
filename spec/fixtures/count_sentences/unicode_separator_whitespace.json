@@ -1,0 +1,7 @@
+{
+  "description": "Separator controls such as U+001C count as whitespace after a sentence end.",
+  "input": {
+    "text": "Done.\u001cNext."
+  },
+  "expected": 2
+}

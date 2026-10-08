@@ -1,0 +1,18 @@
+{
+  "description": "A complete tabular envelope reads back unchanged.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": {
+    "columns": ["host", "count"],
+    "rows": [["a.demo.example", 1]],
+    "row_count": 1,
+    "truncated": false
+  }
+}

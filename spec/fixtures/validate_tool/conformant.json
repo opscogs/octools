@@ -1,0 +1,39 @@
+{
+  "description": "A conformant descriptor has no findings.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote",
+      "title": "Cluster identity",
+      "target": "cluster",
+      "result_kind": "records",
+      "read_only_hint": false,
+      "destructive_hint": true,
+      "idempotent_hint": false,
+      "deprecated": false,
+      "meta": {
+        "min_api_version": "2.10",
+        "nested": {
+          "list": [1, "a", null]
+        }
+      }
+    }
+  },
+  "expected": []
+}

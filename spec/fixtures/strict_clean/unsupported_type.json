@@ -1,0 +1,21 @@
+{
+  "description": "Each member of a type list is checked.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "when": {
+          "type": ["string", "date"]
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "unsupported_type",
+      "tool": null,
+      "path": "/properties/when"
+    }
+  ]
+}

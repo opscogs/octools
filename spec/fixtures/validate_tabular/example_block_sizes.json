@@ -1,0 +1,17 @@
+{
+  "description": "The demo block_sizes result fits its kinds.",
+  "input": {
+    "envelope": {
+      "columns": ["prefix", "prefix_len", "size"],
+      "rows": [
+        ["10.0.0.0/24", 24, 256],
+        ["2001:db8::/32", 32, "79228162514264337593543950336"]
+      ],
+      "row_count": 2,
+      "truncated": false,
+      "column_kinds": ["ip_block", "integer", "big_integer"],
+      "column_scales": [null, null, "log2"]
+    }
+  },
+  "expected": []
+}

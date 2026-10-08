@@ -1,0 +1,7 @@
+{
+  "description": "A full stop followed by a non-space character is not a sentence end.",
+  "input": {
+    "text": "Version 1.5 is required."
+  },
+  "expected": 1
+}

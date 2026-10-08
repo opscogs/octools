@@ -1,0 +1,211 @@
+{
+  "description": "Every input type rendering rule, including the 40-character enum cut.",
+  "input": {
+    "tool": {
+      "name": "type_rendering",
+      "description": "Exercise every input type rendering. Nothing else.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["plain", "mode"],
+        "properties": {
+          "plain": {
+            "type": "string",
+            "description": "A string."
+          },
+          "maybe": {
+            "type": ["string", "null"]
+          },
+          "many": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "bare_array": {
+            "type": "array"
+          },
+          "mode": {
+            "enum": ["a", "b", "c"],
+            "type": "string"
+          },
+          "long_enum": {
+            "enum": [
+              "alpha",
+              "bravo",
+              "charlie",
+              "delta",
+              "echo",
+              "foxtrot",
+              "golf"
+            ]
+          },
+          "mixed_enum": {
+            "enum": [null, true, 1.5]
+          },
+          "fixed": {
+            "const": 3
+          },
+          "ref": {
+            "$ref": "#/$defs/Mode"
+          },
+          "union": {
+            "anyOf": [
+              {
+                "enum": ["a", "b"]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "one": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/Item"
+              }
+            ]
+          },
+          "nothing": {},
+          "empty_union": {
+            "anyOf": []
+          },
+          "not_a_schema": true,
+          "described": {
+            "type": "string",
+            "description": 7
+          }
+        },
+        "$defs": {
+          "Mode": {
+            "enum": ["x"]
+          },
+          "Item": {
+            "type": "object"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": {
+    "name": "type_rendering",
+    "title": null,
+    "summary": "Exercise every input type rendering.",
+    "description": "Exercise every input type rendering. Nothing else.",
+    "access": "remote",
+    "target": null,
+    "result_kind": "records",
+    "read_only": true,
+    "destructive": false,
+    "idempotent": true,
+    "pages": false,
+    "deprecated": false,
+    "alias_of": null,
+    "inputs": [
+      {
+        "name": "plain",
+        "type": "string",
+        "required": true,
+        "description": "A string."
+      },
+      {
+        "name": "maybe",
+        "type": "string|null",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "many",
+        "type": "array[integer]",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "bare_array",
+        "type": "array",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "mode",
+        "type": "enum(a|b|c)",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "long_enum",
+        "type": "enum(alpha|bravo|charlie|delta|echo|foxtrot|...)",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "mixed_enum",
+        "type": "enum(null|true|1.5)",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "fixed",
+        "type": "const(3)",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "ref",
+        "type": "Mode",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "union",
+        "type": "enum(a|b)|null",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "one",
+        "type": "string|Item",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "nothing",
+        "type": "any",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "empty_union",
+        "type": "any",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "not_a_schema",
+        "type": "any",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "described",
+        "type": "string",
+        "required": false,
+        "description": null
+      }
+    ]
+  }
+}

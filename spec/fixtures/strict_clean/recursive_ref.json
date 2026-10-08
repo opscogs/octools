@@ -1,0 +1,39 @@
+{
+  "description": "A $defs entry that reaches itself is recursive.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "$ref": "#/$defs/Node"
+        }
+      },
+      "$defs": {
+        "Node": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "child": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Node"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "recursive_ref",
+      "tool": null,
+      "path": "/$defs/Node"
+    }
+  ]
+}

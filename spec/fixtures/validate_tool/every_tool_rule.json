@@ -1,0 +1,47 @@
+{
+  "description": "Every per-tool rule fires at once, in rule order.",
+  "input": {
+    "tool": {
+      "name": "Bad Name",
+      "description": "Short",
+      "input_schema": {
+        "type": "object"
+      },
+      "result_kind": "artifact",
+      "deprecated": true
+    },
+    "unchecked": true
+  },
+  "expected": [
+    {
+      "rule": "name_pattern",
+      "tool": "Bad Name",
+      "path": null
+    },
+    {
+      "rule": "description_sentences",
+      "tool": "Bad Name",
+      "path": null
+    },
+    {
+      "rule": "open_object",
+      "tool": "Bad Name",
+      "path": "/input_schema"
+    },
+    {
+      "rule": "output_schema_escape",
+      "tool": "Bad Name",
+      "path": null
+    },
+    {
+      "rule": "artifact_envelope",
+      "tool": "Bad Name",
+      "path": null
+    },
+    {
+      "rule": "deprecated_alias",
+      "tool": "Bad Name",
+      "path": null
+    }
+  ]
+}

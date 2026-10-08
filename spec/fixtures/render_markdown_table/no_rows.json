@@ -1,0 +1,8 @@
+{
+  "description": "No rows gives the header and divider only; a column is at least three wide.",
+  "input": {
+    "columns": ["a", "name"],
+    "rows": []
+  },
+  "expected": "| a   | name |\n| --- | ---- |\n"
+}

@@ -1,0 +1,26 @@
+{
+  "description": "enum values must be primitives.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pick": {
+          "enum": [
+            {
+              "a": 1
+            },
+            "b"
+          ]
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "enum_not_primitive",
+      "tool": null,
+      "path": "/properties/pick"
+    }
+  ]
+}

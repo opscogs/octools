@@ -1,0 +1,22 @@
+{
+  "description": "x- keys belong on output schemas only.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "type": "string",
+          "x-sensitivity": "free_text"
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "extension_key",
+      "tool": null,
+      "path": "/properties/note"
+    }
+  ]
+}

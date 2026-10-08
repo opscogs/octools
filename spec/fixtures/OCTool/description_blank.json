@@ -1,0 +1,28 @@
+{
+  "description": "A whitespace-only description is rejected.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "   ",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": {
+    "error": "invalid_descriptor"
+  }
+}

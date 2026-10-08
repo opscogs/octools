@@ -1,0 +1,26 @@
+{
+  "description": "A strict parse of an artifact dump gives the same dump.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120
+      },
+      "artifacts": [],
+      "warnings": [],
+      "sensitivity": "inherits_input"
+    }
+  },
+  "expected": {
+    "artifact": {
+      "reference": "mem://0.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 120
+    },
+    "artifacts": [],
+    "warnings": [],
+    "sensitivity": "inherits_input"
+  }
+}

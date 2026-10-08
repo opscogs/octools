@@ -1,0 +1,610 @@
+name: CI Pipeline
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+    tags: ["*"]
+  pull_request:
+
+# Tag builds share one group so two releases never publish at once; a queued
+# release waits for the running one instead of cancelling it.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_type == 'tag' && 'release' || github.ref }}
+  cancel-in-progress: false
+
+env:
+  SOURCE_DIR: python/src
+  VERSION_FILE: python/src/octools/VERSION
+
+jobs:
+  install_dependencies:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14", "3.15"]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        id: setup_python
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
+      - name: Restore Cache
+        id: cache-deps
+        uses: actions/cache/restore@v6
+        with:
+          path: .venv
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+
+      - name: Install Python Dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: |
+          # might not need below but just fail-safe
+          if [ -d ".venv" ]; then rm -rf .venv; fi
+
+          # Create venv
+          python3 -m venv .venv
+          source .venv/bin/activate
+
+          # Install dependencies
+          pip install --upgrade pip &&
+          pip install -e "./python[all]"
+
+      - name: Save Cache
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: .venv
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+
+      - name: Test Installation
+        run: |
+          source .venv/bin/activate &&
+          ruff --version
+
+  code_checks:
+    needs: install_dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        id: setup_python
+        with:
+          python-version: 3.12
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        id: cache
+        with:
+          path: .venv
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+
+      # Runners can resolve a different patch release than install_dependencies did.
+      - name: Install Python Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf .venv
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip &&
+          pip install -e "./python[all]"
+
+      - name: Ruff Check
+        run: |
+          source .venv/bin/activate
+          ruff check &&
+          ruff format --check
+
+      - name: Mypy Check
+        run: |
+          source .venv/bin/activate
+          mypy python/src
+
+      - name: Spec Check
+        run: |
+          source .venv/bin/activate
+          python scripts/sync_spec.py --check
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Prettier Check
+        run: |
+          npm ci
+          npx prettier python/src spec typescript --check
+
+  docs_checks:
+    needs: install_dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        id: setup_python
+        with:
+          python-version: 3.12
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        id: cache
+        with:
+          path: .venv
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+
+      # Runners can resolve a different patch release than install_dependencies did.
+      - name: Install Python Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf .venv
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip &&
+          pip install -e "./python[all]"
+
+      - name: CSpell Check
+        uses: streetsidesoftware/cspell-action@v9
+        with:
+          files: |
+            docs/**/*.md
+            README.md
+            python/src/**/*.md
+            spec/**/*.md
+            typescript/*.md
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+
+      # The TypeScript API reference is generated into the docs tree (gitignored)
+      # before mkdocs runs; the nav links to it, so a missing build fails --strict.
+      - name: Check Docs
+        run: |
+          npm ci
+          npm --prefix typescript run docs -- --out ../docs/site/api/typescript
+          source .venv/bin/activate &&
+          mkdocs build --strict
+
+  # The TypeScript package (@opscogs/octools): types, lint, the spec/
+  # conformance fixtures at 100% coverage, build, API docs and package contents.
+  typescript_checks:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22", "24", "26"]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck, Lint, Test
+        working-directory: typescript
+        run: |
+          npm run typecheck
+          npm run lint
+          npm run test:coverage
+
+      - name: Coverage Summary
+        if: always()
+        working-directory: typescript
+        run: |
+          node -e '
+            const t = JSON.parse(require("fs").readFileSync("coverage/coverage-summary.json", "utf8")).total;
+            const rows = ["lines", "statements", "functions", "branches"]
+              .map((k) => `| ${k} | ${t[k].covered}/${t[k].total} | ${t[k].pct}% |`);
+            console.log([
+              "### TypeScript (Node ${{ matrix.node-version }}) coverage",
+              "",
+              "| Metric | Covered | Percent |",
+              "| --- | --- | --- |",
+              ...rows,
+            ].join("\n"));
+          ' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build, Docs, Pack
+        working-directory: typescript
+        run: |
+          npm run build
+          npm run docs
+          npm pack --dry-run
+
+  # The upstream-request mirror must match the issue list when a release is
+  # tagged (the changelog cut). On branch pushes a stale mirror is a warning
+  # only, since filing or relabelling an issue changes the list outside git.
+  upstream_mirror_check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: 3.12
+
+      - name: Check Upstream Request Mirror
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if python scripts/sync_upstream_requests.py --check; then
+            exit 0
+          elif [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "::error file=docs/dev/upstream/requests.jsonl::stale; run scripts/sync_upstream_requests.py and commit before tagging"
+            exit 1
+          else
+            echo "::warning file=docs/dev/upstream/requests.jsonl::stale; run scripts/sync_upstream_requests.py before cutting the changelog"
+          fi
+
+  run_tests:
+    needs: install_dependencies
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14", "3.15"]
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - uses: actions/setup-python@v7
+        id: setup_python
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        id: cache
+        with:
+          path: .venv
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+
+      # Runners can resolve a different patch release than install_dependencies did.
+      - name: Install Python Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf .venv
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip &&
+          pip install -e "./python[all]"
+
+      - name: Run Tests
+        run: |
+          source .venv/bin/activate &&
+          pytest --cov ${{ env.SOURCE_DIR }} --cov-report term-missing --cov-report xml
+
+      - name: Coverage Summary
+        if: always()
+        run: |
+          source .venv/bin/activate
+          {
+            echo "### Python ${{ matrix.python-version }} coverage"
+            coverage report --format=markdown
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # Every push builds both packages so packaging is always exercised: a tag
+  # under its release versions, anything else as 0.0.0+<sha> / npm 0.0.0. On a
+  # tag the changelog gate and the lockstep check (both manifests carry the
+  # tag's versions) run before anything is built for publishing.
+  build_package:
+    needs: install_dependencies
+    runs-on: ubuntu-latest
+    outputs:
+      pypi_version: ${{ steps.versions.outputs.pypi_version }}
+      npm_version: ${{ steps.versions.outputs.npm_version }}
+      npm_dist_tag: ${{ steps.versions.outputs.npm_dist_tag }}
+      prerelease: ${{ steps.versions.outputs.prerelease }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        id: setup_python
+        with:
+          python-version: 3.12
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        id: cache
+        with:
+          path: .venv
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+
+      # Runners can resolve a different patch release than install_dependencies did.
+      - name: Install Python Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf .venv
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip &&
+          pip install -e "./python[all]"
+
+      - name: Check Changelog Version
+        if: github.ref_type == 'tag'
+        env:
+          TAG: ${{ github.ref_name }}
+        run: python scripts/changelog_version.py --check-tag "$TAG"
+
+      - name: Map Release Versions
+        id: versions
+        env:
+          TAG: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: |
+          if [ "$REF_TYPE" = "tag" ]; then
+            python scripts/release_version.py "$TAG" | tee -a "$GITHUB_OUTPUT"
+          else
+            python scripts/release_version.py --dev "${GITHUB_SHA::7}" | tee -a "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Stamp Versions
+        env:
+          PYPI_VERSION: ${{ steps.versions.outputs.pypi_version }}
+          NPM_VERSION: ${{ steps.versions.outputs.npm_version }}
+        run: |
+          printf '%s' "$PYPI_VERSION" > "$VERSION_FILE"
+          npm ci
+          npm version "$NPM_VERSION" --workspace typescript --no-git-tag-version --allow-same-version --no-workspaces-update
+
+      - name: Check Lockstep Versions
+        env:
+          TAG: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: |
+          if [ "$REF_TYPE" = "tag" ]; then
+            python scripts/release_version.py "$TAG" --check
+          else
+            python scripts/release_version.py --dev "${GITHUB_SHA::7}" --check
+          fi
+
+      - name: Build Python Distributions
+        run: |
+          source .venv/bin/activate &&
+          python -m build python &&
+          ls -la python/dist/
+
+      # prepack builds dist/ from source, so the tarball holds what was checked.
+      - name: Pack npm Package
+        working-directory: typescript
+        run: |
+          mkdir -p ../npm-dist
+          npm pack --pack-destination ../npm-dist
+          ls -la ../npm-dist/
+
+      # Install the wheel into a clean venv and run the console script against
+      # the shipped demo provider from outside the checkout.
+      - name: Smoke Test Wheel
+        env:
+          PYPI_VERSION: ${{ steps.versions.outputs.pypi_version }}
+        run: |
+          WHEEL_FILE=$(ls "$PWD"/python/dist/*.whl | head -n 1)
+          if [ -z "$WHEEL_FILE" ]; then
+              echo "No wheel file found in python/dist/"
+              exit 1
+          fi
+          python -m venv "$RUNNER_TEMP/wheel_venv" &&
+          source "$RUNNER_TEMP/wheel_venv/bin/activate" &&
+          pip install "$WHEEL_FILE" &&
+          cd "$RUNNER_TEMP" &&
+          python -c "import os, octools; print(octools.__version__, octools.SPEC_VERSION); assert octools.__version__ == os.environ['PYPI_VERSION']" &&
+          octools --version &&
+          octools list octools.example &&
+          octools list octools.example --output-format json --no-pretty > listing.json &&
+          python -c "import json; names = [row['name'] for row in json.load(open('listing.json'))]; assert 'echo_records' in names, names"
+
+      # Install the tarball and its zod peer into an empty project outside the
+      # workspace and import the package root.
+      - name: Smoke Test npm Tarball
+        env:
+          NPM_VERSION: ${{ steps.versions.outputs.npm_version }}
+        run: |
+          TARBALL=$(ls "$PWD"/npm-dist/*.tgz | head -n 1)
+          mkdir "$RUNNER_TEMP/npm_smoke" && cd "$RUNNER_TEMP/npm_smoke"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund "$TARBALL" zod@4
+          node -e '
+            import("@opscogs/octools").then((m) => {
+              const pkg = require("@opscogs/octools/package.json");
+              console.log(pkg.version, m.SPEC_VERSION);
+              if (pkg.version !== process.env.NPM_VERSION) throw new Error(`version ${pkg.version}`);
+              if (typeof m.validateProvider !== "function") throw new Error("validateProvider missing");
+            });
+          '
+
+      - name: Upload Python Distributions
+        uses: actions/upload-artifact@v7
+        with:
+          name: python-dist
+          path: python/dist/*
+          if-no-files-found: error
+
+      - name: Upload npm Tarball
+        uses: actions/upload-artifact@v7
+        with:
+          name: npm-dist
+          path: npm-dist/*.tgz
+          if-no-files-found: error
+
+  # Trusted publishing: PyPI exchanges the job's OIDC token for a short-lived
+  # upload token, so no registry secret is stored. The pypi environment is the
+  # one named in the PyPI trusted-publisher entry.
+  publish_pypi:
+    needs: [build_package, run_tests, code_checks, docs_checks, typescript_checks, upstream_mirror_check]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/octools/${{ needs.build_package.outputs.pypi_version }}/
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: python-dist
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@v1.14.2
+        with:
+          attestations: true
+
+  # Trusted publishing to npm needs npm 11.5.1 or later; the OIDC exchange
+  # replaces NODE_AUTH_TOKEN and provenance links the tarball to this run.
+  publish_npm:
+    needs: [build_package, run_tests, code_checks, docs_checks, typescript_checks, upstream_mirror_check]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@opscogs/octools/v/${{ needs.build_package.outputs.npm_version }}
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+
+      - name: Install npm 11
+        run: |
+          npm install -g npm@11.20.0
+          npm --version
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: npm-dist
+          path: npm-dist
+
+      - name: Publish
+        env:
+          DIST_TAG: ${{ needs.build_package.outputs.npm_dist_tag }}
+        run: npm publish npm-dist/*.tgz --provenance --access public --tag "$DIST_TAG"
+
+  github_release:
+    needs: [build_package, publish_pypi, publish_npm]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: release
+          merge-multiple: true
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          prerelease: ${{ needs.build_package.outputs.prerelease == 'true' }}
+          fail_on_unmatched_files: true
+          files: release/*
+
+  # The published site documents the latest final release, so a pre-release
+  # tag leaves it unchanged.
+  deploy_docs:
+    needs: [build_package, github_release]
+    if: github.ref_type == 'tag' && needs.build_package.outputs.prerelease == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        id: setup_python
+        with:
+          python-version: 3.12
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v6
+        id: cache
+        with:
+          path: .venv
+          key: pip-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+
+      # Runners can resolve a different patch release than install_dependencies did.
+      - name: Install Python Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf .venv
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip &&
+          pip install -e "./python[all]"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Build and Deploy Documentation
+        run: |
+          npm ci
+          npm --prefix typescript run docs -- --out ../docs/site/api/typescript
+          source .venv/bin/activate &&
+          mkdocs build --strict &&
+          mkdocs gh-deploy --force
+
+  # After a final release is published, move the upstream requests it delivers
+  # (open, ur:planned, in the milestone named after the tag, and cited in the
+  # tag's CHANGELOG entry) to ur:delivered with a delivery comment. An uncited
+  # request is reported as a warning and left planned. A pre-release delivers
+  # nothing: its requests ship with the final.
+  deliver_upstream_requests:
+    needs: [build_package, github_release]
+    if: github.ref_type == 'tag' && needs.build_package.outputs.prerelease == 'false'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: 3.12
+
+      - name: Deliver upstream requests
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: python scripts/deliver_upstream_requests.py "$TAG"

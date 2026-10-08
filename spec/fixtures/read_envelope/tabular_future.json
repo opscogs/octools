@@ -1,0 +1,30 @@
+{
+  "description": "Unknown keys drop, unknown kinds read as text, unknown scales and scales on non-numeric kinds read as null.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["prefix", "share", "size", "note"],
+      "column_kinds": ["cidr_set", "decimal", "big_integer", "text"],
+      "column_scales": [null, "log10", "ln", "log2"],
+      "rows": [["192.0.2.0/24", "0.5", "256", "x"]],
+      "row_count": 1,
+      "truncated": true,
+      "next_cursor": "c",
+      "stop_reason": "producer_reason",
+      "resumable": true,
+      "role": "chart",
+      "source": "snapshot-a"
+    }
+  },
+  "expected": {
+    "columns": ["prefix", "share", "size", "note"],
+    "rows": [["192.0.2.0/24", "0.5", "256", "x"]],
+    "row_count": 1,
+    "truncated": true,
+    "column_kinds": ["text", "text", "big_integer", "text"],
+    "column_scales": [null, null, null, null],
+    "next_cursor": "c",
+    "stop_reason": "producer_reason",
+    "resumable": true
+  }
+}

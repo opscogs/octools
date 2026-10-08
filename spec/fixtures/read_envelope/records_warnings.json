@@ -1,0 +1,26 @@
+{
+  "description": "warnings are kept when present.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "warnings": ["source b missing"]
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a"
+      }
+    ],
+    "count": 1,
+    "truncated": false,
+    "warnings": ["source b missing"]
+  }
+}

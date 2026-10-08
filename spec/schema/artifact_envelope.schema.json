@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "ArtifactRef": {
+      "additionalProperties": false,
+      "description": "Where one produced artifact lives and what it is.",
+      "properties": {
+        "reference": {
+          "description": "Reference the caller can cite: the path or id the sink returned.",
+          "type": "string"
+        },
+        "media_type": {
+          "description": "IANA media type, e.g. 'image/svg+xml'.",
+          "type": "string"
+        },
+        "bytes": {
+          "description": "Size of the artifact in bytes.",
+          "type": "integer"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pixel width when the artifact is an image; omitted otherwise."
+        },
+        "height": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pixel height when the artifact is an image; omitted otherwise."
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What the artifact is to the run, such as csv, plan or summary."
+        }
+      },
+      "required": ["reference", "media_type", "bytes"],
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Result of a tool that produces a file rather than data to read.",
+  "properties": {
+    "artifact": {
+      "$ref": "#/$defs/ArtifactRef",
+      "description": "The primary artifact produced."
+    },
+    "artifacts": {
+      "description": "Further artifacts produced alongside the primary, if any.",
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      },
+      "type": "array"
+    },
+    "warnings": {
+      "description": "Non-fatal problems the caller should relay, one per entry.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "sensitivity": {
+      "const": "inherits_input",
+      "default": "inherits_input",
+      "description": "Per-field extras cannot annotate a file, so the artifact is treated as containing every input column.",
+      "type": "string"
+    }
+  },
+  "required": ["artifact"],
+  "type": "object"
+}

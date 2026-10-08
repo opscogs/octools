@@ -1,0 +1,55 @@
+---
+description: Agents must activate project venv or use uv run before any python/pytest/ruff command
+alwaysApply: true
+---
+
+# Virtual environment
+
+**For Cursor/AI agents:** Never run `python`, `python3`, `pytest`, `ruff`, `mypy`, or `mkdocs` without either (1) activating the venv first in the same shell, or (2) using `uv run` so the project env is used. Every Python-related command you suggest or run must follow one of these patterns.
+
+**Which instructions to use:** Use Cursor `user_info` (e.g. `win32` → Windows, `darwin` → macOS, Linux) or the shell you will run commands in. On Windows, default to **PowerShell** and the **Windows (PowerShell)** section below. On macOS or Linux, use **Linux and macOS (bash/zsh)**. Match path separators and activation to that environment.
+
+### Linux and macOS (bash/zsh)
+
+```bash
+source .venv/bin/activate
+```
+
+### Windows (PowerShell)
+
+Activation and examples below assume **PowerShell** (use `.venv\Scripts\Activate.ps1`). Git Bash on Windows may use `source .venv/Scripts/activate` instead; still prefer PowerShell for this rule unless the terminal is explicitly Bash.
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Then run the intended command (e.g. `pytest`, `ruff`, `python`, `uv run ...`).
+
+- **Do** activate first (`source .venv/bin/activate` on Unix, `.venv\Scripts\Activate.ps1` in PowerShell) when suggesting or running: `python`, `python3`, `pytest`, `ruff`, `mypy`, `mkdocs`, or other project tooling that depends on the venv.
+- **Do** use the same shell session where the venv is already activated for follow-up commands, or activate again in a new shell.
+- **Do** use `uv run <command>` on any platform as an alternative so the project env is used without manually activating (e.g. `uv run pytest ...`, `uv run pytest python\tests\unit_tests\...`, `uv run python script.py`).
+- **Do not** run `pytest`, `ruff`, `mypy`, `mkdocs`, or project Python scripts without ensuring the venv is active (either by activating in the same shell or by using `uv run` which uses the project env).
+
+Examples:
+
+Linux and macOS
+
+```bash
+source .venv/bin/activate
+pytest python/tests/unit_tests/test_descriptor.py -v
+```
+
+```bash
+uv run pytest python/tests/unit_tests/test_descriptor.py -v
+```
+
+Windows (PowerShell)
+
+```powershell
+.venv\Scripts\Activate.ps1
+pytest python\tests\unit_tests\test_descriptor.py -v
+```
+
+```powershell
+uv run pytest python\tests\unit_tests\test_descriptor.py -v
+```

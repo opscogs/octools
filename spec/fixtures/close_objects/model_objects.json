@@ -1,0 +1,92 @@
+{
+  "description": "Every object with properties gets additionalProperties false; a free-form object and an explicit setting stay.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "inner": {
+          "type": "object",
+          "properties": {
+            "a": {
+              "type": "string"
+            }
+          }
+        },
+        "free": {
+          "type": "object"
+        },
+        "open": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        "default": {
+          "type": "object",
+          "properties": {},
+          "default": {
+            "properties": {}
+          }
+        }
+      },
+      "$defs": {
+        "D": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    }
+  },
+  "expected": {
+    "type": "object",
+    "properties": {
+      "inner": {
+        "type": "object",
+        "properties": {
+          "a": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "free": {
+        "type": "object"
+      },
+      "open": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": true
+      },
+      "list": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        }
+      },
+      "default": {
+        "type": "object",
+        "properties": {},
+        "default": {
+          "properties": {}
+        },
+        "additionalProperties": false
+      }
+    },
+    "$defs": {
+      "D": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "additionalProperties": false
+  }
+}

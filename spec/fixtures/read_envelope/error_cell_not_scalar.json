@@ -1,0 +1,15 @@
+{
+  "description": "Cells are scalars only.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a", [1]]],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

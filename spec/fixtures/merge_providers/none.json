@@ -1,0 +1,7 @@
+{
+  "description": "Merging no providers gives an empty listing.",
+  "input": {
+    "providers": []
+  },
+  "expected": []
+}

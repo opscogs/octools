@@ -1,0 +1,8 @@
+{
+  "description": "An empty listing in the md style.",
+  "input": {
+    "tools": [],
+    "style": "md"
+  },
+  "expected": "| name | access | mode | result_kind | pages | deprecated | summary |\n| ---- | ------ | ---- | ----------- | ----- | ---------- | ------- |\n"
+}

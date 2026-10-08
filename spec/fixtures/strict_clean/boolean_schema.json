@@ -1,0 +1,19 @@
+{
+  "description": "A boolean subschema is not allowed.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "any": true
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "boolean_schema",
+      "tool": null,
+      "path": "/properties/any"
+    }
+  ]
+}

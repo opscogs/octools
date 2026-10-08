@@ -1,0 +1,47 @@
+{
+  "description": "strict_clean findings on the input schema carry the tool name and a /input_schema path prefix.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "title": "Args",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^a"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": [
+    {
+      "rule": "title_present",
+      "tool": "cluster_info",
+      "path": "/input_schema"
+    },
+    {
+      "rule": "open_object",
+      "tool": "cluster_info",
+      "path": "/input_schema"
+    },
+    {
+      "rule": "unsupported_keyword",
+      "tool": "cluster_info",
+      "path": "/input_schema/properties/name"
+    }
+  ]
+}

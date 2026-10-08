@@ -1,0 +1,8 @@
+{
+  "description": "An empty listing in the txt style.",
+  "input": {
+    "tools": [],
+    "style": "txt"
+  },
+  "expected": ""
+}

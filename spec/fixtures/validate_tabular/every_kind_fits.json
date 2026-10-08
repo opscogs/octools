@@ -1,0 +1,62 @@
+{
+  "description": "Valid cells for every kind, and null under any kind, have no findings.",
+  "input": {
+    "envelope": {
+      "columns": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+      "column_kinds": [
+        "text",
+        "number",
+        "integer",
+        "boolean",
+        "timestamp",
+        "ip",
+        "fqdn",
+        "mac",
+        "ip_block",
+        "big_integer"
+      ],
+      "rows": [
+        [
+          "x",
+          1,
+          9007199254740991,
+          true,
+          "2026-10-08T12:00:00Z",
+          "192.0.2.1",
+          "a.demo.example",
+          "00:11:22:33:44:55",
+          "10.0.0.1/24",
+          "-12"
+        ],
+        [
+          "",
+          1.5,
+          -9007199254740991,
+          false,
+          "2026-10-08t12:00:00.123+02:00",
+          "2001:db8::1",
+          "demo.example.",
+          "00-11-22-33-44-55-66-77",
+          "10.0.0.1-10.0.0.9",
+          18
+        ],
+        [
+          null,
+          -0.25,
+          0,
+          null,
+          "2026-02-28T23:59:59-05:30",
+          "::",
+          "localhost",
+          "aa:BB:cc:DD:ee:FF",
+          "2001:db8::1",
+          "18446744073709551616"
+        ],
+        [null, null, null, null, null, null, null, null, "2001:db8::/32", "0"]
+      ],
+      "row_count": 4,
+      "truncated": false
+    }
+  },
+  "expected": []
+}

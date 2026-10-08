@@ -1,0 +1,7 @@
+{
+  "description": "U+FEFF is not whitespace, so it does not end a sentence.",
+  "input": {
+    "text": "Done.\ufeffNext."
+  },
+  "expected": 1
+}

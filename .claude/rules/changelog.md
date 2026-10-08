@@ -1,0 +1,38 @@
+---
+paths:
+  - "CHANGELOG.md"
+---
+<!-- Generated from .cursor/rules/changelog.mdc by scripts/sync_claude_config.py; edit the source. -->
+
+# CHANGELOG updates
+
+`CHANGELOG.md` follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). It is a scan list for readers picking up a new version. Entries are **hints** to the published docs, not a second copy of them. Skip a formatting-only change, an internal rename, or a merge commit that nobody upgrading would notice.
+
+## Format
+
+- Add the newest bullet at the top of the current `## [x.y.z] - Unreleased` section.
+- Tag every bullet with a Linear key (`OCI-613`) or a GitHub issue key (`GH-32`).
+- Use Keep a Changelog sections: `Added` / `Changed` / `Fixed` (and `Removed` when needed). Put unreleased work under `[x.y.z] - Unreleased`.
+- One concern per bullet. Prefer a **single wrapped sentence**.
+- A bullet delivering an upstream request keeps its Linear key and names the request id in parentheses at the end of the sentence (`... on RecordsEnvelope (DEMO-UR-0042)`). The request id is the citation key; do not also append the `GH-N` of the request's issue (`GH-N` tags octools' own issues).
+
+## What belongs here
+
+- User-visible behavior: a new public helper, an envelope field, a breaking `SPEC_VERSION` or `__all__` contract, a validator finding shape.
+- Names a reader will search in docs (`read_envelope`, `validate_provider`, `merge_providers`, `column_kinds`).
+
+## What belongs in docs instead
+
+- Full schema listings, finding-code matrices, tolerant-reader fallback tables, exact validation messages, internal function names, and follow-ups that are not shipped.
+
+Write the complete listing in `docs/site/` (or `docs/decisions/` for a contract). Do not duplicate that listing in the changelog.
+
+## When to go past one line
+
+Keep a second sentence only for a contract a scanner would otherwise miss: a **breaking** `SPEC_VERSION` or public `__all__` change, a tolerant-reader fallback whose absence changes meaning, or a validator finding shape a caller must match. Do not use extra lines for completeness.
+
+## Releasing a version
+
+- Rename `## [X.Y.Z] - Unreleased` to `## [X.Y.Z] - YYYY-MM-DD` when cutting a release, and add a fresh `## [<next-version>] - Unreleased` section above it.
+- The newest version stays at the top. Older versions follow in reverse chronological order.
+- `scripts/changelog_version.py --check-tag` gates the release: a final tag must equal the top entry's version, and that entry must carry a real date (not `Unreleased`); a pre-release tag (`X.Y.ZaN`/`bN`/`rcN`) must match the top entry's version, dated or `Unreleased`. CI runs this before a tag build ships.

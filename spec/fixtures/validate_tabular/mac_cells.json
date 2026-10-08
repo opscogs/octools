@@ -1,0 +1,36 @@
+{
+  "description": "One mac column per candidate cell: the first fits, every other column has one finding.",
+  "input": {
+    "envelope": {
+      "columns": ["c0", "c1", "c2", "c3"],
+      "column_kinds": ["mac", "mac", "mac", "mac"],
+      "rows": [
+        [
+          "00:11:22:33:44:55",
+          "00:11:22-33:44:55",
+          "0011.2233.4455",
+          "00:11:22:33:44"
+        ]
+      ],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": [
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/1"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/2"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/3"
+    }
+  ]
+}

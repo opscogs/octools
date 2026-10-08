@@ -1,0 +1,19 @@
+{
+  "description": "Booleans render yes/no, null and missing keys as empty cells, numbers as text.",
+  "input": {
+    "columns": ["name", "ok", "count", "note"],
+    "rows": [
+      {
+        "name": "a",
+        "ok": true,
+        "count": 3,
+        "note": null
+      },
+      {
+        "name": "bb",
+        "ok": false
+      }
+    ]
+  },
+  "expected": "| name | ok  | count | note |\n| ---- | --- | ----- | ---- |\n| a    | yes | 3     |      |\n| bb   | no  |       |      |\n"
+}

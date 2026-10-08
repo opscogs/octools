@@ -1,0 +1,40 @@
+{
+  "description": "One big_integer column per candidate cell: the first fits, every other column has one finding.",
+  "input": {
+    "envelope": {
+      "columns": ["c0", "c1", "c2", "c3", "c4"],
+      "column_kinds": [
+        "big_integer",
+        "big_integer",
+        "big_integer",
+        "big_integer",
+        "big_integer"
+      ],
+      "rows": [["123", "01", "1.0", true, "+1"]],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": [
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/1"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/2"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/3"
+    },
+    {
+      "rule": "cell_kind",
+      "tool": null,
+      "path": "/rows/0/4"
+    }
+  ]
+}

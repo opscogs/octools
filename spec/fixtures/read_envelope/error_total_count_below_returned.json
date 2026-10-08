@@ -1,0 +1,19 @@
+{
+  "description": "total_count may not be below the number returned.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "total_count": 0
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

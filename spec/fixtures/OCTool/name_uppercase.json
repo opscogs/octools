@@ -1,0 +1,28 @@
+{
+  "description": "A name with an uppercase letter breaks NAME_RE.",
+  "input": {
+    "tool": {
+      "name": "Cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"],
+        "additionalProperties": false
+      },
+      "access": "remote"
+    }
+  },
+  "expected": {
+    "error": "invalid_descriptor"
+  }
+}

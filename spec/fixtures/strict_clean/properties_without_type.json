@@ -1,0 +1,21 @@
+{
+  "description": "An object is recognized by properties alone.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inner": {
+          "properties": {}
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "open_object",
+      "tool": null,
+      "path": "/properties/inner"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "description": "allOf must not contain a $ref member.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "a": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/A"
+            }
+          ]
+        }
+      },
+      "$defs": {
+        "A": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "allof_ref",
+      "tool": null,
+      "path": "/properties/a/allOf"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "description": "Text with no sentence end counts zero.",
+  "input": {
+    "text": "Return the identity"
+  },
+  "expected": 0
+}

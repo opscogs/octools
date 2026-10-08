@@ -1,0 +1,21 @@
+---
+paths:
+  - "docs/decisions/**/*.md"
+---
+<!-- Generated from .cursor/rules/decision-versioning.mdc by scripts/sync_claude_config.py; edit the source. -->
+
+# Decision records carry a semantic version
+
+Every ADR in `docs/decisions/` has `version:` in its MADR front matter, and the decision log shows it in the Version column. Both change in the same commit.
+
+- A new ADR starts at `0.1.0`.
+- Bump **once per commit** that changes an ADR, compared with the version on `main` (not with your last local edit). Update the front-matter `date` at the same time.
+- While `proposed`: **minor** for new or changed content, **patch** for editorial fixes.
+- Acceptance sets `1.0.0`.
+- After acceptance:
+  - **major**: the decision, or the meaning of an invariant, changes (removed, reversed or narrowed);
+  - **minor**: an additive change (a new invariant, sub-decision, option or test obligation);
+  - **patch**: an editorial change that alters no meaning (wording, links, formatting).
+- `rejected`, `deprecated` and `superseded` are minor bumps.
+- Invariant IDs never change meaning within a major version. If a major bump retires an invariant, retire its ID too; never reuse it.
+- The version is the only change record. Per `no-historical-narrative`, the ADR body states what holds now; `git log` holds the history.

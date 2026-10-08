@@ -1,0 +1,20 @@
+{
+  "description": "All-null scales need no column_kinds.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "column_scales": [null, null]
+    }
+  },
+  "expected": {
+    "columns": ["host", "count"],
+    "rows": [["a.demo.example", 1]],
+    "row_count": 1,
+    "truncated": false,
+    "column_scales": [null, null]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "description": "A title keyword is reported at every level.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "title": "Args",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Name"
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "title_present",
+      "tool": null,
+      "path": ""
+    },
+    {
+      "rule": "title_present",
+      "tool": null,
+      "path": "/properties/name"
+    }
+  ]
+}

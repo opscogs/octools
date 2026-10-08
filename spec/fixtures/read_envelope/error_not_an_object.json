@@ -1,0 +1,10 @@
+{
+  "description": "An envelope is a JSON object.",
+  "input": {
+    "model": "records",
+    "data": ["not", "an", "object"]
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

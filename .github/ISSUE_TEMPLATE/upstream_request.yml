@@ -1,0 +1,134 @@
+name: Upstream request
+description: A shared-tool ask from a consumer of octools
+title: "PREFIX-UR-NNNN "
+labels: ["upstream-request", "ur:filed"]
+body:
+  - {
+      type: markdown,
+      attributes:
+        {
+          value: "Use this form only if you maintain a downstream library that tracks its requests with its own decision-record prefix (`PREFIX-UR-NNNN`). Everyone else: use the **Feature request** form.",
+        },
+    }
+  - {
+      type: input,
+      id: request_id,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Request id",
+          description: "Your decision-record prefix plus UR plus four digits, e.g. DEMO-UR-0042, sequential across every upstream you file against and never reused. Start the title with it, followed by the short imperative title your own record carries.",
+        },
+    }
+  - {
+      type: input,
+      id: consumer,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Consumer package and repo",
+          placeholder: "demo_tools (demo_tools)",
+        },
+    }
+  - {
+      type: input,
+      id: consumer_version,
+      validations: { required: true },
+      attributes: { label: "Consumer version and current octools floor" },
+    }
+  - {
+      type: input,
+      id: declared_range,
+      attributes:
+        {
+          label: "Declared octools range (optional)",
+          description: "The dependency range from the consumer's own pyproject, e.g. octools >= 1.0, < 2.",
+          placeholder: "octools >= 1.0, < 2",
+        },
+    }
+  - {
+      type: textarea,
+      id: justification,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Shared-tool justification",
+          description: "Per OCTL-0001, why a consumer library cannot fix this on its own because the behaviour lives in the descriptor, envelopes, schema helpers, validator or converters. Say why it is not transport, adapter or field-mapping territory, and why it is not on the 1.x scope fence.",
+        },
+    }
+  - {
+      type: textarea,
+      id: reproduction,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Friction and reproduction",
+          description: "What the gap costs the consumer today, concretely, then the smallest snippet or failing test. No network, no vendor or product names.",
+        },
+    }
+  - {
+      type: textarea,
+      id: requested,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Requested behaviour and acceptance",
+          description: "Observable from outside - a released version, a promoted symbol, a documented field.",
+        },
+    }
+  - {
+      type: textarea,
+      id: proposed_api,
+      attributes: { label: "Proposed API (optional)" },
+    }
+  - {
+      type: textarea,
+      id: workaround,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Workaround in the consumer today",
+          description: "What the consumer does instead, or none and why. Give file and line when the path names no vendor or product; otherwise describe the location.",
+        },
+    }
+  - {
+      type: dropdown,
+      id: impact,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Impact",
+          options:
+            ["Blocks a consumer release", "Workaround exists", "Papercut"],
+        },
+    }
+  - {
+      type: dropdown,
+      id: size,
+      validations: { required: true },
+      attributes:
+        {
+          label: "Size hint",
+          description: "A rough read of the change, for grouping; not an estimate anyone is held to.",
+          options: ["S", "M", "L"],
+        },
+    }
+  - {
+      type: checkboxes,
+      id: checks,
+      attributes:
+        {
+          label: "Checks",
+          options:
+            [
+              {
+                label: "I searched open and closed issues for this id and this ask",
+                required: true,
+              },
+              {
+                label: "No vendor or product name appears in this issue",
+                required: true,
+              },
+            ],
+        },
+    }

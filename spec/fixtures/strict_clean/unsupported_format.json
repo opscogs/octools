@@ -1,0 +1,22 @@
+{
+  "description": "A format outside STRICT_FORMATS is reported.",
+  "input": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "net": {
+          "type": "string",
+          "format": "ipv4-network"
+        }
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "unsupported_format",
+      "tool": null,
+      "path": "/properties/net"
+    }
+  ]
+}

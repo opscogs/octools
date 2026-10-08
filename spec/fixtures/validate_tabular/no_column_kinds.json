@@ -1,0 +1,12 @@
+{
+  "description": "Without column_kinds there is nothing to check.",
+  "input": {
+    "envelope": {
+      "columns": ["host", "count"],
+      "rows": [[1, "x"]],
+      "row_count": 1,
+      "truncated": false
+    }
+  },
+  "expected": []
+}

@@ -1,0 +1,19 @@
+{
+  "description": "A string total_count is a canonical non-negative decimal.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "total_count": "01"
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

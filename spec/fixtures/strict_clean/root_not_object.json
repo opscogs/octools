@@ -1,0 +1,18 @@
+{
+  "description": "The root must be an object schema.",
+  "input": {
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "expected": [
+    {
+      "rule": "root_not_object",
+      "tool": null,
+      "path": ""
+    }
+  ]
+}

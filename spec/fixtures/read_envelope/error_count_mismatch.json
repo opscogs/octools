@@ -1,0 +1,18 @@
+{
+  "description": "count must equal the number of records.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 2,
+      "truncated": false
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

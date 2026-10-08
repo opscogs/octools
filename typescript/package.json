@@ -1,0 +1,68 @@
+{
+  "name": "@opscogs/octools",
+  "version": "0.0.0",
+  "description": "OpsCogs standard interface for AI agent tools: the OCTool descriptor, result envelopes, a conformance validator and plain-object converters to the MCP and Anthropic tool shapes.",
+  "keywords": [
+    "agent",
+    "tools",
+    "mcp",
+    "json-schema",
+    "zod"
+  ],
+  "license": "MIT",
+  "author": "OpsCogs Inc.",
+  "homepage": "https://octools.docs.opscogs.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opscogs/octools.git",
+    "directory": "typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/opscogs/octools/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "docs": "typedoc",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "zod": "^4.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.4",
+    "@vitest/coverage-v8": "5.0.1",
+    "eslint": "10.11.0",
+    "typedoc": "0.28.20",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.70.1",
+    "vitest": "5.0.1",
+    "zod": "4.6.5"
+  }
+}

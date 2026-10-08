@@ -1,0 +1,25 @@
+{
+  "description": "A resumable key that agrees with next_cursor is checked, not stored; a complete read dumps no resumable.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "a"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "resumable": false
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "a"
+      }
+    ],
+    "count": 1,
+    "truncated": false
+  }
+}

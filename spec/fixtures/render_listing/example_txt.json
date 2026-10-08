@@ -1,0 +1,601 @@
+{
+  "description": "The demo provider in the txt style.",
+  "input": {
+    "tools": [
+      {
+        "name": "echo_records",
+        "description": "Return each input string as one record with its position. Use it to check that a tool round-trip works before calling anything real. Returns a records envelope; when limit cut the list, truncated is true and next_cursor fetches the next page.",
+        "input_schema": {
+          "description": "Input of ``echo_records``.",
+          "properties": {
+            "values": {
+              "description": "Strings to echo back, one record each.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "limit": {
+              "default": 10,
+              "description": "Maximum records to return, 1 to 100; the tool enforces it.",
+              "type": "integer"
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "next_cursor from a previous page; omit for the first page."
+            }
+          },
+          "required": ["values"],
+          "type": "object",
+          "additionalProperties": false
+        },
+        "access": "local",
+        "target": null,
+        "output_schema": {
+          "$defs": {
+            "EchoRecord": {
+              "description": "One record of ``echo_records``: an input string and its position.",
+              "properties": {
+                "value": {
+                  "description": "The echoed string.",
+                  "type": "string",
+                  "x-sensitivity": "free_text"
+                },
+                "position": {
+                  "description": "Zero-based position in the input.",
+                  "type": "integer"
+                }
+              },
+              "required": ["value", "position"],
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "records": {
+              "description": "Result records; keys and order follow the item schema.",
+              "items": {
+                "$ref": "#/$defs/EchoRecord"
+              },
+              "type": "array"
+            },
+            "count": {
+              "description": "Number of records returned, after any cap; equals len(records).",
+              "type": "integer"
+            },
+            "truncated": {
+              "description": "True when a cap, a stop or an interrupted read cut the result short. A truncated read whose resumable is false is the terminal case: it ended for good and there is nothing left to follow.",
+              "type": "boolean"
+            },
+            "total_count": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Exact size of the full result when the source knows it, as an integer, or as a decimal string when above 2^53 - 1; omitted when unknown or approximate."
+            },
+            "next_cursor": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Opaque token that resumes the read where it stopped, present only when resumable is true; pass it back as the tool's cursor argument, unchanged."
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Why the read stopped early. Well-known values include run_deadline, page_count, record_limit, interrupted and cursor_stalled; omitted when the read ended naturally or the limit simply cut it. A cursor_stalled read publishes no next_cursor, because following it would serve the same records again."
+            },
+            "warnings": {
+              "description": "Non-fatal problems the caller should relay, one per entry.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "resumable": {
+              "description": "True when next_cursor is present and following it reads more records; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",
+              "type": "boolean"
+            }
+          },
+          "required": ["records", "count", "truncated"],
+          "type": "object"
+        },
+        "result_kind": "records",
+        "title": "Echo strings as records",
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "deprecated": false,
+        "meta": {}
+      },
+      {
+        "name": "echo",
+        "description": "Deprecated alias of echo_records kept for one major version. Call echo_records instead.",
+        "input_schema": {
+          "description": "Input of ``echo_records``.",
+          "properties": {
+            "values": {
+              "description": "Strings to echo back, one record each.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "limit": {
+              "default": 10,
+              "description": "Maximum records to return, 1 to 100; the tool enforces it.",
+              "type": "integer"
+            },
+            "cursor": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "next_cursor from a previous page; omit for the first page."
+            }
+          },
+          "required": ["values"],
+          "type": "object",
+          "additionalProperties": false
+        },
+        "access": "local",
+        "target": null,
+        "output_schema": {
+          "$defs": {
+            "EchoRecord": {
+              "description": "One record of ``echo_records``: an input string and its position.",
+              "properties": {
+                "value": {
+                  "description": "The echoed string.",
+                  "type": "string",
+                  "x-sensitivity": "free_text"
+                },
+                "position": {
+                  "description": "Zero-based position in the input.",
+                  "type": "integer"
+                }
+              },
+              "required": ["value", "position"],
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "records": {
+              "description": "Result records; keys and order follow the item schema.",
+              "items": {
+                "$ref": "#/$defs/EchoRecord"
+              },
+              "type": "array"
+            },
+            "count": {
+              "description": "Number of records returned, after any cap; equals len(records).",
+              "type": "integer"
+            },
+            "truncated": {
+              "description": "True when a cap, a stop or an interrupted read cut the result short. A truncated read whose resumable is false is the terminal case: it ended for good and there is nothing left to follow.",
+              "type": "boolean"
+            },
+            "total_count": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Exact size of the full result when the source knows it, as an integer, or as a decimal string when above 2^53 - 1; omitted when unknown or approximate."
+            },
+            "next_cursor": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Opaque token that resumes the read where it stopped, present only when resumable is true; pass it back as the tool's cursor argument, unchanged."
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Why the read stopped early. Well-known values include run_deadline, page_count, record_limit, interrupted and cursor_stalled; omitted when the read ended naturally or the limit simply cut it. A cursor_stalled read publishes no next_cursor, because following it would serve the same records again."
+            },
+            "warnings": {
+              "description": "Non-fatal problems the caller should relay, one per entry.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "resumable": {
+              "description": "True when next_cursor is present and following it reads more records; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",
+              "type": "boolean"
+            }
+          },
+          "required": ["records", "count", "truncated"],
+          "type": "object"
+        },
+        "result_kind": "records",
+        "title": null,
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "deprecated": true,
+        "meta": {
+          "alias_of": "echo_records"
+        }
+      },
+      {
+        "name": "block_sizes",
+        "description": "Return each CIDR prefix normalized, with its length and address count. Use it to compare how large address blocks are before planning a split. Returns a tabular envelope; a size beyond 2^53 - 1 is a decimal string.",
+        "input_schema": {
+          "description": "Input of ``block_sizes``.",
+          "properties": {
+            "prefixes": {
+              "description": "CIDR prefixes, IPv4 or IPv6, one row each; host bits allowed.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": ["prefixes"],
+          "type": "object",
+          "additionalProperties": false
+        },
+        "access": "local",
+        "target": null,
+        "output_schema": {
+          "additionalProperties": false,
+          "description": "Columns and rows for results whose shape is only known at run time.",
+          "properties": {
+            "columns": {
+              "description": "Column names, in row order.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "rows": {
+              "description": "Rows of scalar cells; each row has one cell per column.",
+              "items": {
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            "row_count": {
+              "description": "Number of rows returned, after any cap; equals len(rows).",
+              "type": "integer"
+            },
+            "truncated": {
+              "description": "True when a cap, a stop or an interrupted read cut the result short. A truncated read whose resumable is false is the terminal case: it ended for good and there is nothing left to follow.",
+              "type": "boolean"
+            },
+            "column_kinds": {
+              "anyOf": [
+                {
+                  "items": {
+                    "enum": [
+                      "text",
+                      "number",
+                      "integer",
+                      "boolean",
+                      "timestamp",
+                      "ip",
+                      "fqdn",
+                      "mac",
+                      "ip_block",
+                      "big_integer"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional per-column kind, one per column, from COLUMN_KINDS: text, number, integer, boolean, timestamp (RFC 3339 date-time), ip (v4 or v6), fqdn, mac, ip_block (address, CIDR prefix or first-last range), big_integer (integer, or a decimal string beyond 2^53 - 1)."
+            },
+            "column_scales": {
+              "anyOf": [
+                {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "enum": ["linear", "log10", "log2"],
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional per-column chart scale hint, one per column, from COLUMN_SCALES: linear, log10, log2; only on number, integer and big_integer columns, null for no hint."
+            },
+            "column_descriptions": {
+              "anyOf": [
+                {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "One short description per column, in column order; null where a column has none."
+            },
+            "total_count": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Exact size of the full result when the source knows it, as an integer, or as a decimal string when above 2^53 - 1; omitted when unknown or approximate."
+            },
+            "next_cursor": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Opaque token that resumes the read where it stopped, present only when resumable is true; pass it back as the tool's cursor argument, unchanged."
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Why the read stopped early. Well-known values include run_deadline, page_count, record_limit, interrupted and cursor_stalled; omitted when the read ended naturally or the limit simply cut it. A cursor_stalled read publishes no next_cursor, because following it would serve the same rows again."
+            },
+            "warnings": {
+              "description": "Non-fatal problems the caller should relay, one per entry.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "resumable": {
+              "description": "True when next_cursor is present and following it reads more rows; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",
+              "type": "boolean"
+            }
+          },
+          "required": ["columns", "rows", "row_count", "truncated"],
+          "type": "object"
+        },
+        "result_kind": "records",
+        "title": "Address block sizes",
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "deprecated": false,
+        "meta": {}
+      },
+      {
+        "name": "render_badge",
+        "description": "Render a two-part SVG badge and write it through the injected sink. Use it when a report needs a small status marker rather than a chart. Returns an artifact envelope citing the reference the sink returned.",
+        "input_schema": {
+          "description": "Input of ``render_badge``.",
+          "properties": {
+            "label": {
+              "description": "Text on the left half of the badge.",
+              "type": "string"
+            },
+            "value": {
+              "description": "Text on the right half of the badge.",
+              "type": "string"
+            }
+          },
+          "required": ["label", "value"],
+          "type": "object",
+          "additionalProperties": false
+        },
+        "access": "local",
+        "target": null,
+        "output_schema": {
+          "$defs": {
+            "ArtifactRef": {
+              "additionalProperties": false,
+              "description": "Where one produced artifact lives and what it is.",
+              "properties": {
+                "reference": {
+                  "description": "Reference the caller can cite: the path or id the sink returned.",
+                  "type": "string"
+                },
+                "media_type": {
+                  "description": "IANA media type, e.g. 'image/svg+xml'.",
+                  "type": "string"
+                },
+                "bytes": {
+                  "description": "Size of the artifact in bytes.",
+                  "type": "integer"
+                },
+                "width": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "Pixel width when the artifact is an image; omitted otherwise."
+                },
+                "height": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "Pixel height when the artifact is an image; omitted otherwise."
+                },
+                "role": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null,
+                  "description": "What the artifact is to the run, such as csv, plan or summary."
+                }
+              },
+              "required": ["reference", "media_type", "bytes"],
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Result of a tool that produces a file rather than data to read.",
+          "properties": {
+            "artifact": {
+              "$ref": "#/$defs/ArtifactRef",
+              "description": "The primary artifact produced."
+            },
+            "artifacts": {
+              "description": "Further artifacts produced alongside the primary, if any.",
+              "items": {
+                "$ref": "#/$defs/ArtifactRef"
+              },
+              "type": "array"
+            },
+            "warnings": {
+              "description": "Non-fatal problems the caller should relay, one per entry.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "sensitivity": {
+              "const": "inherits_input",
+              "default": "inherits_input",
+              "description": "Per-field extras cannot annotate a file, so the artifact is treated as containing every input column.",
+              "type": "string"
+            }
+          },
+          "required": ["artifact"],
+          "type": "object"
+        },
+        "result_kind": "artifact",
+        "title": null,
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "deprecated": false,
+        "meta": {
+          "renderer": "svgstatic"
+        }
+      }
+    ],
+    "style": "txt"
+  },
+  "expected": "echo_records - Echo strings as records\n  Return each input string as one record with its position. Use it to check that a tool\n  round-trip works before calling anything real. Returns a records envelope; when limit\n  cut the list, truncated is true and next_cursor fetches the next page.\n  access: local  target: -  result: records\n  hints: read-only, idempotent, pages\n  inputs:\n    name    type           required  description\n    values  array[string]  yes       Strings to echo back, one record each.\n    limit   integer        no        Maximum records to return, 1 to 100; the tool enforces it.\n    cursor  string|null    no        next_cursor from a previous page; omit for the first page.\n\necho\n  Deprecated alias of echo_records kept for one major version. Call echo_records\n  instead.\n  access: local  target: -  result: records\n  hints: read-only, idempotent, pages\n  deprecated: use echo_records\n  inputs:\n    name    type           required  description\n    values  array[string]  yes       Strings to echo back, one record each.\n    limit   integer        no        Maximum records to return, 1 to 100; the tool enforces it.\n    cursor  string|null    no        next_cursor from a previous page; omit for the first page.\n\nblock_sizes - Address block sizes\n  Return each CIDR prefix normalized, with its length and address count. Use it to\n  compare how large address blocks are before planning a split. Returns a tabular\n  envelope; a size beyond 2^53 - 1 is a decimal string.\n  access: local  target: -  result: records\n  hints: read-only, idempotent\n  inputs:\n    name      type           required  description\n    prefixes  array[string]  yes       CIDR prefixes, IPv4 or IPv6, one row each; host bits allowed.\n\nrender_badge\n  Render a two-part SVG badge and write it through the injected sink. Use it when a\n  report needs a small status marker rather than a chart. Returns an artifact envelope\n  citing the reference the sink returned.\n  access: local  target: -  result: artifact\n  hints: read-only, idempotent\n  inputs:\n    name   type    required  description\n    label  string  yes       Text on the left half of the badge.\n    value  string  yes       Text on the right half of the badge.\n"
+}

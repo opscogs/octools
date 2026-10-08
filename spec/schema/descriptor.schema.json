@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "One agent tool, described once, convertible to any vendor's shape.",
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,47}$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "input_schema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "access": {
+      "enum": ["local", "remote"],
+      "type": "string"
+    },
+    "target": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "output_schema": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "result_kind": {
+      "default": "records",
+      "enum": ["records", "artifact"],
+      "type": "string"
+    },
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "read_only_hint": {
+      "default": true,
+      "type": "boolean"
+    },
+    "destructive_hint": {
+      "default": false,
+      "type": "boolean"
+    },
+    "idempotent_hint": {
+      "default": true,
+      "type": "boolean"
+    },
+    "deprecated": {
+      "default": false,
+      "type": "boolean"
+    },
+    "meta": {
+      "additionalProperties": true,
+      "default": {},
+      "type": "object"
+    }
+  },
+  "required": ["name", "description", "input_schema", "access"],
+  "type": "object"
+}

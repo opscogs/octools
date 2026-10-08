@@ -1,0 +1,24 @@
+{
+  "description": "A strict parse of a full tabular dump gives the same dump.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["host", "count"],
+      "rows": [["a.demo.example", 1]],
+      "row_count": 1,
+      "truncated": false,
+      "column_kinds": ["fqdn", "integer"],
+      "column_scales": [null, "log2"],
+      "column_descriptions": [null, "Hits."]
+    }
+  },
+  "expected": {
+    "columns": ["host", "count"],
+    "rows": [["a.demo.example", 1]],
+    "row_count": 1,
+    "truncated": false,
+    "column_kinds": ["fqdn", "integer"],
+    "column_scales": [null, "log2"],
+    "column_descriptions": [null, "Hits."]
+  }
+}
