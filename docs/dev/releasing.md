@@ -1,6 +1,6 @@
 # Releasing
 
-Version: **1.1.0** · Date: 2026-10-08
+Version: **1.2.0** · Date: 2026-10-08
 
 The release runbook for maintainers. One tag publishes both packages, the
 PyPI distribution `octools` and the npm package `@opscogs/octools`, at the
@@ -97,7 +97,7 @@ git push origin 1.2.0
 | `build_package`             | Gates the tag against the changelog, writes `VERSION`, builds the sdist and wheel, stamps the npm version, runs `npm pack`, checks both versions with `release_version.py --check`, smoke-installs both artifacts and uploads them as workflow artifacts. |
 | `publish_pypi`              | Environment `pypi`. Publishes the sdist and wheel by trusted publishing, with attestations.                                                                                                                                                               |
 | `publish_npm`               | Environment `npm`. Publishes the tarball by trusted publishing with `--provenance`, under dist-tag `latest` (finals) or `next` (pre-releases).                                                                                                            |
-| `github_release`            | After both publishes. Creates the GitHub release with the wheel, sdist and tgz as assets; pre-releases are flagged as such.                                                                                                                               |
+| `github_release`            | After both publishes. Drafts the GitHub release with the wheel, sdist and tgz as assets, then publishes it; pre-releases are flagged as such and never marked latest. Works with immutable releases enabled.                                              |
 | `deploy_docs`               | Finals only. Builds the TypeDoc pages and runs `mkdocs gh-deploy`.                                                                                                                                                                                        |
 | `deliver_upstream_requests` | Finals only: moves cited `ur:planned` requests in the tag's milestone to `ur:delivered`.                                                                                                                                                                  |
 
