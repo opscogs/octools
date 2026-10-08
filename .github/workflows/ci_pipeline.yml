@@ -514,7 +514,16 @@ jobs:
       - name: Publish
         env:
           DIST_TAG: ${{ needs.build_package.outputs.npm_dist_tag }}
-        run: npm publish npm-dist/*.tgz --provenance --access public --tag "$DIST_TAG"
+        # A tarball path needs "./": npm reads "dir/file.tgz" as a GitHub
+        # owner/repo shorthand.
+        run: |
+          shopt -s nullglob
+          tarballs=(./npm-dist/*.tgz)
+          if [ "${#tarballs[@]}" -ne 1 ]; then
+            echo "::error::expected one tarball in npm-dist, found ${#tarballs[@]}"
+            exit 1
+          fi
+          npm publish "${tarballs[0]}" --provenance --access public --tag "$DIST_TAG"
 
   github_release:
     needs: [build_package, publish_pypi, publish_npm]
