@@ -38,9 +38,9 @@ Changelog = "https://github.com/opscogs/octools/blob/main/CHANGELOG.md"
 [project.optional-dependencies]
 dev = [
     "build == 1.6.1",
-    "ruff == 0.16.9",
-    "black == 26.5.1",
-    "mypy == 2.3.1",
+    "ruff == 0.16.10",
+    "black == 26.10.0",
+    "mypy == 2.4.0",
 ]
 doc = [
     "mkdocs-material == 9.7.7",
