@@ -1,13 +1,13 @@
 # The OCTool descriptor
 
-Version: **1.2.1** · Date: 2026-10-30
+Version: **1.3.0** · Date: 2026-10-30
 
 `OCTool` is a frozen descriptor of one capability a library offers to an
 agent runtime: a keyword-only dataclass in Python, a class built with
 `new OCTool({ ... })` in TypeScript. This page is the reference: every
 field, the result envelopes, when a tool may skip a result schema, what
 "strict-clean" means for an input schema, and how the format and the
-tools themselves evolve. `octools.SPEC_VERSION` is `"1.1"`.
+tools themselves evolve. `octools.SPEC_VERSION` is `"1.2"`.
 
 ## Fields
 
@@ -560,6 +560,29 @@ only one less restrictive than `"inherits_input"`, which stays the
 fallback a tolerant reader gives an unrecognized value (see
 [Reading envelopes from another process](#reading-envelopes-from-another-process)).
 
+### Source of a result
+
+`source` says which instance and snapshot answered, so a selector such as
+`latest` can be resolved after the call. It is an optional `SourceRef` on all
+three envelopes, left out of the dump when unset, and both of its strings are
+optional. It is a closed object because envelopes nest into strict-clean tool
+schemas, which reject an open map; a later minor can add keys, and
+`read_envelope` drops the ones it does not know.
+
+```json
+{
+  "columns": ["name"],
+  "rows": [["alpha"]],
+  "row_count": 1,
+  "truncated": false,
+  "source": { "instance": "host.demo.invalid", "snapshot": "20260101T000000Z" }
+}
+```
+
+A producer in a multi-tenant host keeps `source` to values the caller may
+see, never a host path or another tenant's name. `read_envelope` drops a
+malformed `source`, and the result stays usable without it.
+
 ### Sensitivity on record fields
 
 Per-field sensitivity goes on the **result** model only, as a pydantic
@@ -746,7 +769,7 @@ model it as a closed object or move it out of the input schema.
 
 ## Versioning and deprecation
 
-`SPEC_VERSION` is `"1.1"`, the format version of the descriptor and the
+`SPEC_VERSION` is `"1.2"`, the format version of the descriptor and the
 envelopes. Under the compatibility contract below, a spec minor is
 additive and a spec major is one of the "must not" changes. A reader
 checks the major only; a test that pins the whole string fails on every
@@ -805,9 +828,9 @@ mattering is documented as ignored. The dataclass is keyword-only, so
 adding a field to `OCTool` never breaks construction.
 
 **Envelope subclasses.** A consumer may subclass a result envelope or
-`ArtifactRef`. The field names `role` and `source` are reserved for
-`octools` itself: `ArtifactRef` defines `role`, so an `ArtifactRef`
-subclass uses it rather than a field of its own, and no subclass declares
+`ArtifactRef`. The field names `role` and `source` belong to `octools`:
+`ArtifactRef` defines `role` and every envelope defines `source`, so a
+subclass uses them rather than fields of its own, and no subclass declares
 either name. A consumer's own subclass fields carry a consumer prefix (`<pkg>_...`)
 unless the field is being proposed upstream, and a subclass field that
 later collides with an `octools` field is the consumer's to rename or

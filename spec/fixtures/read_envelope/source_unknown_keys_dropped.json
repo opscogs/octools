@@ -1,0 +1,25 @@
+{
+  "description": "An unknown source key is dropped and the known keys stay.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["name"],
+      "rows": [["alpha"]],
+      "row_count": 1,
+      "truncated": false,
+      "source": {
+        "snapshot": "20260101T000000Z",
+        "region": 7
+      }
+    }
+  },
+  "expected": {
+    "columns": ["name"],
+    "rows": [["alpha"]],
+    "row_count": 1,
+    "truncated": false,
+    "source": {
+      "snapshot": "20260101T000000Z"
+    }
+  }
+}

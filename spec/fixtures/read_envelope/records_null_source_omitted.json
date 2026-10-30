@@ -1,0 +1,25 @@
+{
+  "description": "A null source is left out of the dump.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "alpha"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "source": null
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "alpha"
+      }
+    ],
+    "count": 1,
+    "truncated": false
+  }
+}

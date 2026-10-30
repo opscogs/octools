@@ -19,7 +19,7 @@ from typing import Any, Literal, Protocol, get_args, runtime_checkable
 
 from octools.findings import Finding
 
-SPEC_VERSION = "1.1"
+SPEC_VERSION = "1.2"
 """Format version of the ``OCTool`` descriptor and the result envelopes.
 
 Readers check the major only. A minor bump adds only what a reader may drop

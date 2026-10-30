@@ -1,0 +1,25 @@
+{
+  "description": "A source that is not an object is dropped on read.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "alpha"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "source": ["alpha"]
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "alpha"
+      }
+    ],
+    "count": 1,
+    "truncated": false
+  }
+}

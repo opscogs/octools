@@ -47,7 +47,7 @@ def make(**overrides) -> OCTool:
 
 
 def test_spec_version_and_literals():
-    assert SPEC_VERSION == "1.1"
+    assert SPEC_VERSION == "1.2"
     assert RESULT_KINDS == ("records", "artifact")
     assert ACCESS_KINDS == ("local", "remote")
     assert RESULT_KIND_FALLBACK in RESULT_KINDS

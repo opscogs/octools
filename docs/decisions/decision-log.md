@@ -15,7 +15,7 @@ Status key: ✅ accepted · 📝 proposed · ❌ rejected · ⚠️ deprecated �
 | [OCTL-0002](OCTL-0002-result-paging.md)                        | Result paging                                | ✅ accepted | 1.4.1   | 2026-10-08 |
 | [OCTL-0004](OCTL-0004-merge-providers.md)                      | Merging providers                            | ✅ accepted | 1.1.1   | 2026-10-08 |
 | [OCTL-0005](OCTL-0005-column-kinds-ip-block-big-integer.md)    | Column kinds `ip_block` and `big_integer`    | ✅ accepted | 1.1.1   | 2026-10-08 |
-| [OCTL-0006](OCTL-0006-tolerant-readers.md)                     | Tolerant readers                             | ✅ accepted | 1.3.1   | 2026-10-08 |
+| [OCTL-0006](OCTL-0006-tolerant-readers.md)                     | Tolerant readers                             | ✅ accepted | 1.4.0   | 2026-10-30 |
 | [OCTL-0007](OCTL-0007-human-readable-listings.md)              | Human-readable listings                      | ✅ accepted | 1.0.1   | 2026-10-08 |
 | [OCTL-0008](OCTL-0008-language-neutral-spec-and-typescript.md) | Language-neutral spec and TypeScript package | ✅ accepted | 1.0.0   | 2026-10-08 |
 
@@ -25,6 +25,7 @@ Newest entries first.
 
 | Date       | ADR       | Version | Status      | Change                                                                                                                                                                                                                    |
 | ---------- | --------- | ------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-10-30 | OCTL-0006 | 1.4.0   | ✅ accepted | `source` defined on all three envelopes as a closed `SourceRef`, omitted when unset, malformed value dropped on read; `SPEC_VERSION` `"1.2"`                                                                              |
 | 2026-10-30 | OCTL-0001 | 1.2.0   | ✅ accepted | `TOOL_FORMATS` and `convert_tool`: converter ids, unknown id raises, no fallback; octools 1.3.0                                                                                                                           |
 | 2026-10-08 | OCTL-0008 | 1.0.0   | ✅ accepted | Accepted; MIT monorepo with `python/`, `typescript/` and the `spec/` conformance authority; full TypeScript parity on zod v4; lockstep versions; trusted publishing; octools 1.2.0                                        |
 | 2026-10-08 | OCTL-0007 | 1.0.1   | ✅ accepted | Wording: CLI rules stated in the record; consumers named generically; neutral decision-makers                                                                                                                             |

@@ -1,5 +1,38 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "SourceRef": {
+      "additionalProperties": false,
+      "description": "Which instance and snapshot answered a read.",
+      "properties": {
+        "instance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The instance that answered."
+        },
+        "snapshot": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The snapshot that answered."
+        }
+      },
+      "type": "object"
+    }
+  },
   "additionalProperties": false,
   "description": "Columns and rows for results whose shape is only known at run time.",
   "properties": {
@@ -161,6 +194,18 @@
         "type": "string"
       },
       "type": "array"
+    },
+    "source": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SourceRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Which instance and snapshot answered, when a producer says."
     },
     "resumable": {
       "description": "True when next_cursor is present and following it reads more rows; false when this read is over: do not call again with the same arguments. Present only when truncated is true; absent reads as false.",

@@ -1,0 +1,18 @@
+{
+  "description": "A strict parse rejects a source whose values are not strings.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["name"],
+      "rows": [["alpha"]],
+      "row_count": 1,
+      "truncated": false,
+      "source": {
+        "snapshot": 7
+      }
+    }
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

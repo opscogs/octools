@@ -1,0 +1,31 @@
+{
+  "description": "An artifact envelope carries source through a read.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120
+      },
+      "source": {
+        "instance": "host.demo.invalid",
+        "snapshot": "20260101T000000Z"
+      }
+    }
+  },
+  "expected": {
+    "artifact": {
+      "reference": "mem://0.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 120
+    },
+    "artifacts": [],
+    "warnings": [],
+    "sensitivity": "inherits_input",
+    "source": {
+      "instance": "host.demo.invalid",
+      "snapshot": "20260101T000000Z"
+    }
+  }
+}

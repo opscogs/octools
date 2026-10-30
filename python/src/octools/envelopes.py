@@ -108,6 +108,16 @@ def _tolerant(info: ValidationInfo) -> bool:
     return isinstance(info.context, Mapping) and info.context.get(_TOLERANT) is True
 
 
+def _source_fits(source: object) -> bool:
+    """Return True when ``source`` is absent or an object with string known keys."""
+    if source is None:
+        return True
+    return isinstance(source, Mapping) and all(
+        source.get(key) is None or isinstance(source[key], str)
+        for key in SourceRef.model_fields
+    )
+
+
 class _Envelope(BaseModel):
     """Base for every envelope: closed objects, no unknown keys."""
 
@@ -122,7 +132,10 @@ class _Envelope(BaseModel):
         """
         if _tolerant(info) and isinstance(data, Mapping):
             known = cls.model_fields.keys() | cls.model_computed_fields.keys()
-            return {key: data[key] for key in data if key in known}
+            kept = {key: data[key] for key in data if key in known}
+            if not _source_fits(kept.get("source")):
+                del kept["source"]
+            return kept
         return data
 
 
@@ -275,12 +288,24 @@ def _resumable_description(items: str) -> str:
     )
 
 
+class SourceRef(_Envelope):
+    """Which instance and snapshot answered a read."""
+
+    instance: str | None = Field(
+        default=None, exclude_if=_is_none, description="The instance that answered."
+    )
+    snapshot: str | None = Field(
+        default=None, exclude_if=_is_none, description="The snapshot that answered."
+    )
+
+
 def _is_empty(value: object) -> bool:
     """Tell the serializer to omit a list-envelope ``warnings`` that is empty."""
     return value == []
 
 
 _WARNINGS_DESCRIPTION = "Non-fatal problems the caller should relay, one per entry."
+_SOURCE_DESCRIPTION = "Which instance and snapshot answered, when a producer says."
 
 
 class RecordsEnvelope[T](_PagedEnvelope):
@@ -306,6 +331,9 @@ class RecordsEnvelope[T](_PagedEnvelope):
     )
     warnings: list[str] = Field(
         default_factory=list, exclude_if=_is_empty, description=_WARNINGS_DESCRIPTION
+    )
+    source: SourceRef | None = Field(
+        default=None, exclude_if=_is_none, description=_SOURCE_DESCRIPTION
     )
 
     @computed_field(description=_resumable_description("records"))  # type: ignore[prop-decorator]
@@ -383,6 +411,9 @@ class TabularEnvelope(_PagedEnvelope):
     )
     warnings: list[str] = Field(
         default_factory=list, exclude_if=_is_empty, description=_WARNINGS_DESCRIPTION
+    )
+    source: SourceRef | None = Field(
+        default=None, exclude_if=_is_none, description=_SOURCE_DESCRIPTION
     )
 
     @computed_field(description=_resumable_description("rows"))  # type: ignore[prop-decorator]
@@ -527,6 +558,9 @@ class ArtifactEnvelope(_Envelope):
         description="Further artifacts produced alongside the primary, if any.",
     )
     warnings: list[str] = Field(default_factory=list, description=_WARNINGS_DESCRIPTION)
+    source: SourceRef | None = Field(
+        default=None, exclude_if=_is_none, description=_SOURCE_DESCRIPTION
+    )
     sensitivity: Sensitivity = Field(
         default="inherits_input",
         description=(
@@ -595,6 +629,7 @@ __all__ = [
     "ColumnScale",
     "RecordsEnvelope",
     "Sensitivity",
+    "SourceRef",
     "TabularEnvelope",
     "artifact_schema",
     "read_envelope",

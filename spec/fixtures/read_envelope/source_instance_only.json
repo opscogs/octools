@@ -1,0 +1,24 @@
+{
+  "description": "Either source key may stand alone.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["name"],
+      "rows": [["alpha"]],
+      "row_count": 1,
+      "truncated": false,
+      "source": {
+        "instance": "host.demo.invalid"
+      }
+    }
+  },
+  "expected": {
+    "columns": ["name"],
+    "rows": [["alpha"]],
+    "row_count": 1,
+    "truncated": false,
+    "source": {
+      "instance": "host.demo.invalid"
+    }
+  }
+}

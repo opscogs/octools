@@ -1,6 +1,6 @@
 # The TypeScript package
 
-Version: **1.2.0** · Date: 2026-10-08
+Version: **1.3.0** · Date: 2026-10-30
 
 `@opscogs/octools` is `octools` for TypeScript and JavaScript. It covers
 the whole public API of the Python package: the `OCTool` descriptor, the

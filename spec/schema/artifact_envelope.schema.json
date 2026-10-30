@@ -56,6 +56,37 @@
       },
       "required": ["reference", "media_type", "bytes"],
       "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "description": "Which instance and snapshot answered a read.",
+      "properties": {
+        "instance": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The instance that answered."
+        },
+        "snapshot": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The snapshot that answered."
+        }
+      },
+      "type": "object"
     }
   },
   "additionalProperties": false,
@@ -78,6 +109,18 @@
         "type": "string"
       },
       "type": "array"
+    },
+    "source": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SourceRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Which instance and snapshot answered, when a producer says."
     },
     "sensitivity": {
       "const": "inherits_input",

@@ -17,7 +17,7 @@
  * read as a fallback: an optional field whose absence keeps its meaning, or
  * a value in a vocabulary that has a fallback.
  */
-export const SPEC_VERSION = "1.1";
+export const SPEC_VERSION = "1.2";
 
 /** Every `result_kind` value, in documentation order. */
 export const RESULT_KINDS = ["records", "artifact"] as const;

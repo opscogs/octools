@@ -82,7 +82,7 @@ Example:
   "outputSchema": { "type": "object", "properties": {} },
   "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true },
   "_meta": {
-    "com.opscogs.octools/spec_version": "1.1",
+    "com.opscogs.octools/spec_version": "1.2",
     "com.opscogs.octools/access": "remote",
     "com.opscogs.octools/result_kind": "records",
     "com.opscogs.octools/deprecated": false,

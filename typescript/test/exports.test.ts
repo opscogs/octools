@@ -38,6 +38,7 @@ it("exports exactly the public names", () => {
       "SCHEMA_DIALECT",
       "SCHEMA_ESCAPE_KEY",
       "SENSITIVITY_FALLBACK",
+      "SourceRef",
       "SPEC_VERSION",
       "STRICT_FORMATS",
       "STRICT_KEYWORDS",

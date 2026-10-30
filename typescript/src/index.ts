@@ -34,6 +34,8 @@ export {
   RecordsEnvelope,
   type RecordsEnvelopeInput,
   type RecordsEnvelopeSchema,
+  SourceRef,
+  type SourceRefInput,
   TabularEnvelope,
   type TabularEnvelopeInput,
   artifactSchema,
