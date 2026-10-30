@@ -195,6 +195,14 @@ _TYPE_KINDS: Mapping[object, ColumnKind] = {
 """Field types with a fixed kind; a plain ``datetime`` may lack an offset, so text."""
 
 
+def _shared_kind(kinds: Iterable[ColumnKind]) -> ColumnKind:
+    """Return the kind all share, ``number`` for a numeric mix, else text."""
+    distinct = set(kinds)
+    if len(distinct) == 1:
+        return distinct.pop()
+    return "number" if distinct == {"integer", "number"} else "text"
+
+
 def _value_kind(value: object) -> ColumnKind:
     """Return the kind of one literal or enum value."""
     if isinstance(value, bool):
@@ -205,21 +213,21 @@ def _value_kind(value: object) -> ColumnKind:
 
 
 def _values_kind(values: Iterable[object]) -> ColumnKind:
-    """Return the kind every value shares, or text when they differ."""
-    kinds = {_value_kind(value) for value in values}
-    return kinds.pop() if len(kinds) == 1 else "text"
+    """Return the kind the non-null values share."""
+    return _shared_kind(_value_kind(value) for value in values if value is not None)
 
 
 def _column_kind(annotation: object) -> ColumnKind:
     """Return the column kind of a field annotation; anything unknown is text."""
     origin = typing.get_origin(annotation)
+    if origin is typing.Annotated:
+        return _column_kind(typing.get_args(annotation)[0])
     if origin in (typing.Union, types.UnionType):
-        members = [
-            member
+        return _shared_kind(
+            _column_kind(member)
             for member in typing.get_args(annotation)
             if member is not types.NoneType
-        ]
-        return _column_kind(members[0]) if len(members) == 1 else "text"
+        )
     if origin is typing.Literal:
         return _values_kind(typing.get_args(annotation))
     if not isinstance(annotation, type):
@@ -231,9 +239,15 @@ def _column_kind(annotation: object) -> ColumnKind:
     return _TYPE_KINDS.get(annotation, "text")
 
 
-def _model_cell(value: object) -> Cell:
-    """Return a dumped value as a cell; a list or dict is compact JSON text."""
-    if isinstance(value, list | dict):
+def _model_cell(value: object, kind: ColumnKind) -> Cell:
+    """Return a dumped value as a cell of ``kind``.
+
+    A list or dict is compact JSON text, and so is any other non-string value
+    in a text column, so a union such as ``int | str`` still fits its kind.
+    """
+    if isinstance(value, list | dict) or (
+        kind == "text" and not isinstance(value, str | None)
+    ):
         return json.dumps(value, separators=(",", ":"), ensure_ascii=False)
     return typing.cast(Cell, value)
 
@@ -243,19 +257,25 @@ def tabular_from_models(
     items: Iterable[BaseModel],
     *,
     column_kinds: Mapping[str, ColumnKind] | None = None,
+    truncated: bool = False,
+    next_cursor: str | None = None,
 ) -> TabularEnvelope:
-    """Return ``items`` as one complete table with ``model``'s fields as columns.
+    """Return ``items`` as a table with ``model``'s fields as columns.
 
     Columns are the fields in declaration order, under their field names, and
-    a field marked ``exclude`` is left out. Each kind comes from the field's
-    annotation, ``Optional`` unwrapped: ``AwareDatetime`` is ``timestamp``,
-    since a plain ``datetime`` may lack the offset that kind requires; an
-    address is ``ip``, a network or interface ``ip_block``; an enum or
-    ``Literal`` takes the kind its values share; anything else is ``text``,
-    and a list, dict or nested model is compact JSON text. ``column_kinds``
+    a field marked ``exclude`` is left out; a value the dump omits is a null
+    cell. Each kind comes from the field's annotation, ``Optional`` and
+    ``Annotated`` unwrapped: ``AwareDatetime`` is ``timestamp``, since a plain
+    ``datetime`` may lack the offset that kind requires; an address is ``ip``,
+    a network or interface ``ip_block``; a union, enum or ``Literal`` takes
+    the kind its members share, ``number`` for a mix of integers and numbers;
+    anything else is ``text``. A list, dict or nested model is compact JSON
+    text, as is any other non-string value in a text column. ``column_kinds``
     overrides per column, which is how a column becomes ``big_integer`` or
     ``fqdn``; a key that is not a column raises ``OCToolError``. Field
     descriptions fill ``column_descriptions`` when any field has one.
+    ``truncated`` and ``next_cursor`` describe a capped read, under the
+    envelope's own checks.
     """
     fields = {
         name: field for name, field in model.model_fields.items() if not field.exclude
@@ -264,17 +284,25 @@ def tabular_from_models(
     unknown = sorted(overrides.keys() - fields.keys())
     if unknown:
         raise OCToolError(f"column_kinds names unknown columns: {unknown}")
-    dumps = [item.model_dump(mode="json") for item in items]
+    kinds = [
+        overrides.get(name, _column_kind(field.annotation))
+        for name, field in fields.items()
+    ]
+    dumps = [item.model_dump(mode="json", by_alias=False) for item in items]
     descriptions = [field.description for field in fields.values()]
     return TabularEnvelope(
         columns=list(fields),
-        rows=[[_model_cell(dump[name]) for name in fields] for dump in dumps],
-        row_count=len(dumps),
-        truncated=False,
-        column_kinds=[
-            overrides.get(name, _column_kind(field.annotation))
-            for name, field in fields.items()
+        rows=[
+            [
+                _model_cell(dump.get(name), kind)
+                for name, kind in zip(fields, kinds, strict=True)
+            ]
+            for dump in dumps
         ],
+        row_count=len(dumps),
+        truncated=truncated,
+        next_cursor=next_cursor,
+        column_kinds=kinds,
         column_descriptions=descriptions if any(descriptions) else None,
     )
 

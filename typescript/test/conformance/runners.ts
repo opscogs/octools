@@ -153,6 +153,10 @@ const FIELD_TYPES: Readonly<Record<string, () => z.ZodType>> = {
   object: () => z.record(z.string(), z.int()),
   nested: () => NESTED,
   union: () => z.union([z.int(), z.string()]),
+  union_numeric: () => z.union([z.int(), z.number()]),
+  union_boolean: () => z.union([z.boolean(), z.string()]),
+  literal_nullable: () => z.literal([1, null]),
+  positive: () => z.int().positive(),
 };
 
 interface FixtureField {
@@ -185,10 +189,15 @@ function fromModels(input: Record<string, unknown>): unknown {
     return tabularFromModels(schema, items, {
       columnKinds: input["column_kinds"] as
         Record<string, ColumnKind> | undefined,
+      truncated: input["truncated"] as boolean | undefined,
+      nextCursor: input["next_cursor"] as string | undefined,
     });
   } catch (error) {
     if (error instanceof OCToolError) {
       throw new FixtureError("invalid_column");
+    }
+    if (error instanceof z.ZodError) {
+      throw new FixtureError("invalid_envelope");
     }
     throw error;
   }

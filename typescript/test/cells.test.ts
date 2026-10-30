@@ -266,6 +266,17 @@ describe("tabularFromModels", () => {
     ]);
   });
 
+  it("reads a nullable union member and a union of objects", () => {
+    const schema = z.object({
+      size: z.union([z.int().nullable(), z.null()]),
+      either: z.union([z.object({ a: z.int() }), z.string()]),
+    });
+    const table = tabularFromModels(schema, [{ size: 1, either: { a: 1 } }]);
+    expect(table.column_kinds).toEqual(["integer", "text"]);
+    expect(table.rows).toEqual([[1, '{"a":1}']]);
+    expect(validateTabular(table)).toEqual([]);
+  });
+
   it("leaves an empty literal set as text", () => {
     const schema = z.object({ none: z.enum({}) });
     expect(tabularFromModels(schema, []).column_kinds).toEqual(["text"]);

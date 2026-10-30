@@ -192,6 +192,20 @@ export function validateTabular(envelope: TabularEnvelope): Finding[] {
   return findings;
 }
 
+/** Return the kind all share, `number` for a numeric mix, else text. */
+function sharedKind(kinds: Iterable<ColumnKind>): ColumnKind {
+  const distinct = new Set(kinds);
+  const [kind, ...others] = distinct;
+  if (others.length === 0) {
+    return kind ?? "text";
+  }
+  return distinct.size === 2 &&
+    distinct.has("integer") &&
+    distinct.has("number")
+    ? "number"
+    : "text";
+}
+
 /** Return the kind of one literal or enum value. */
 function valueKind(value: unknown): ColumnKind {
   if (typeof value === "boolean") {
@@ -203,10 +217,13 @@ function valueKind(value: unknown): ColumnKind {
   return "text";
 }
 
-/** Return the kind every value shares, or text when they differ. */
+/** Return the kind the non-null values share. */
 function valuesKind(values: Iterable<unknown>): ColumnKind {
-  const [kind, ...others] = new Set([...values].map(valueKind));
-  return others.length === 0 ? (kind ?? "text") : "text";
+  return sharedKind(
+    [...values]
+      .filter((value) => value !== null && value !== undefined)
+      .map(valueKind),
+  );
 }
 
 /** Return a field with its optional, nullable and default wrappers removed. */
@@ -254,35 +271,61 @@ function columnKind(field: z.ZodType): ColumnKind {
   if (field instanceof z.ZodLiteral) {
     return valuesKind(field.values);
   }
+  if (field instanceof z.ZodUnion) {
+    return sharedKind(
+      (field.options as readonly z.ZodType[])
+        .filter((member) => !(member instanceof z.ZodNull))
+        .map((member) => columnKind(unwrapped(member).inner)),
+    );
+  }
   return "text";
 }
 
-/** Return a dumped value as a cell; an array or object is compact JSON text. */
-function modelCell(value: unknown): Cell {
-  if (typeof value === "object" && value !== null) {
+/**
+ * Return a dumped value as a cell of `kind`.
+ *
+ * An array or object is compact JSON text, and so is any other non-string
+ * value in a text column, so a union of a number and a string still fits its
+ * kind.
+ */
+function modelCell(value: unknown, kind: ColumnKind): Cell {
+  if (value === undefined || value === null) {
+    return null;
+  }
+  if (
+    typeof value === "object" ||
+    (kind === "text" && typeof value !== "string")
+  ) {
     return JSON.stringify(value);
   }
-  return (value ?? null) as Cell;
+  return value as Cell;
 }
 
 /** Options {@link tabularFromModels} takes. */
 export interface TabularFromModelsOptions {
   /** Kinds overriding the inferred ones, by column. */
   readonly columnKinds?: Readonly<Record<string, ColumnKind>> | undefined;
+  /** True when a cap cut the result short. */
+  readonly truncated?: boolean | undefined;
+  /** Opaque token that resumes the read. */
+  readonly nextCursor?: string | null | undefined;
 }
 
 /**
- * Return `items` as one complete table with `schema`'s fields as columns.
+ * Return `items` as a table with `schema`'s fields as columns.
  *
- * Columns are the fields in declaration order. Each kind comes from the
- * field's schema, optional, nullable and default wrappers removed: a date or
- * a `z.iso.datetime()` that requires an offset is `timestamp`; `z.ipv4()` or
- * `z.ipv6()` is `ip`, `z.cidrv4()` or `z.cidrv6()` is `ip_block`; an enum or
- * literal takes the kind its values share; anything else is `text`, and an
- * array or object is compact JSON text. `columnKinds` overrides per column,
+ * Columns are the fields in declaration order; a value an item lacks is a
+ * null cell. Each kind comes from the field's schema, optional, nullable and
+ * default wrappers removed: a date or a `z.iso.datetime()` that requires an
+ * offset is `timestamp`; `z.ipv4()` or `z.ipv6()` is `ip`, `z.cidrv4()` or
+ * `z.cidrv6()` is `ip_block`; a union, enum or literal takes the kind its
+ * members share, `number` for a mix of integers and numbers; anything else
+ * is `text`. An array or object is compact JSON text, as is any other
+ * non-string value in a text column. `columnKinds` overrides per column,
  * which is how a column becomes `big_integer` or `fqdn`; a key that is not a
  * column throws {@link OCToolError}. Field descriptions fill
- * `column_descriptions` when any field has one.
+ * `column_descriptions` when any field has one. `truncated` and `nextCursor`
+ * describe a capped read, under the envelope's own checks.
  */
 export function tabularFromModels(
   schema: z.ZodObject,
@@ -302,19 +345,22 @@ export function tabularFromModels(
       `columnKinds names unknown columns: ${unknown.join(", ")}`,
     );
   }
+  const typed = fields.map((field) => ({
+    name: field.name,
+    kind: overrides[field.name] ?? columnKind(field.inner),
+  }));
   const rows = [...items].map((item) => {
     const dump = JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
-    return columns.map((name) => modelCell(dump[name]));
+    return typed.map(({ name, kind }) => modelCell(dump[name], kind));
   });
   const descriptions = fields.map((field) => field.description ?? null);
   return TabularEnvelope.parse({
     columns,
     rows,
     row_count: rows.length,
-    truncated: false,
-    column_kinds: fields.map(
-      (field) => overrides[field.name] ?? columnKind(field.inner),
-    ),
+    truncated: options.truncated ?? false,
+    next_cursor: options.nextCursor ?? null,
+    column_kinds: typed.map((column) => column.kind),
     column_descriptions: descriptions.some((entry) => entry !== null)
       ? descriptions
       : null,

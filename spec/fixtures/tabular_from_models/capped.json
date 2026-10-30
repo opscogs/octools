@@ -1,0 +1,27 @@
+{
+  "description": "truncated and next_cursor describe a capped read.",
+  "input": {
+    "fields": [
+      {
+        "name": "label",
+        "type": "text"
+      }
+    ],
+    "items": [
+      {
+        "label": "alpha"
+      }
+    ],
+    "truncated": true,
+    "next_cursor": "c"
+  },
+  "expected": {
+    "columns": ["label"],
+    "rows": [["alpha"]],
+    "row_count": 1,
+    "truncated": true,
+    "next_cursor": "c",
+    "resumable": true,
+    "column_kinds": ["text"]
+  }
+}

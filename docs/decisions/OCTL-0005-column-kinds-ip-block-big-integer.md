@@ -1,6 +1,6 @@
 ---
 status: accepted
-version: 1.2.0
+version: 1.2.1
 date: 2026-10-30
 decision-makers: OpsCogs maintainers
 ---
@@ -271,24 +271,27 @@ differently. Columns are the model's fields in declaration order. The kind comes
 from the annotation alone, never from the values, so a column keeps its kind on
 every page:
 
-| Field type                               | Kind                           |
-| ---------------------------------------- | ------------------------------ |
-| `bool`, `int`, `float`                   | `boolean`, `integer`, `number` |
-| `Optional[X]`                            | the kind of `X`                |
-| An enum or `Literal`                     | the kind its values share      |
-| `AwareDatetime`                          | `timestamp`                    |
-| An IP address type                       | `ip`                           |
-| An IP network or interface type          | `ip_block`                     |
-| A list, dict or nested model             | `text`, as compact JSON        |
-| Anything else, `datetime` and `date` too | `text`                         |
+| Field type                               | Kind                                                                 |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| `bool`, `int`, `float`                   | `boolean`, `integer`, `number`                                       |
+| `Optional[X]`, `Annotated[X, ...]`       | the kind of `X`                                                      |
+| A union, enum or `Literal`               | the kind its members share, `number` for integers mixed with numbers |
+| `AwareDatetime`                          | `timestamp`                                                          |
+| An IP address type                       | `ip`                                                                 |
+| An IP network or interface type          | `ip_block`                                                           |
+| A list, dict or nested model             | `text`, as compact JSON                                              |
+| A non-string value in a `text` column    | compact JSON                                                         |
+| Anything else, `datetime` and `date` too | `text`                                                               |
 
 A plain `datetime` is `text` because it may lack the offset the `timestamp` kind
 requires; a producer whose values carry one overrides the column. `big_integer`
 and `fqdn` come only from the `column_kinds` override, since an annotation
 cannot signal them. A list, dict or nested cell is JSON text because a cell is a
-scalar. `column_descriptions` fills from field descriptions when any exists. The
-result is one complete table; a producer that caps it sets the paging fields on
-a copy.
+scalar, and any other non-string value in a `text` column is too, so a union
+such as `int | str` still passes `validate_tabular`. A value the dump omits is a
+null cell. `column_descriptions` fills from field descriptions when any exists.
+`truncated` and `next_cursor` describe a capped read and go through the
+envelope's own checks.
 
 ### Renderer guidance
 

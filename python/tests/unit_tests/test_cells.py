@@ -6,7 +6,7 @@ from datetime import date
 from typing import Literal
 
 import pytest
-from pydantic import BaseModel, Field, IPvAnyAddress
+from pydantic import BaseModel, ConfigDict, Field, IPvAnyAddress
 
 from octools import (
     COLUMN_KINDS,
@@ -169,4 +169,16 @@ def test_tabular_from_models_reads_enums_and_skips_excluded_fields():
         ["red", 1, "10.0.0.1", "2001:db8::/32", "2026-01-01", True, 0.5]
     ]
     assert table.column_descriptions is None
+    assert validate_tabular(table) == []
+
+
+def test_tabular_from_models_keeps_omitted_and_aliased_values_as_columns():
+    class Row(BaseModel):
+        model_config = ConfigDict(serialize_by_alias=True, populate_by_name=True)
+        size: int = Field(alias="bytes")
+        note: str | None = Field(default=None, exclude_if=lambda value: value is None)
+
+    table = tabular_from_models(Row, [Row(size=1)])
+    assert table.columns == ["size", "note"]
+    assert table.rows == [[1, None]]
     assert validate_tabular(table) == []

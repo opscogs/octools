@@ -12,7 +12,7 @@ import ipaddress
 import json
 from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
 from pydantic import AwareDatetime, BaseModel, Field, ValidationError, create_model
 
@@ -189,6 +189,10 @@ FIELD_TYPES: dict[str, object] = {
     "object": dict[str, int],
     "nested": _Nested,
     "union": int | str,
+    "union_numeric": int | float,
+    "union_boolean": bool | str,
+    "literal_nullable": Literal[1, None],  # noqa: PYI061
+    "positive": Annotated[int, Field(gt=0)],
 }
 """Each neutral field type of a ``tabular_from_models`` fixture as an annotation."""
 
@@ -207,9 +211,17 @@ def from_models(data: dict[str, Any]) -> object:
     )
     items = [model.model_validate(item) for item in data["items"]]
     try:
-        table = tabular_from_models(model, items, column_kinds=data.get("column_kinds"))
+        table = tabular_from_models(
+            model,
+            items,
+            column_kinds=data.get("column_kinds"),
+            truncated=data.get("truncated", False),
+            next_cursor=data.get("next_cursor"),
+        )
     except OCToolError as exc:
         raise FixtureError("invalid_column") from exc
+    except ValidationError as exc:
+        raise FixtureError("invalid_envelope") from exc
     return table.model_dump(mode="json")
 
 

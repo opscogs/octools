@@ -1,5 +1,5 @@
 {
-  "description": "Each field type maps to its kind, and a list, object or nested cell is compact JSON.",
+  "description": "Each field type maps to its kind; a list, object or nested cell is compact JSON, as is a non-string cell in a text column.",
   "input": {
     "fields": [
       {
@@ -61,6 +61,23 @@
       {
         "name": "either",
         "type": "union"
+      },
+      {
+        "name": "ints",
+        "type": "union_numeric"
+      },
+      {
+        "name": "toggle",
+        "type": "union_boolean"
+      },
+      {
+        "name": "maybe",
+        "type": "literal_nullable"
+      },
+      {
+        "name": "count",
+        "type": "positive",
+        "nullable": true
       }
     ],
     "items": [
@@ -83,7 +100,11 @@
         "inner": {
           "a": 1
         },
-        "either": 1
+        "either": 1,
+        "ints": 4.5,
+        "toggle": true,
+        "maybe": 1,
+        "count": 3
       }
     ]
   },
@@ -103,7 +124,11 @@
       "names",
       "sizes",
       "inner",
-      "either"
+      "either",
+      "ints",
+      "toggle",
+      "maybe",
+      "count"
     ],
     "rows": [
       [
@@ -117,11 +142,15 @@
         "10.0.0.0/8",
         "a",
         1,
-        1,
+        "1",
         "[\"a\",\"b\"]",
         "{\"a\":1}",
         "{\"a\":1}",
-        1
+        "1",
+        4.5,
+        "true",
+        1,
+        3
       ]
     ],
     "row_count": 1,
@@ -141,7 +170,11 @@
       "text",
       "text",
       "text",
-      "text"
+      "text",
+      "number",
+      "text",
+      "integer",
+      "integer"
     ]
   }
 }

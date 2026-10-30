@@ -366,27 +366,30 @@ the reason to avoid a linear axis.
 
 `tabular_from_models(model, items, *, column_kinds=None)`
 (`tabularFromModels(schema, items, { columnKinds })`, over a zod object)
-builds a complete `TabularEnvelope` from a model, so every producer maps a
+builds a `TabularEnvelope` from a model, so every producer maps a
 field's type to a column kind the same way. Columns are the fields in
 declaration order, and the kind comes from the type alone:
 
 | Field type                                | Kind                           |
 | ----------------------------------------- | ------------------------------ |
 | `bool`, `int`, `float`                    | `boolean`, `integer`, `number` |
-| `Optional[X]`                             | the kind of `X`                |
-| An enum or `Literal`                      | the kind its values share      |
+| `Optional[X]`, `Annotated[X, ...]` | the kind of `X` |
+| A union, enum or `Literal` | the kind its members share, `number` for integers mixed with numbers |
 | `AwareDatetime`                           | `timestamp`                    |
 | An IP address type                        | `ip`                           |
 | An IP network or interface type           | `ip_block`                     |
-| A list, dict or nested model              | `text`, as compact JSON        |
+| A list, dict or nested model | `text`, as compact JSON |
+| A non-string value in a `text` column | compact JSON |
 | Anything else, `datetime` and `date` too  | `text`                         |
 
 A plain `datetime` is `text` because it may lack the offset `timestamp`
 requires. `column_kinds` overrides per column, which is how a column becomes
 `timestamp` from a plain `datetime`, or `big_integer` or `fqdn`; a key that is
 not a column raises `OCToolError`. Field descriptions fill
-`column_descriptions` when any field has one. Run `validate_tabular` on the
-result in your tests: an `int` beyond 2^53 - 1 needs the `big_integer`
+`column_descriptions` when any field has one, and a value the dump omits is a
+null cell. `truncated` and `next_cursor` (`nextCursor`) describe a capped read
+and go through the envelope's own checks. Run `validate_tabular` on the result
+in your tests: an `int` beyond 2^53 - 1 needs the `big_integer`
 override.
 
 ### `validate_tabular`
