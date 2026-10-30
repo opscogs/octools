@@ -11,8 +11,8 @@ it drops.
 from __future__ import annotations
 
 import re
-from collections.abc import Mapping
-from typing import Any, cast
+from collections.abc import Callable, Mapping
+from typing import Any, Literal, cast, get_args
 
 from octools.descriptor import SPEC_VERSION, OCTool, OCToolError
 from octools.schema import strip_keys
@@ -57,10 +57,10 @@ def to_mcp_tool(tool: OCTool, *, name_prefix: str = "") -> dict[str, Any]:
     so one provider can reach two targets on one server. ``inputSchema`` and
     ``outputSchema`` are the descriptor's schemas verbatim; the three hints
     become ``annotations``; ``access``, ``target``, ``result_kind``,
-    ``deprecated`` and the ``meta`` bag go under ``_meta`` with the
+    ``deprecated``, the ``meta`` bag and ``tags`` go under ``_meta`` with the
     ``com.opscogs.octools/`` prefix, beside the spec version. Only ``func`` is
-    not represented (it is the server's handler). ``title``, ``outputSchema``
-    and ``target`` are present only when set.
+    not represented (it is the server's handler). ``title``, ``outputSchema``,
+    ``target`` and ``tags`` are present only when set.
     """
     out: dict[str, Any] = {"name": _prefixed_name(tool, name_prefix, MCP_NAME_RE)}
     if tool.title is not None:
@@ -83,6 +83,8 @@ def to_mcp_tool(tool: OCTool, *, name_prefix: str = "") -> dict[str, Any]:
     }
     if tool.target is not None:
         meta[f"{MCP_META_NAMESPACE}target"] = tool.target
+    if tool.tags:
+        meta[f"{MCP_META_NAMESPACE}tags"] = list(tool.tags)
     out["_meta"] = meta
     return out
 
@@ -96,8 +98,9 @@ def to_anthropic_tool(tool: OCTool, *, name_prefix: str = "") -> dict[str, Any]:
     ``x-`` key stripped and ``additionalProperties: false`` on the root, so
     the runtime can set ``strict: true`` itself. Dropped, because the API has
     no slot for them: ``title``, ``output_schema``, the hints, ``access`` /
-    ``target``, ``result_kind``, ``deprecated`` and ``meta`` -- the runtime's
-    registry keeps those. ``strict`` is not emitted; it is a runtime choice.
+    ``target``, ``result_kind``, ``deprecated``, ``meta`` and ``tags`` -- the
+    runtime's registry keeps those, and ``select_tools`` filters by tag first.
+    ``strict`` is not emitted; it is a runtime choice.
     """
     name = _prefixed_name(tool, name_prefix, ANTHROPIC_NAME_RE)
     schema = strip_keys(tool.input_schema, keys=("title",), prefixes=("x-",))
@@ -105,10 +108,36 @@ def to_anthropic_tool(tool: OCTool, *, name_prefix: str = "") -> dict[str, Any]:
     return {"name": name, "description": tool.description, "input_schema": schema}
 
 
+ToolFormat = Literal["mcp", "anthropic"]
+"""A converter id; ``TOOL_FORMATS`` lists the same values."""
+TOOL_FORMATS: tuple[str, ...] = get_args(ToolFormat)
+"""Every converter id, in documentation order."""
+_CONVERTERS: Mapping[str, Callable[..., dict[str, Any]]] = {
+    "mcp": to_mcp_tool,
+    "anthropic": to_anthropic_tool,
+}
+
+
+def convert_tool(tool: OCTool, format: str, *, name_prefix: str = "") -> dict[str, Any]:
+    """Return ``tool`` in the shape of the converter ``format`` names.
+
+    ``format`` is one of ``TOOL_FORMATS``; these ids name converters and are
+    separate from the listing styles. An unknown id raises ``OCToolError``
+    rather than falling back, since the output would be for the wrong target.
+    """
+    converter = _CONVERTERS.get(format)
+    if converter is None:
+        raise OCToolError(f"format must be one of {TOOL_FORMATS}, got {format!r}")
+    return converter(tool, name_prefix=name_prefix)
+
+
 __all__ = [
     "ANTHROPIC_NAME_RE",
     "MCP_META_NAMESPACE",
     "MCP_NAME_RE",
+    "TOOL_FORMATS",
+    "ToolFormat",
+    "convert_tool",
     "to_anthropic_tool",
     "to_mcp_tool",
 ]

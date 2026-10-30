@@ -17,7 +17,7 @@
  * read as a fallback: an optional field whose absence keeps its meaning, or
  * a value in a vocabulary that has a fallback.
  */
-export const SPEC_VERSION = "1.1";
+export const SPEC_VERSION = "1.2";
 
 /** Every `result_kind` value, in documentation order. */
 export const RESULT_KINDS = ["records", "artifact"] as const;
@@ -160,3 +160,15 @@ export const ALIAS_OF_KEY = "alias_of";
 export const LISTING_STYLES = ["table", "md", "txt", "json"] as const;
 /** A listing style: `table`, `md`, `txt` or `json`. */
 export type ListingStyle = (typeof LISTING_STYLES)[number];
+
+/** Every well-known tag, in documentation order. */
+export const TOOL_TAGS = ["recommended", "advanced"] as const;
+/** A well-known tag: `recommended` or `advanced`. */
+export type ToolTag = (typeof TOOL_TAGS)[number];
+/** How a reader of a tool listing reads a tag it does not know: it ignores it. */
+export const TOOL_TAG_FALLBACK: ToolTag | null = null;
+
+/** Every converter id, in documentation order. */
+export const TOOL_FORMATS = ["mcp", "anthropic"] as const;
+/** A converter id: `mcp` or `anthropic`. */
+export type ToolFormat = (typeof TOOL_FORMATS)[number];

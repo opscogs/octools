@@ -7,11 +7,14 @@ dependencies so every OpsCogs library can depend on it.
 
 from pathlib import Path
 
-from octools.cells import validate_tabular
+from octools.cells import tabular_from_models, validate_tabular
 from octools.convert import (
     ANTHROPIC_NAME_RE,
     MCP_META_NAMESPACE,
     MCP_NAME_RE,
+    TOOL_FORMATS,
+    ToolFormat,
+    convert_tool,
     to_anthropic_tool,
     to_mcp_tool,
 )
@@ -22,13 +25,17 @@ from octools.descriptor import (
     RESULT_KIND_FALLBACK,
     RESULT_KINDS,
     SPEC_VERSION,
+    TOOL_TAG_FALLBACK,
+    TOOL_TAGS,
     Access,
     OCTool,
     OCToolError,
     ResultKind,
     ToolProvider,
+    ToolTag,
     check_tool_listing,
     merge_providers,
+    select_tools,
 )
 from octools.envelopes import (
     COLUMN_KIND_FALLBACK,
@@ -45,6 +52,7 @@ from octools.envelopes import (
     ColumnScale,
     RecordsEnvelope,
     Sensitivity,
+    SourceRef,
     TabularEnvelope,
     artifact_schema,
     read_envelope,
@@ -83,6 +91,7 @@ from octools.validate import (
     SCHEMA_ESCAPE_KEY,
     count_sentences,
     validate_provider,
+    validate_tags,
     validate_tool,
 )
 
@@ -115,6 +124,9 @@ __all__ = [
     "STRICT_KEYWORDS",
     "STRICT_TYPES",
     "TABULAR_DEF_NAME",
+    "TOOL_FORMATS",
+    "TOOL_TAGS",
+    "TOOL_TAG_FALLBACK",
     "VOCABULARY_FALLBACKS",
     "Access",
     "ArtifactEnvelope",
@@ -131,13 +143,17 @@ __all__ = [
     "RecordsEnvelope",
     "ResultKind",
     "Sensitivity",
+    "SourceRef",
     "TabularEnvelope",
+    "ToolFormat",
     "ToolProvider",
     "ToolSummary",
+    "ToolTag",
     "__version__",
     "artifact_schema",
     "check_tool_listing",
     "close_objects",
+    "convert_tool",
     "count_sentences",
     "input_schema_for",
     "merge_providers",
@@ -147,15 +163,18 @@ __all__ = [
     "render_listing",
     "render_markdown_table",
     "schema_for",
+    "select_tools",
     "strict_clean",
     "strip_keys",
     "strip_titles",
     "summarize_provider",
     "summarize_tool",
+    "tabular_from_models",
     "tabular_schema",
     "to_anthropic_tool",
     "to_mcp_tool",
     "validate_provider",
     "validate_tabular",
+    "validate_tags",
     "validate_tool",
 ]

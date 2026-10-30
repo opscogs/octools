@@ -48,9 +48,10 @@
       "object",
       "string"
     ],
-    "TABULAR_DEF_NAME": "TabularEnvelope"
+    "TABULAR_DEF_NAME": "TabularEnvelope",
+    "TOOL_FORMATS": ["mcp", "anthropic"]
   },
-  "spec_version": "1.1",
+  "spec_version": "1.2",
   "vocabularies": {
     "access": {
       "fallback": "remote",
@@ -97,6 +98,13 @@
       "type": "Sensitivity",
       "values": ["inherits_input"],
       "values_constant": null
+    },
+    "tool_tags": {
+      "fallback": null,
+      "fallback_constant": "TOOL_TAG_FALLBACK",
+      "type": "ToolTag",
+      "values": ["recommended", "advanced"],
+      "values_constant": "TOOL_TAGS"
     }
   }
 }

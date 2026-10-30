@@ -1,0 +1,25 @@
+{
+  "description": "A null source key is left out and the other key stays.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["name"],
+      "rows": [["alpha"]],
+      "row_count": 1,
+      "truncated": false,
+      "source": {
+        "instance": null,
+        "snapshot": "20260101T000000Z"
+      }
+    }
+  },
+  "expected": {
+    "columns": ["name"],
+    "rows": [["alpha"]],
+    "row_count": 1,
+    "truncated": false,
+    "source": {
+      "snapshot": "20260101T000000Z"
+    }
+  }
+}

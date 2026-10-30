@@ -95,6 +95,40 @@ function resumableDescription(items: string): string {
   );
 }
 
+const SOURCE_DESCRIPTION =
+  "Which instance and snapshot answered, when a producer says.";
+
+const sourceShape = {
+  instance: z
+    .string()
+    .nullable()
+    .default(null)
+    .describe("The instance that answered."),
+  snapshot: z
+    .string()
+    .nullable()
+    .default(null)
+    .describe("The snapshot that answered."),
+};
+
+/** The source schema: strict parse to the wire form, unset keys left out. */
+export const SourceRef: z.ZodType<SourceRef, SourceRefInput> = z
+  .strictObject(sourceShape)
+  .transform((value): SourceRef => ({
+    ...(value.instance === null ? {} : { instance: value.instance }),
+    ...(value.snapshot === null ? {} : { snapshot: value.snapshot }),
+  }))
+  .meta({
+    id: "SourceRef",
+    description: "Which instance and snapshot answered a read.",
+  });
+
+// A default over a transform describes the output side only, so the field
+// states it through prefault.
+const sourceField = SourceRef.nullable()
+  .prefault(null)
+  .describe(SOURCE_DESCRIPTION);
+
 /** The paging fields both list envelopes share, after `truncated`. */
 function pagingShape(items: string) {
   return {
@@ -113,8 +147,23 @@ function pagingShape(items: string) {
       .default(null)
       .describe(stopReasonDescription(items)),
     warnings: z.array(z.string()).optional().describe(WARNINGS_DESCRIPTION),
+    source: sourceField,
     resumable: z.boolean().optional().describe(resumableDescription(items)),
   };
+}
+
+/** Which instance and snapshot answered a read. */
+export interface SourceRef {
+  /** The instance that answered. */
+  instance?: string;
+  /** The snapshot that answered. */
+  snapshot?: string;
+}
+
+/** A source as a strict parse accepts it. */
+export interface SourceRefInput {
+  instance?: string | null | undefined;
+  snapshot?: string | null | undefined;
 }
 
 /** The paging fields as parsed, before they are dumped. */
@@ -124,6 +173,7 @@ interface ParsedPaging {
   next_cursor: string | null;
   stop_reason: string | null;
   warnings?: string[] | undefined;
+  source: SourceRef | null;
   resumable?: boolean | undefined;
 }
 
@@ -139,6 +189,8 @@ export interface PagingFields {
   stop_reason?: string;
   /** Non-fatal problems the caller should relay; left out when empty. */
   warnings?: string[];
+  /** Which instance and snapshot answered; left out when unset. */
+  source?: SourceRef;
   /** Whether following `next_cursor` reads more; present only when truncated. */
   resumable?: boolean;
 }
@@ -150,6 +202,7 @@ export interface PagingInput {
   next_cursor?: string | null | undefined;
   stop_reason?: string | null | undefined;
   warnings?: string[] | undefined;
+  source?: SourceRefInput | null | undefined;
   resumable?: boolean | undefined;
 }
 
@@ -186,6 +239,7 @@ function dumpPaging(paging: ParsedPaging): PagingFields {
   if (paging.warnings !== undefined && paging.warnings.length > 0) {
     out.warnings = paging.warnings;
   }
+  if (paging.source !== null) out.source = paging.source;
   if (paging.truncated) out.resumable = paging.next_cursor !== null;
   return out;
 }
@@ -276,6 +330,8 @@ export interface ArtifactEnvelope {
   artifacts: ArtifactRef[];
   /** Non-fatal problems the caller should relay; always present. */
   warnings: string[];
+  /** Which instance and snapshot answered; left out when unset. */
+  source?: SourceRef;
   /** The artifact is treated as containing every input column. */
   sensitivity: Sensitivity;
 }
@@ -285,6 +341,7 @@ export interface ArtifactEnvelopeInput {
   artifact: ArtifactRefInput;
   artifacts?: ArtifactRefInput[] | undefined;
   warnings?: string[] | undefined;
+  source?: SourceRefInput | null | undefined;
   sensitivity?: Sensitivity | undefined;
 }
 
@@ -299,13 +356,37 @@ function isObject(value: unknown): value is Record<string, unknown> {
 }
 
 /** Return a copy of `data` holding only the keys in `known`. */
+const SOURCE_KEYS: ReadonlySet<string> = new Set(Object.keys(sourceShape));
+
+/** True when `source` is absent or an object with string known keys. */
+function sourceFits(source: unknown): boolean {
+  if (source === undefined || source === null) {
+    return true;
+  }
+  if (typeof source !== "object" || Array.isArray(source)) {
+    return false;
+  }
+  const entries = source as Record<string, unknown>;
+  return [...SOURCE_KEYS].every((key) => {
+    const value = entries[key];
+    return value === undefined || value === null || typeof value === "string";
+  });
+}
+
 function pick(
   data: Record<string, unknown>,
   known: ReadonlySet<string>,
 ): Record<string, unknown> {
-  return Object.fromEntries(
-    Object.entries(data).filter(([key]) => known.has(key)),
+  const kept = Object.fromEntries(
+    Object.entries(data).filter(
+      ([key, value]) =>
+        known.has(key) && (key !== "source" || sourceFits(value)),
+    ),
   );
+  if (kept["source"] !== undefined) {
+    kept["source"] = dropUnknown(kept["source"], SOURCE_KEYS);
+  }
+  return kept;
 }
 
 /** Return `data` without unknown keys when it is an object, else unchanged. */
@@ -594,6 +675,7 @@ const artifactShape = {
     .optional()
     .describe("Further artifacts produced alongside the primary, if any."),
   warnings: z.array(z.string()).optional().describe(WARNINGS_DESCRIPTION),
+  source: sourceField,
   sensitivity: z
     .literal(SENSITIVITIES)
     .default("inherits_input")
@@ -613,6 +695,7 @@ export const ArtifactEnvelope: z.ZodType<
     artifact: value.artifact,
     artifacts: value.artifacts ?? [],
     warnings: value.warnings ?? [],
+    ...(value.source === null ? {} : { source: value.source }),
     sensitivity: value.sensitivity,
   }))
   .meta({

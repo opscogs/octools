@@ -1,7 +1,7 @@
 ---
 status: accepted
-version: 1.1.1
-date: 2026-10-08
+version: 1.2.0
+date: 2026-10-30
 decision-makers: OpsCogs maintainers
 ---
 
@@ -107,6 +107,12 @@ When one does, it arrives in a minor release as an additive
 allows: a plain dict, no SDK dependency, applying the OpenAI strict-mode
 transform, in which every property is listed in `required` and an optional
 property becomes a union with `null`.
+
+`TOOL_FORMATS` lists the converter ids and `convert_tool` dispatches on them,
+so a new converter reaches a consumer without a code change there. An unknown
+id raises rather than falling back, because output for the wrong target is
+never usable. The ids select an input and are not read from another process,
+so they have no fallback, and they stay separate from the listing styles.
 
 ### Deliberate deviations from the sources
 

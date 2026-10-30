@@ -53,6 +53,9 @@ from octools import (
     STRICT_KEYWORDS,
     STRICT_TYPES,
     TABULAR_DEF_NAME,
+    TOOL_FORMATS,
+    TOOL_TAG_FALLBACK,
+    TOOL_TAGS,
     Finding,
     NoTitleGenerator,
     OCTool,
@@ -182,6 +185,9 @@ def vocabulary() -> dict[str, object]:
             "SENSITIVITY_FALLBACK",
             SENSITIVITY_FALLBACK,
         ),
+        "tool_tags": _vocabulary_entry(
+            "ToolTag", "TOOL_TAGS", TOOL_TAGS, "TOOL_TAG_FALLBACK", TOOL_TAG_FALLBACK
+        ),
     }
     constants: dict[str, object] = {
         "ALIAS_OF_KEY": ALIAS_OF_KEY,
@@ -198,6 +204,7 @@ def vocabulary() -> dict[str, object]:
         "STRICT_KEYWORDS": sorted(STRICT_KEYWORDS),
         "STRICT_TYPES": sorted(STRICT_TYPES),
         "TABULAR_DEF_NAME": TABULAR_DEF_NAME,
+        "TOOL_FORMATS": list(TOOL_FORMATS),
     }
     return {
         "constants": constants,

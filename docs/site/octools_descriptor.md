@@ -1,13 +1,13 @@
 # The OCTool descriptor
 
-Version: **1.2.0** · Date: 2026-10-08
+Version: **1.3.0** · Date: 2026-10-30
 
 `OCTool` is a frozen descriptor of one capability a library offers to an
 agent runtime: a keyword-only dataclass in Python, a class built with
 `new OCTool({ ... })` in TypeScript. This page is the reference: every
 field, the result envelopes, when a tool may skip a result schema, what
 "strict-clean" means for an input schema, and how the format and the
-tools themselves evolve. `octools.SPEC_VERSION` is `"1.1"`.
+tools themselves evolve. `octools.SPEC_VERSION` is `"1.2"`.
 
 ## Fields
 
@@ -33,6 +33,7 @@ subclass in TypeScript). Policy rules (marked
 | `idempotent_hint`  | `bool`                            | `True`      | MCP `idempotentHint`; meaningful when not read-only.                                                                                                                  |
 | `deprecated`       | `bool`                            | `False`     | An alias kept alive after a rename; must name the replacement in `meta["alias_of"]` (*validator*).                                                                    |
 | `meta`             | `Mapping[str, Any]`               | `{}`        | Library facts the consumer may read, plain snake_case keys: `min_api_version`, `schema_escape`, `alias_of`. Exported to MCP under `_meta["com.opscogs.octools/meta"]`.         |
+| `tags`             | `tuple[str, ...]`                 | `()`        | What the tool is, for a host to select by: `recommended` (load by default) or `advanced` (load on request). See [Tool tags](#tool-tags). |
 
 The table gives the Python names and types. In TypeScript every field is
 camelCase (`input_schema` is `inputSchema`, `read_only_hint` is
@@ -361,6 +362,37 @@ the reason to avoid a linear axis.
 - A renderer that cannot draw a given scale, or is not charting at all,
   ignores `column_scales`.
 
+### `tabular_from_models`
+
+`tabular_from_models(model, items, *, column_kinds=None)`
+(`tabularFromModels(schema, items, { columnKinds })`, over a zod object)
+builds a `TabularEnvelope` from a model, so every producer maps a
+field's type to a column kind the same way. Columns are the fields in
+declaration order, and the kind comes from the type alone:
+
+| Field type                                | Kind                           |
+| ----------------------------------------- | ------------------------------ |
+| `bool`, `int`, `float`                    | `boolean`, `integer`, `number` |
+| `Optional[X]`, `Annotated[X, ...]` | the kind of `X` |
+| A union, enum or `Literal` | the kind its members share, `number` for integers mixed with numbers |
+| `AwareDatetime`                           | `timestamp`                    |
+| An IP address type                        | `ip`                           |
+| An IP network or interface type           | `ip_block`                     |
+| A list, dict or nested model | `text`, as compact JSON |
+| A non-string value in a `text` column | compact JSON |
+| `z.bigint()` (TypeScript) | `big_integer`, as a decimal string |
+| Anything else, `datetime` and `date` too  | `text`                         |
+
+A plain `datetime` is `text` because it may lack the offset `timestamp`
+requires. `column_kinds` overrides per column, which is how a column becomes
+`timestamp` from a plain `datetime`, or `big_integer` or `fqdn`; a key that is
+not a column raises `OCToolError`. Field descriptions fill
+`column_descriptions` when any field has one, and a value the dump omits is a
+null cell, as is a non-finite float. `truncated` and `next_cursor` (`nextCursor`) describe a capped read
+and go through the envelope's own checks. Run `validate_tabular` on the result
+in your tests: an `int` beyond 2^53 - 1 needs the `big_integer`
+override.
+
 ### `validate_tabular`
 
 === "Python"
@@ -545,8 +577,11 @@ serializes its `warnings`, empty or not.
 ```
 
 `reference` is whatever the injected sink returned; the library never
-chooses a filename. `role` says what the artifact is to the run, such as
-`csv`, `plan` or `summary`; it is free text, not a closed vocabulary, so
+chooses a filename. A sink in a multi-tenant host returns a reference
+relative to the caller's storage root, or an opaque id, never an absolute
+host path, so a result never reveals where or for whom it is stored.
+`role` says what the artifact is to the run, such as `csv`, `plan` or
+`summary`; it is free text, not a closed vocabulary, so
 it has no fallback. `width`, `height` and `role` are omitted when unset,
 as is every optional envelope field left at `None`. `artifacts` lists
 further outputs beside the primary.
@@ -556,6 +591,29 @@ containing every input column. The vocabulary may gain a value later, but
 only one less restrictive than `"inherits_input"`, which stays the
 fallback a tolerant reader gives an unrecognized value (see
 [Reading envelopes from another process](#reading-envelopes-from-another-process)).
+
+### Source of a result
+
+`source` says which instance and snapshot answered, so a selector such as
+`latest` can be resolved after the call. It is an optional `SourceRef` on all
+three envelopes, left out of the dump when unset, and both of its strings are
+optional. It is a closed object because envelopes nest into strict-clean tool
+schemas, which reject an open map; a later minor can add keys, and
+`read_envelope` drops the ones it does not know.
+
+```json
+{
+  "columns": ["name"],
+  "rows": [["alpha"]],
+  "row_count": 1,
+  "truncated": false,
+  "source": { "instance": "host.demo.invalid", "snapshot": "20260101T000000Z" }
+}
+```
+
+A producer in a multi-tenant host keeps `source` to values the caller may
+see, never a host path or another tenant's name. `read_envelope` drops a
+malformed `source`, and the result stays usable without it.
 
 ### Sensitivity on record fields
 
@@ -686,6 +744,59 @@ raises `TypeError` when `model` is not one of the three envelope types.
     const table = readEnvelope(TabularEnvelope, text);
     ```
 
+## Tool tags
+
+`tags` says what a tool is, so a host that merges providers can choose what to
+load without knowing any consumer's `meta` key. `TOOL_TAGS` lists the
+well-known values, and a reader ignores a tag it does not know, so a tool
+carrying only unknown tags is never loaded by default. A host still decides
+what it loads.
+
+=== "Python"
+
+    ```python
+    from octools import merge_providers, select_tools, to_mcp_tool
+
+    merged = merge_providers(my_tools, partner_tools)
+    default = select_tools(merged, tags={"recommended"})
+    definitions = [to_mcp_tool(tool) for tool in default.all_tools()]
+    ```
+
+=== "TypeScript"
+
+    ```ts
+    import { mergeProviders, selectTools, toMcpTool } from "@opscogs/octools";
+
+    const merged = mergeProviders(myTools, partnerTools);
+    const initial = selectTools(merged, { tags: ["recommended"] });
+    const definitions = initial.allTools().map((tool) => toMcpTool(tool));
+    ```
+
+`select_tools` keeps a tool carrying any given tag, in listing order. It
+returns a provider, so listings, converters and validators work on the result.
+To require a tag from each of two sets, nest the calls:
+
+=== "Python"
+
+    ```python
+    selected = select_tools(select_tools(merged, tags={"network"}), tags={"recommended"})
+    ```
+
+=== "TypeScript"
+
+    ```ts
+    const selected = selectTools(selectTools(merged, { tags: ["network"] }), {
+      tags: ["recommended"],
+    });
+    ```
+
+A provider may add its own domain tags, such as `network`, beside the
+well-known ones. `validate_tags(provider, allowed={"network"})`
+(`validateTags(provider, { allowed: ["network"] })`) reports each tag outside
+`TOOL_TAGS` and `allowed` as `unknown_tag`; with no `allowed` it checks against
+`TOOL_TAGS` alone. It is opt-in, and `validate_provider` does not report tags. A
+provider that groups tools with a `meta` key moves that value to `tags`.
+
 ## Escape conditions
 
 `output_schema` is preferred, not mandatory. It may be `None`, or an open
@@ -743,7 +854,7 @@ model it as a closed object or move it out of the input schema.
 
 ## Versioning and deprecation
 
-`SPEC_VERSION` is `"1.1"`, the format version of the descriptor and the
+`SPEC_VERSION` is `"1.2"`, the format version of the descriptor and the
 envelopes. Under the compatibility contract below, a spec minor is
 additive and a spec major is one of the "must not" changes. A reader
 checks the major only; a test that pins the whole string fails on every
@@ -802,9 +913,9 @@ mattering is documented as ignored. The dataclass is keyword-only, so
 adding a field to `OCTool` never breaks construction.
 
 **Envelope subclasses.** A consumer may subclass a result envelope or
-`ArtifactRef`. The field names `role` and `source` are reserved for
-`octools` itself: `ArtifactRef` defines `role`, so an `ArtifactRef`
-subclass uses it rather than a field of its own, and no subclass declares
+`ArtifactRef`. The field names `role` and `source` belong to `octools`:
+`ArtifactRef` defines `role` and every envelope defines `source`, so a
+subclass uses them rather than fields of its own, and no subclass declares
 either name. A consumer's own subclass fields carry a consumer prefix (`<pkg>_...`)
 unless the field is being proposed upstream, and a subclass field that
 later collides with an `octools` field is the consumer's to rename or

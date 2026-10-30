@@ -1,0 +1,21 @@
+{
+  "description": "A source whose values are not strings is dropped on read.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["name"],
+      "rows": [["alpha"]],
+      "row_count": 1,
+      "truncated": false,
+      "source": {
+        "snapshot": 7
+      }
+    }
+  },
+  "expected": {
+    "columns": ["name"],
+    "rows": [["alpha"]],
+    "row_count": 1,
+    "truncated": false
+  }
+}

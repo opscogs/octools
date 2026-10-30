@@ -81,6 +81,13 @@ describe("listing parity", () => {
   });
 });
 
+describe("ToolSummary", () => {
+  it("reads a row without tags as untagged", () => {
+    const row = summarizeTool(buildTool(PARITY.tools[0] ?? {})).asRow();
+    expect(new ToolSummary(row).tags).toEqual([]);
+  });
+});
+
 describe("summaries", () => {
   const tool: ListedTool = {
     name: "plain",

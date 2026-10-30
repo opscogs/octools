@@ -37,7 +37,7 @@ def test_echo_records_runs_and_matches_schema():
         "resumable": True,
     }
     RecordsEnvelope[EchoRecord].model_validate(result)
-    assert set(result) | {"stop_reason", "warnings"} == set(
+    assert set(result) | {"stop_reason", "warnings", "source"} == set(
         ECHO_RECORDS.output_schema["properties"]
     )
 

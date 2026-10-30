@@ -1,6 +1,6 @@
 # The TypeScript package
 
-Version: **1.2.0** · Date: 2026-10-08
+Version: **1.3.0** · Date: 2026-10-30
 
 `@opscogs/octools` is `octools` for TypeScript and JavaScript. It covers
 the whole public API of the Python package: the `OCTool` descriptor, the
@@ -57,7 +57,11 @@ maps one to one onto a name in the Python package's `__all__`:
 | `NoTitleGenerator`                                                     | none: `schemaFor` strips titles itself                                               |
 | `validate_tool`, `validate_provider`, `count_sentences`                | `validateTool`, `validateProvider`, `countSentences`                                 |
 | `merge_providers`, `check_tool_listing`                                | `mergeProviders`, `checkToolListing`                                                 |
+| `tabular_from_models(model, items, column_kinds=...)`                  | `tabularFromModels(schema, items, { columnKinds })`                                  |
+| `select_tools(provider, tags=...)`, `validate_tags`                    | `selectTools(provider, { tags })`, `validateTags`                                    |
+| `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                          | `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                                        |
 | `to_mcp_tool(tool, name_prefix=...)`, `to_anthropic_tool`              | `toMcpTool(tool, { namePrefix })`, `toAnthropicTool`                                 |
+| `convert_tool(tool, format, name_prefix=...)`, `TOOL_FORMATS`          | `convertTool(tool, format, { namePrefix })`, `TOOL_FORMATS`                          |
 | `summarize_tool`, `summarize_provider(provider, access=...)`           | `summarizeTool`, `summarizeProvider(provider, { access })`                           |
 | `render_listing(provider, style=..., access=..., pretty=...)`          | `renderListing(provider, { style, access, pretty })`                                 |
 | `render_markdown_table`, `ToolSummary.as_row()`, `InputSummary`        | `renderMarkdownTable`, `ToolSummary.asRow()`, `InputSummary`                         |

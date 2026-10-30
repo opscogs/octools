@@ -1,7 +1,7 @@
 ---
 status: accepted
-version: 1.3.1
-date: 2026-10-08
+version: 1.4.0
+date: 2026-10-30
 decision-makers: OpsCogs maintainers
 ---
 
@@ -184,9 +184,14 @@ The compatibility contract for every release within a major:
 - **`Finding`** may gain optional fields defaulting to `None` in a minor.
 - **`ToolProvider`** is frozen within a major: no new required members.
 - **Envelope subclasses.** Consumers may subclass envelopes and
-  `ArtifactRef`. The field names `role` and `source` are reserved for
-  `octools`, as is every field an envelope already carries, `warnings`
-  among them. `ArtifactRef` defines `role` as optional free text naming
+  `ArtifactRef`. The field names `role` and `source` belong to
+  `octools`, as does every field an envelope already carries, `warnings`
+  among them. `source` is an optional `SourceRef` on all three envelopes,
+  saying which instance and snapshot answered. It is a closed object, not a
+  map, because envelopes nest into strict-clean schemas that reject open
+  maps. A minor may add keys, it is left out of the dump when unset, and
+  `read_envelope` drops unknown keys and a malformed value, since the result
+  stays usable without it. `ArtifactRef` defines `role` as optional free text naming
   what the artifact is to the run, such as `csv`, `plan` or `summary`,
   left out of the dump when unset; it is not a closed vocabulary, so it
   has no fallback, and an `ArtifactRef` subclass uses it rather than a
@@ -352,7 +357,8 @@ contract. It ships in octools 1.0.0 beside
 dump and schema rule, `warnings` on every envelope, the reserved names
 `role` and `source`, and `ArtifactRef.role` ship in octools 1.1.0 with
 `SPEC_VERSION` `"1.1"`, beside `stop_reason` and `resumable`
-([OCTL-0002](./OCTL-0002-result-paging.md)).
+([OCTL-0002](./OCTL-0002-result-paging.md)). `source` ships in octools 1.3.0
+with `SPEC_VERSION` `"1.2"`.
 
 The published docs carry the contract (descriptor versioning section), the
 per-vocabulary fallback table, the reserved subclass field names, the

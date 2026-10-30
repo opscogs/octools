@@ -29,6 +29,7 @@
     "destructive_hint": false,
     "idempotent_hint": true,
     "deprecated": false,
-    "meta": {}
+    "meta": {},
+    "tags": []
   }
 }

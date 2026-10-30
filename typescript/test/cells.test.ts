@@ -1,10 +1,12 @@
 /** Cell predicates agree with the Python implementation beyond the spec fixtures. */
 import { describe, expect, it } from "vitest";
+import * as z from "zod";
 
 import {
   type Cell,
   type ColumnKind,
   TabularEnvelope,
+  tabularFromModels,
   validateTabular,
 } from "../src/index.js";
 
@@ -231,5 +233,80 @@ describe("validateTabular findings", () => {
   it("treats an integral number as an integer however JSON wrote it", () => {
     const envelope = table("integer", JSON.parse("[1.0, 1e3]") as Cell[]);
     expect(validateTabular(envelope)).toEqual([]);
+  });
+});
+
+describe("tabularFromModels", () => {
+  it("reads dates, IPv6, default wrappers and absent items", () => {
+    const schema = z.object({
+      at: z.date().describe("When."),
+      addr: z.ipv6().optional(),
+      net: z.cidrv6(),
+      size: z.number().prefault(1),
+    });
+    const at = new Date("2026-01-01T00:00:00.000Z");
+    const table = tabularFromModels(schema, [{ at, net: "2001:db8::/32" }]);
+    expect(table.column_kinds).toEqual([
+      "timestamp",
+      "ip",
+      "ip_block",
+      "number",
+    ]);
+    expect(table.rows).toEqual([
+      ["2026-01-01T00:00:00.000Z", null, "2001:db8::/32", null],
+    ]);
+    expect(table.column_descriptions).toEqual(["When.", null, null, null]);
+  });
+
+  it("reads boolean and fractional literals", () => {
+    const schema = z.object({ on: z.literal(true), half: z.literal(0.5) });
+    expect(tabularFromModels(schema, []).column_kinds).toEqual([
+      "boolean",
+      "number",
+    ]);
+  });
+
+  it("reads a nullable union member and a union of objects", () => {
+    const schema = z.object({
+      size: z.union([z.int().nullable(), z.null()]),
+      either: z.union([z.object({ a: z.int() }), z.string()]),
+    });
+    const table = tabularFromModels(schema, [{ size: 1, either: { a: 1 } }]);
+    expect(table.column_kinds).toEqual(["integer", "text"]);
+    expect(table.rows).toEqual([[1, '{"a":1}']]);
+    expect(validateTabular(table)).toEqual([]);
+  });
+
+  it("reads a bigint as a big_integer decimal string", () => {
+    const schema = z.object({
+      size: z.bigint(),
+      nested: z.object({ size: z.bigint() }),
+      plain: z.bigint(),
+    });
+    const size = 9007199254740993n;
+    const table = tabularFromModels(
+      schema,
+      [{ size, nested: { size }, plain: size }],
+      { columnKinds: { plain: "text" } },
+    );
+    expect(table.column_kinds).toEqual(["big_integer", "text", "text"]);
+    expect(table.rows).toEqual([
+      ["9007199254740993", '{"size":"9007199254740993"}', "9007199254740993"],
+    ]);
+    expect(validateTabular(table)).toEqual([]);
+  });
+
+  it("reads a non-finite number as null", () => {
+    const schema = z.object({ ratio: z.number(), ratios: z.array(z.number()) });
+    const table = tabularFromModels(schema, [
+      { ratio: Number.NaN, ratios: [Number.POSITIVE_INFINITY] },
+    ]);
+    expect(table.rows).toEqual([[null, "[null]"]]);
+    expect(validateTabular(table)).toEqual([]);
+  });
+
+  it("leaves an empty literal set as text", () => {
+    const schema = z.object({ none: z.enum({}) });
+    expect(tabularFromModels(schema, []).column_kinds).toEqual(["text"]);
   });
 });

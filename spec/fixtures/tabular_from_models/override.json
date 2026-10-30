@@ -1,0 +1,32 @@
+{
+  "description": "column_kinds overrides the inferred kind per column.",
+  "input": {
+    "fields": [
+      {
+        "name": "size",
+        "type": "text"
+      },
+      {
+        "name": "host",
+        "type": "text"
+      }
+    ],
+    "items": [
+      {
+        "size": "9007199254740993",
+        "host": "host.demo.invalid"
+      }
+    ],
+    "column_kinds": {
+      "size": "big_integer",
+      "host": "fqdn"
+    }
+  },
+  "expected": {
+    "columns": ["size", "host"],
+    "rows": [["9007199254740993", "host.demo.invalid"]],
+    "row_count": 1,
+    "truncated": false,
+    "column_kinds": ["big_integer", "fqdn"]
+  }
+}

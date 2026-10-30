@@ -15,28 +15,34 @@ import * as z from "zod";
 import {
   type Access,
   ArtifactEnvelope,
+  type ColumnKind,
   type Finding,
   type ListingStyle,
   type JsonSchema,
   OCToolError,
   RecordsEnvelope,
+  TOOL_FORMATS,
   TabularEnvelope,
   checkToolListing,
   closeObjects,
+  convertTool,
   countSentences,
   mergeProviders,
   readEnvelope,
   renderListing,
   renderMarkdownTable,
+  selectTools,
   strictClean,
   stripKeys,
   stripTitles,
   summarizeProvider,
   summarizeTool,
+  tabularFromModels,
   toAnthropicTool,
   toMcpTool,
   validateProvider,
   validateTabular,
+  validateTags,
   validateTool,
 } from "../../src/index.js";
 import type { ErrorCode } from "../../src/errors.js";
@@ -114,11 +120,95 @@ function convert(
   }
 }
 
+function convertFormat(input: Record<string, unknown>): unknown {
+  const tool = buildTool(input["tool"] as Record<string, unknown>);
+  const format = input["format"] as string;
+  try {
+    return convertTool(tool, format, {
+      namePrefix: input["name_prefix"] as string | undefined,
+    });
+  } catch (error) {
+    if (error instanceof OCToolError) {
+      const known = (TOOL_FORMATS as readonly string[]).includes(format);
+      throw new FixtureError(known ? "invalid_name" : "invalid_format");
+    }
+    throw error;
+  }
+}
+
+const NESTED = z.object({ a: z.int() });
+const FIELD_TYPES: Readonly<Record<string, () => z.ZodType>> = {
+  boolean: () => z.boolean(),
+  integer: () => z.int(),
+  number: () => z.number(),
+  text: () => z.string(),
+  timestamp: () => z.iso.datetime({ offset: true }),
+  datetime: () => z.iso.datetime({ local: true }),
+  ip: () => z.ipv4(),
+  ip_block: () => z.cidrv4(),
+  literal_text: () => z.enum(["a", "b"]),
+  literal_integer: () => z.literal([1, 2]),
+  literal_mixed: () => z.literal(["a", 1]),
+  list: () => z.array(z.string()),
+  object: () => z.record(z.string(), z.int()),
+  nested: () => NESTED,
+  union: () => z.union([z.int(), z.string()]),
+  union_numeric: () => z.union([z.int(), z.number()]),
+  union_boolean: () => z.union([z.boolean(), z.string()]),
+  literal_nullable: () => z.literal([1, null]),
+  positive: () => z.int().positive(),
+};
+
+interface FixtureField {
+  name: string;
+  type: string;
+  description?: string;
+  nullable?: boolean;
+}
+
+function modelField(field: FixtureField): z.ZodType {
+  const build = FIELD_TYPES[field.type];
+  if (build === undefined) {
+    throw new Error(`unknown field type ${field.type}`);
+  }
+  const base = build();
+  const described =
+    field.description === undefined ? base : base.describe(field.description);
+  return field.nullable === true
+    ? described.nullable().default(null)
+    : described;
+}
+
+function fromModels(input: Record<string, unknown>): unknown {
+  const fields = input["fields"] as FixtureField[];
+  const schema = z.object(
+    Object.fromEntries(fields.map((field) => [field.name, modelField(field)])),
+  );
+  const items = (input["items"] as unknown[]).map((item) => schema.parse(item));
+  try {
+    return tabularFromModels(schema, items, {
+      columnKinds: input["column_kinds"] as
+        Record<string, ColumnKind> | undefined,
+      truncated: input["truncated"] as boolean | undefined,
+      nextCursor: input["next_cursor"] as string | undefined,
+    });
+  } catch (error) {
+    if (error instanceof OCToolError) {
+      throw new FixtureError("invalid_column");
+    }
+    if (error instanceof z.ZodError) {
+      throw new FixtureError("invalid_envelope");
+    }
+    throw error;
+  }
+}
+
 /** One runner per fixture directory under `spec/fixtures/`. */
 export const RUNNERS: Readonly<Record<string, Runner>> = {
   OCTool: (input) =>
     descriptor(buildTool(input["tool"] as Record<string, unknown>)),
   check_tool_listing: (input) => findings(checkToolListing(provider(input))),
+  convert_tool: convertFormat,
   count_sentences: (input) => countSentences(input["text"] as string),
   merge_providers: (input) =>
     mergeProviders(
@@ -126,9 +216,20 @@ export const RUNNERS: Readonly<Record<string, Runner>> = {
     )
       .allTools()
       .map((tool) => tool.name),
+  tabular_from_models: fromModels,
   to_anthropic_tool: (input) => convert(toAnthropicTool, input),
   to_mcp_tool: (input) => convert(toMcpTool, input),
+  select_tools: (input) =>
+    selectTools(provider(input), { tags: input["tags"] as string[] })
+      .allTools()
+      .map((tool) => tool.name),
   validate_provider: (input) => findings(validateProvider(provider(input))),
+  validate_tags: (input) =>
+    findings(
+      validateTags(provider(input), {
+        allowed: input["allowed"] as string[] | undefined,
+      }),
+    ),
   validate_tool: (input) =>
     findings(
       validateTool(

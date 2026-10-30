@@ -500,6 +500,7 @@ def test_artifact_schema_shape():
         "artifact",
         "artifacts",
         "warnings",
+        "source",
         "sensitivity",
     }
     assert schema["required"] == ["artifact"]
@@ -737,3 +738,28 @@ def test_every_closed_envelope_vocabulary_declares_a_fallback():
     for name, values in vocabularies.items():
         fallback = VOCABULARY_FALLBACKS[name]
         assert fallback is None or fallback in values, name
+
+
+SOURCE = {"instance": "host.demo.invalid", "snapshot": "20260101T000000Z"}
+
+
+@pytest.mark.parametrize(
+    ("model", "data"),
+    [
+        (TabularEnvelope, {"columns": ["a"], "rows": [[1]], "row_count": 1}),
+        (RecordsEnvelope[dict[str, int]], {"records": [{"a": 1}], "count": 1}),
+    ],
+)
+def test_source_round_trips_and_is_omitted_when_unset(model, data):
+    data = {**data, "truncated": False}
+    assert "source" not in model.model_validate(data).model_dump(mode="json")
+    dumped = model.model_validate({**data, "source": SOURCE}).model_dump(mode="json")
+    assert dumped["source"] == SOURCE
+    assert model.model_validate(dumped).model_dump(mode="json") == dumped
+
+
+def test_source_is_optional_in_the_output_schemas():
+    for schema in (tabular_schema(), artifact_schema()):
+        assert "source" in schema["properties"]
+        assert "source" not in schema.get("required", [])
+        assert strict_clean(schema) == []

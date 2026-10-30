@@ -1,0 +1,19 @@
+{
+  "description": "No items is an empty table with its columns.",
+  "input": {
+    "fields": [
+      {
+        "name": "label",
+        "type": "text"
+      }
+    ],
+    "items": []
+  },
+  "expected": {
+    "columns": ["label"],
+    "rows": [],
+    "row_count": 0,
+    "truncated": false,
+    "column_kinds": ["text"]
+  }
+}

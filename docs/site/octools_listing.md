@@ -1,6 +1,6 @@
 # Listing tools for people
 
-Version: **1.2.0** · Date: 2026-10-08
+Version: **1.3.0** · Date: 2026-10-30
 
 The listing helpers turn a provider's tools into a listing a person can
 read: a terminal command (`octools list`) for anyone with the Python

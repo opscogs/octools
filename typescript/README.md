@@ -71,8 +71,12 @@ Each name maps one to one onto a name in the Python package's `__all__`.
 | `OCTool(name=..., input_schema=..., ...)`                              | `new OCTool({ name, inputSchema, ... })`: every field in camelCase                    |
 | `ToolProvider` (`all_tools()`)                                         | interface `ToolProvider` (`allTools()`)                                               |
 | `merge_providers`, `check_tool_listing`                                | `mergeProviders`, `checkToolListing`                                                  |
+| `tabular_from_models(model, items, column_kinds=...)`                  | `tabularFromModels(schema, items, { columnKinds })`                                   |
+| `select_tools(provider, tags=...)`, `validate_tags`                    | `selectTools(provider, { tags })`, `validateTags`                                     |
+| `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                          | `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                                         |
 | `validate_tool`, `validate_provider`, `count_sentences`                | `validateTool`, `validateProvider`, `countSentences`                                  |
 | `to_mcp_tool(tool, name_prefix=...)`, `to_anthropic_tool`              | `toMcpTool(tool, { namePrefix })`, `toAnthropicTool`                                  |
+| `convert_tool(tool, format, name_prefix=...)`, `TOOL_FORMATS`          | `convertTool(tool, format, { namePrefix })`, `TOOL_FORMATS`                           |
 | `summarize_tool`, `summarize_provider(provider, access=...)`           | `summarizeTool`, `summarizeProvider(provider, { access })`                            |
 | `render_listing(provider, style=..., access=..., pretty=...)`          | `renderListing(provider, { style, access, pretty })`; a bad style throws `RangeError` |
 | `render_markdown_table`, `ToolSummary.as_row()`, `InputSummary`        | `renderMarkdownTable`, `ToolSummary.asRow()`, `InputSummary`                          |

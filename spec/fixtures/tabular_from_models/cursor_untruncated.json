@@ -1,0 +1,16 @@
+{
+  "description": "The envelope's own checks apply to a cursor on an untruncated read.",
+  "input": {
+    "fields": [
+      {
+        "name": "label",
+        "type": "text"
+      }
+    ],
+    "items": [],
+    "next_cursor": "c"
+  },
+  "expected": {
+    "error": "invalid_envelope"
+  }
+}

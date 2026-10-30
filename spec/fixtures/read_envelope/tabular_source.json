@@ -1,0 +1,26 @@
+{
+  "description": "A tabular envelope carries source through a read.",
+  "input": {
+    "model": "tabular",
+    "data": {
+      "columns": ["name"],
+      "rows": [["alpha"]],
+      "row_count": 1,
+      "truncated": false,
+      "source": {
+        "instance": "host.demo.invalid",
+        "snapshot": "20260101T000000Z"
+      }
+    }
+  },
+  "expected": {
+    "columns": ["name"],
+    "rows": [["alpha"]],
+    "row_count": 1,
+    "truncated": false,
+    "source": {
+      "instance": "host.demo.invalid",
+      "snapshot": "20260101T000000Z"
+    }
+  }
+}

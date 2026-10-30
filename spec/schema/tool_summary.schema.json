@@ -97,6 +97,13 @@
         "$ref": "#/$defs/InputSummary"
       },
       "type": "array"
+    },
+    "tags": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
     }
   },
   "required": [

@@ -13,6 +13,7 @@ import {
   checkToolListing,
   typeName,
 } from "./descriptor.js";
+import { OCToolError } from "./errors.js";
 import { Finding } from "./findings.js";
 import { SENTENCE_RE as PY_SENTENCE_RE, strip } from "./internal/pytext.js";
 import type { JsonSchema } from "./internal/jsonSchema.js";
@@ -23,6 +24,7 @@ import {
   MIN_SENTENCES,
   NAME_RE,
   SCHEMA_ESCAPE_KEY,
+  TOOL_TAGS,
 } from "./vocabulary.js";
 
 // Python's whitespace set, so counts match the Python implementation.
@@ -160,4 +162,47 @@ export function validateProvider(provider: ToolProvider): Finding[] {
     }
   });
   return findings;
+}
+
+/** Options {@link validateTags} takes. */
+export interface ValidateTagsOptions {
+  /** A provider's own domain tags, accepted beside {@link TOOL_TAGS}. */
+  readonly allowed?: Iterable<string> | undefined;
+}
+
+/**
+ * Report every tag outside {@link TOOL_TAGS} and `options.allowed`, one
+ * `unknown_tag` finding each.
+ *
+ * A bare string for `allowed` throws {@link OCToolError}, since it would
+ * match by character. Opt-in, like `validateTabular`, so `validateProvider`
+ * stays unchanged. Items that are not tools are `validateProvider`'s to
+ * report.
+ */
+export function validateTags(
+  provider: ToolProvider,
+  options: ValidateTagsOptions = {},
+): Finding[] {
+  const allowed = options.allowed ?? [];
+  if (typeof allowed === "string") {
+    throw new OCToolError("allowed must be an iterable of strings");
+  }
+  const known = new Set<string>([...TOOL_TAGS, ...allowed]);
+  const items: readonly unknown[] = provider.allTools();
+  return items.flatMap((item) =>
+    item instanceof OCTool
+      ? item.tags.flatMap((tag, index) =>
+          known.has(tag)
+            ? []
+            : [
+                new Finding({
+                  rule: "unknown_tag",
+                  message: `tag ${JSON.stringify(tag)} is not one of ${[...known].sort().join(", ")}`,
+                  tool: item.name,
+                  path: `/tags/${String(index)}`,
+                }),
+              ],
+        )
+      : [],
+  );
 }

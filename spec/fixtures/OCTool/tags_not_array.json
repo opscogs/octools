@@ -1,0 +1,19 @@
+{
+  "description": "Tags must be an array, not a string.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote",
+      "tags": "recommended"
+    }
+  },
+  "expected": {
+    "error": "invalid_descriptor"
+  }
+}

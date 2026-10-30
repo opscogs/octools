@@ -18,6 +18,7 @@ import {
   MCP_META_NAMESPACE,
   MCP_NAME_RE,
   SPEC_VERSION,
+  TOOL_FORMATS,
 } from "./vocabulary.js";
 
 /** Options both converters take. */
@@ -64,11 +65,11 @@ function prefixedName(
  * `name` has `namePrefix` prepended, checked against {@link MCP_NAME_RE},
  * so one provider can reach two targets on one server. `inputSchema` and
  * `outputSchema` are the descriptor's schemas verbatim; the three hints
- * become `annotations`; `access`, `target`, `result_kind`, `deprecated` and
- * the `meta` bag go under `_meta` with the `com.opscogs.octools/` prefix,
+ * become `annotations`; `access`, `target`, `result_kind`, `deprecated`, the
+ * `meta` bag and `tags` go under `_meta` with the `com.opscogs.octools/` prefix,
  * beside the spec version. Only `func` is not represented (it is the
- * server's handler). `title`, `outputSchema` and `target` are present only
- * when set. Throws {@link OCToolError} when the prefixed name breaks the
+ * server's handler). `title`, `outputSchema`, `target` and `tags` are present
+ * only when set. Throws {@link OCToolError} when the prefixed name breaks the
  * rule.
  */
 export function toMcpTool(
@@ -101,6 +102,9 @@ export function toMcpTool(
   if (tool.target !== null) {
     meta[`${MCP_META_NAMESPACE}target`] = tool.target;
   }
+  if (tool.tags.length > 0) {
+    meta[`${MCP_META_NAMESPACE}tags`] = [...tool.tags];
+  }
   out["_meta"] = meta;
   return out;
 }
@@ -114,8 +118,8 @@ export function toMcpTool(
  * `additionalProperties: false` on the root unless it sets its own, so the
  * runtime can set `strict: true` itself. Dropped, because the API has no
  * slot for them: `title`, `outputSchema`, the hints, `access` / `target`,
- * `resultKind`, `deprecated` and `meta` (the runtime's registry keeps
- * those). `strict` is not emitted; it is a runtime choice. Throws
+ * `resultKind`, `deprecated`, `meta` and `tags` (the runtime's registry keeps
+ * those, and `selectTools` filters by tag first). `strict` is not emitted; it is a runtime choice. Throws
  * {@link OCToolError} when the prefixed name breaks the rule.
  */
 export function toAnthropicTool(
@@ -131,4 +135,28 @@ export function toAnthropicTool(
     schema["additionalProperties"] = false;
   }
   return { name, description: tool.description, input_schema: schema };
+}
+
+/**
+ * Return `tool` in the shape of the converter `format` names.
+ *
+ * `format` is one of {@link TOOL_FORMATS}; these ids name converters and are
+ * separate from the listing styles. Throws {@link OCToolError} for an
+ * unknown id rather than falling back, since the output would be for the
+ * wrong target.
+ */
+export function convertTool(
+  tool: OCTool,
+  format: string,
+  options: ConvertOptions = {},
+): Record<string, unknown> {
+  if (format === "mcp") {
+    return toMcpTool(tool, options);
+  }
+  if (format === "anthropic") {
+    return toAnthropicTool(tool, options);
+  }
+  throw new OCToolError(
+    `format must be one of ${TOOL_FORMATS.join(", ")}, got ${JSON.stringify(format)}`,
+  );
 }

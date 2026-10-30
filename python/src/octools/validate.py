@@ -8,10 +8,17 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from dataclasses import replace
 
-from octools.descriptor import NAME_RE, OCTool, ToolProvider, check_tool_listing
+from octools.descriptor import (
+    NAME_RE,
+    TOOL_TAGS,
+    OCTool,
+    OCToolError,
+    ToolProvider,
+    check_tool_listing,
+)
 from octools.findings import Finding
 from octools.schema import strict_clean
 
@@ -154,6 +161,33 @@ def validate_provider(provider: ToolProvider) -> list[Finding]:
     return findings
 
 
+def validate_tags(
+    provider: ToolProvider, *, allowed: Iterable[str] = ()
+) -> list[Finding]:
+    """Report every tag outside ``TOOL_TAGS`` and ``allowed``, as ``unknown_tag``.
+
+    ``allowed`` names a provider's own domain tags beside the well-known ones;
+    a bare string raises ``OCToolError``, since it would match by character.
+    Opt-in, like ``validate_tabular``, so ``validate_provider`` stays
+    unchanged. Items that are not tools are ``validate_provider``'s to report.
+    """
+    if isinstance(allowed, str):
+        raise OCToolError("allowed must be an iterable of strings")
+    known = {*TOOL_TAGS, *allowed}
+    return [
+        Finding(
+            rule="unknown_tag",
+            message=f"tag {tag!r} is not one of {sorted(known)}",
+            tool=tool.name,
+            path=f"/tags/{index}",
+        )
+        for tool in provider.all_tools()
+        if isinstance(tool, OCTool)
+        for index, tag in enumerate(tool.tags)
+        if tag not in known
+    ]
+
+
 __all__ = [
     "ALIAS_OF_KEY",
     "MAX_SENTENCES",
@@ -161,5 +195,6 @@ __all__ = [
     "SCHEMA_ESCAPE_KEY",
     "count_sentences",
     "validate_provider",
+    "validate_tags",
     "validate_tool",
 ]

@@ -8,8 +8,17 @@
  *
  * @packageDocumentation
  */
-export { validateTabular } from "./cells.js";
-export { type ConvertOptions, toAnthropicTool, toMcpTool } from "./convert.js";
+export {
+  type TabularFromModelsOptions,
+  tabularFromModels,
+  validateTabular,
+} from "./cells.js";
+export {
+  type ConvertOptions,
+  convertTool,
+  toAnthropicTool,
+  toMcpTool,
+} from "./convert.js";
 export {
   OCTool,
   type OCToolInit,
@@ -17,6 +26,7 @@ export {
   type ToolProvider,
   checkToolListing,
   mergeProviders,
+  selectTools,
 } from "./descriptor.js";
 export {
   ArtifactEnvelope,
@@ -29,6 +39,8 @@ export {
   RecordsEnvelope,
   type RecordsEnvelopeInput,
   type RecordsEnvelopeSchema,
+  SourceRef,
+  type SourceRefInput,
   TabularEnvelope,
   type TabularEnvelopeInput,
   artifactSchema,
@@ -65,7 +77,13 @@ export {
   stripKeys,
   stripTitles,
 } from "./schema.js";
-export { countSentences, validateProvider, validateTool } from "./validate.js";
+export {
+  type ValidateTagsOptions,
+  countSentences,
+  validateProvider,
+  validateTags,
+  validateTool,
+} from "./validate.js";
 export {
   ACCESS_FALLBACK,
   ACCESS_KINDS,
@@ -91,6 +109,9 @@ export {
   STRICT_KEYWORDS,
   STRICT_TYPES,
   TABULAR_DEF_NAME,
+  TOOL_FORMATS,
+  TOOL_TAGS,
+  TOOL_TAG_FALLBACK,
   VOCABULARY_FALLBACKS,
   type Access,
   type ColumnKind,
@@ -98,4 +119,6 @@ export {
   type ListingStyle,
   type ResultKind,
   type Sensitivity,
+  type ToolFormat,
+  type ToolTag,
 } from "./vocabulary.js";

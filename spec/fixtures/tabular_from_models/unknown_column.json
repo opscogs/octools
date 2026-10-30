@@ -1,0 +1,18 @@
+{
+  "description": "An override for a column the model lacks is an error.",
+  "input": {
+    "fields": [
+      {
+        "name": "label",
+        "type": "text"
+      }
+    ],
+    "items": [],
+    "column_kinds": {
+      "missing": "text"
+    }
+  },
+  "expected": {
+    "error": "invalid_column"
+  }
+}

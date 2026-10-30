@@ -61,10 +61,11 @@ class ToolSummary:
     deprecated: bool
     alias_of: str | None
     inputs: tuple[InputSummary, ...]
+    tags: tuple[str, ...] = ()
 
     def as_row(self) -> dict[str, object]:
         """Return a JSON-ready flat dict; ``inputs`` is a list of plain dicts."""
-        return {
+        row: dict[str, object] = {
             "name": self.name,
             "title": self.title,
             "summary": self.summary,
@@ -80,6 +81,9 @@ class ToolSummary:
             "alias_of": self.alias_of,
             "inputs": [_input_row(item) for item in self.inputs],
         }
+        if self.tags:
+            row["tags"] = list(self.tags)
+        return row
 
 
 def _input_row(item: InputSummary) -> dict[str, object]:
@@ -197,6 +201,7 @@ def summarize_tool(tool: OCTool) -> ToolSummary:
         deprecated=tool.deprecated,
         alias_of=alias if isinstance(alias, str) and alias else None,
         inputs=_inputs(tool.input_schema),
+        tags=tool.tags,
     )
 
 

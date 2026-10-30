@@ -1,6 +1,6 @@
 # Converters
 
-Version: **1.2.0** · Date: 2026-10-08
+Version: **1.3.0** · Date: 2026-10-30
 
 The converters turn an `OCTool` into the registration object a target
 expects, as plain data: dicts in Python, plain objects in TypeScript. No
@@ -58,6 +58,7 @@ fields this mapping uses). Everything but `func` survives, because
 | `access`                                    | `_meta["com.opscogs.octools/access"]`                          |
 | `target`                                    | `_meta["com.opscogs.octools/target"]` (only when set)          |
 | `result_kind`                               | `_meta["com.opscogs.octools/result_kind"]`                     |
+| `tags`                                      | `_meta["com.opscogs.octools/tags"]` (only when set)            |
 | `deprecated`                                | `_meta["com.opscogs.octools/deprecated"]`                      |
 | `meta`                                      | `_meta["com.opscogs.octools/meta"]` (copy)                     |
 | `SPEC_VERSION`                              | `_meta["com.opscogs.octools/spec_version"]`                    |
@@ -82,7 +83,7 @@ Example:
   "outputSchema": { "type": "object", "properties": {} },
   "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true },
   "_meta": {
-    "com.opscogs.octools/spec_version": "1.1",
+    "com.opscogs.octools/spec_version": "1.2",
     "com.opscogs.octools/access": "remote",
     "com.opscogs.octools/result_kind": "records",
     "com.opscogs.octools/deprecated": false,
@@ -102,6 +103,16 @@ The reverse mapping is mechanical, and the test suite proves it: an
 `OCTool` rebuilt from `to_mcp_tool(tool)` plus the original `func`
 compares equal to `tool`.
 
+## Choosing a converter by id: `convert_tool(tool, format, *, name_prefix="")`
+
+TypeScript: `convertTool(tool, format, { namePrefix })`.
+
+`TOOL_FORMATS` lists the converter ids, `"mcp"` and `"anthropic"`. A
+consumer that offers an export format takes its choices from `TOOL_FORMATS`
+and calls `convert_tool`, so a new converter reaches it with no code change.
+An unknown id raises `OCToolError`. These ids are separate from the listing
+styles in `LISTING_STYLES`.
+
 ## Anthropic: `to_anthropic_tool(tool, *, name_prefix="")`
 
 TypeScript: `toAnthropicTool(tool, { namePrefix })`.
@@ -120,7 +131,8 @@ altered, even one literally called `title`.
 
 Dropped, because the API has no slot for them: `title`, `output_schema`,
 the three hints, `access` and `target`, `result_kind`, `deprecated`,
-`meta`, and `func`. A runtime keeps those in its own registry, which is
+`meta`, `tags`, and `func`. A host filters with `select_tools` before
+converting, and a runtime keeps those in its own registry, which is
 where approval policy, result rendering and deprecation warnings already
 read them. `strict` is not emitted either: turning strict mode on is a
 runtime decision, and a strict-clean input schema is what makes it

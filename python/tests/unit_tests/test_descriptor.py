@@ -16,7 +16,9 @@ from octools import (
     check_tool_listing,
     example,
     merge_providers,
+    select_tools,
     validate_provider,
+    validate_tags,
 )
 from octools.example import ECHO_RECORDS, TOOLS, ExampleProvider
 from tests.support import build_tool
@@ -47,7 +49,7 @@ def make(**overrides) -> OCTool:
 
 
 def test_spec_version_and_literals():
-    assert SPEC_VERSION == "1.1"
+    assert SPEC_VERSION == "1.2"
     assert RESULT_KINDS == ("records", "artifact")
     assert ACCESS_KINDS == ("local", "remote")
     assert RESULT_KIND_FALLBACK in RESULT_KINDS
@@ -221,3 +223,29 @@ def test_merge_providers_still_sees_an_unstable_member():
     merged = merge_providers(ShufflingProvider())
     assert [f.rule for f in check_tool_listing(merged)] == ["unstable_order"]
     assert [f.rule for f in validate_provider(merged)] == ["unstable_order"]
+
+
+def test_nested_select_tools_requires_every_tag():
+    tools = (
+        dataclasses.replace(ECHO_RECORDS, tags=("network", "recommended")),
+        dataclasses.replace(ECHO_RECORDS, name="one_tag", tags=("network",)),
+    )
+
+    class Listing:
+        def all_tools(self):
+            return tools
+
+    selected = select_tools(
+        select_tools(Listing(), tags={"network"}), tags={"recommended"}
+    )
+    assert selected.all_tools() == tools[:1]
+
+
+def test_validate_tags_rejects_a_bare_string():
+    with pytest.raises(OCToolError, match="iterable of strings"):
+        validate_tags(merge_providers(), allowed="custom")
+
+
+def test_select_tools_rejects_a_bare_string():
+    with pytest.raises(OCToolError, match="iterable of strings"):
+        select_tools(merge_providers(), tags="recommended")

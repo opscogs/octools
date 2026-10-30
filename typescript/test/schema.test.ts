@@ -239,6 +239,9 @@ describe("zod models emit the Python helpers' schemas", () => {
 
   it("emits a records envelope over a model as Python does", () => {
     const schema = recordsSchema(Item);
+    const { SourceRef: sourceDef } = closeObjects(tabularSchema())[
+      "$defs"
+    ] as Record<string, unknown>;
     expect(schema).toStrictEqual(outputSchemaFor(RecordsEnvelope(Item)));
     expect(schema["properties"]).toMatchObject({
       records: {
@@ -259,6 +262,7 @@ describe("zod models emit the Python helpers' schemas", () => {
         required: ["name"],
         type: "object",
       },
+      SourceRef: sourceDef,
     });
   });
 
@@ -284,8 +288,10 @@ describe("zod models emit the Python helpers' schemas", () => {
       additionalProperties: false,
     });
     const { $defs: artifactDefs, ...artifact } = closeObjects(artifactSchema());
+    const tabular = closeObjects(tabularSchema());
+    delete tabular["$defs"];
     expect(defs).toStrictEqual({
-      [TABULAR_DEF_NAME]: closeObjects(tabularSchema()),
+      [TABULAR_DEF_NAME]: tabular,
       ArtifactEnvelope: artifact,
       ...(artifactDefs as object),
     });

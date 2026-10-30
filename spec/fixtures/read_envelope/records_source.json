@@ -1,0 +1,32 @@
+{
+  "description": "A records envelope carries source through a read.",
+  "input": {
+    "model": "records",
+    "data": {
+      "records": [
+        {
+          "name": "alpha"
+        }
+      ],
+      "count": 1,
+      "truncated": false,
+      "source": {
+        "instance": "host.demo.invalid",
+        "snapshot": "20260101T000000Z"
+      }
+    }
+  },
+  "expected": {
+    "records": [
+      {
+        "name": "alpha"
+      }
+    ],
+    "count": 1,
+    "truncated": false,
+    "source": {
+      "instance": "host.demo.invalid",
+      "snapshot": "20260101T000000Z"
+    }
+  }
+}
