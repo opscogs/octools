@@ -8,11 +8,13 @@ are ``{"error": <code>}``.
 """
 
 import dataclasses
+import ipaddress
 import json
 from collections.abc import Callable
-from typing import Any
+from datetime import datetime
+from typing import Any, Literal
 
-from pydantic import ValidationError
+from pydantic import AwareDatetime, BaseModel, Field, ValidationError, create_model
 
 from octools import (
     TOOL_FORMATS,
@@ -36,6 +38,7 @@ from octools import (
     strip_titles,
     summarize_provider,
     summarize_tool,
+    tabular_from_models,
     to_anthropic_tool,
     to_mcp_tool,
     validate_provider,
@@ -166,6 +169,50 @@ def tabular(data: dict[str, Any]) -> object:
     return findings(validate_tabular(table))
 
 
+class _Nested(BaseModel):
+    a: int
+
+
+FIELD_TYPES: dict[str, object] = {
+    "boolean": bool,
+    "integer": int,
+    "number": float,
+    "text": str,
+    "timestamp": AwareDatetime,
+    "datetime": datetime,
+    "ip": ipaddress.IPv4Address,
+    "ip_block": ipaddress.IPv4Network,
+    "literal_text": Literal["a", "b"],
+    "literal_integer": Literal[1, 2],
+    "literal_mixed": Literal["a", 1],
+    "list": list[str],
+    "object": dict[str, int],
+    "nested": _Nested,
+    "union": int | str,
+}
+"""Each neutral field type of a ``tabular_from_models`` fixture as an annotation."""
+
+
+def _model_field(field: dict[str, Any]) -> tuple[object, object]:
+    annotation = FIELD_TYPES[field["type"]]
+    description = field.get("description")
+    if field.get("nullable"):
+        return (annotation | None, Field(default=None, description=description))
+    return (annotation, Field(description=description))
+
+
+def from_models(data: dict[str, Any]) -> object:
+    model = create_model(
+        "Row", **{field["name"]: _model_field(field) for field in data["fields"]}
+    )
+    items = [model.model_validate(item) for item in data["items"]]
+    try:
+        table = tabular_from_models(model, items, column_kinds=data.get("column_kinds"))
+    except OCToolError as exc:
+        raise FixtureError("invalid_column") from exc
+    return table.model_dump(mode="json")
+
+
 def listing(data: dict[str, Any]) -> object:
     try:
         return render_listing(
@@ -212,6 +259,7 @@ RUNNERS: dict[str, Callable[[dict[str, Any]], object]] = {
         for summary in summarize_provider(provider(data), access=data.get("access"))
     ],
     "summarize_tool": lambda data: summarize_tool(build_tool(data["tool"])).as_row(),
+    "tabular_from_models": from_models,
     "to_anthropic_tool": lambda data: convert(to_anthropic_tool, data),
     "to_mcp_tool": lambda data: convert(to_mcp_tool, data),
     "validate_envelope": lambda data: envelope(

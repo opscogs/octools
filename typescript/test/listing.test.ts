@@ -83,7 +83,7 @@ describe("listing parity", () => {
 
 describe("ToolSummary", () => {
   it("reads a row without tags as untagged", () => {
-    const row = summarizeTool(TOOLS[0]!).asRow();
+    const row = summarizeTool(buildTool(PARITY.tools[0] ?? {})).asRow();
     expect(new ToolSummary(row).tags).toEqual([]);
   });
 });

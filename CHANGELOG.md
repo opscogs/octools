@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - Unreleased
+
+### Added 1.3.0
+
+- `tabular_from_models` builds a `TabularEnvelope` from a pydantic model or zod object, with one mapping from a field's type to a column kind (OCI-679) (CLI-UR-0002)
+- `OCTool.tags`, `TOOL_TAGS`, `select_tools` and the opt-in `validate_tags`, with tags published to MCP under `_meta`, per OCTL-0009 (OCI-679) (CLI-UR-0003)
+- `source` on all three envelopes, a `SourceRef` naming the instance and snapshot that answered (OCI-679) (BKP-UR-0002)
+- `TOOL_FORMATS` and `convert_tool` select a converter by id (OCI-679) (CLI-UR-0001)
+
+### Changed 1.3.0
+
+- `SPEC_VERSION` is `"1.2"`; a consumer test pinning `"1.1"` must update (OCI-679)
+- Envelope schemas gain an optional `source` and a `SourceRef` definition; assert on the keys you need, not whole schemas (OCI-679)
+
 ## [1.2.0] - 2026-10-08
 
 ### Added 1.2.0

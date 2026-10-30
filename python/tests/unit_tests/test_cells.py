@@ -1,8 +1,20 @@
 """Tests for validate_tabular."""
 
-import pytest
+import enum
+import ipaddress
+from datetime import date
+from typing import Literal
 
-from octools import COLUMN_KINDS, Finding, TabularEnvelope, validate_tabular
+import pytest
+from pydantic import BaseModel, Field, IPvAnyAddress
+
+from octools import (
+    COLUMN_KINDS,
+    Finding,
+    TabularEnvelope,
+    tabular_from_models,
+    validate_tabular,
+)
 
 BIG = 2**53
 CELLS = {
@@ -119,3 +131,42 @@ def test_one_finding_per_column_in_column_order():
             path="/rows/1/2",
         ),
     ]
+
+
+class _Color(enum.Enum):
+    RED = "red"
+
+
+class _Rank(enum.IntEnum):
+    LOW = 1
+
+
+class _Row(BaseModel):
+    color: _Color
+    rank: _Rank
+    addr: IPvAnyAddress
+    net: ipaddress.IPv6Network
+    hidden: str = Field(default="x", exclude=True)
+    day: date = date(2026, 1, 1)
+    on: Literal[True] = True
+    half: float | None = 0.5
+
+
+def test_tabular_from_models_reads_enums_and_skips_excluded_fields():
+    row = _Row(color=_Color.RED, rank=_Rank.LOW, addr="10.0.0.1", net="2001:db8::/32")
+    table = tabular_from_models(_Row, [row])
+    assert table.columns == ["color", "rank", "addr", "net", "day", "on", "half"]
+    assert table.column_kinds == [
+        "text",
+        "integer",
+        "ip",
+        "ip_block",
+        "text",
+        "boolean",
+        "number",
+    ]
+    assert table.rows == [
+        ["red", 1, "10.0.0.1", "2001:db8::/32", "2026-01-01", True, 0.5]
+    ]
+    assert table.column_descriptions is None
+    assert validate_tabular(table) == []

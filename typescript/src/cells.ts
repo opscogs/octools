@@ -1,5 +1,5 @@
 /**
- * Cell-level check of a `TabularEnvelope` against its `column_kinds`.
+ * Cell-level check of a `TabularEnvelope`, and building one from a schema.
  *
  * Parsing an envelope checks the kind vocabulary, never a cell's content.
  * {@link validateTabular} is the opt-in content check a producer runs in
@@ -12,9 +12,15 @@
  * kinds however it was written. Python keeps `1.0` a float, which fits
  * neither.
  *
+ * {@link tabularFromModels} builds a table from a zod object schema, so every
+ * producer maps a field's type to a column kind the same way.
+ *
  * @module
  */
-import type { Cell, TabularEnvelope } from "./envelopes.js";
+import * as z from "zod";
+
+import { type Cell, TabularEnvelope } from "./envelopes.js";
+import { OCToolError } from "./errors.js";
 import { Finding } from "./findings.js";
 import {
   isAtOrBefore,
@@ -184,4 +190,133 @@ export function validateTabular(envelope: TabularEnvelope): Finding[] {
     }
   }
   return findings;
+}
+
+/** Return the kind of one literal or enum value. */
+function valueKind(value: unknown): ColumnKind {
+  if (typeof value === "boolean") {
+    return "boolean";
+  }
+  if (typeof value === "number") {
+    return Number.isInteger(value) ? "integer" : "number";
+  }
+  return "text";
+}
+
+/** Return the kind every value shares, or text when they differ. */
+function valuesKind(values: Iterable<unknown>): ColumnKind {
+  const [kind, ...others] = new Set([...values].map(valueKind));
+  return others.length === 0 ? (kind ?? "text") : "text";
+}
+
+/** Return a field with its optional, nullable and default wrappers removed. */
+function unwrapped(field: z.ZodType): {
+  inner: z.ZodType;
+  description: string | undefined;
+} {
+  let inner = field;
+  let description = field.description;
+  while (
+    inner instanceof z.ZodOptional ||
+    inner instanceof z.ZodNullable ||
+    inner instanceof z.ZodDefault ||
+    inner instanceof z.ZodPrefault
+  ) {
+    inner = inner.def.innerType as z.ZodType;
+    description ??= inner.description;
+  }
+  return { inner, description };
+}
+
+/** Return the column kind of an unwrapped field; anything unknown is text. */
+function columnKind(field: z.ZodType): ColumnKind {
+  if (field instanceof z.ZodBoolean) {
+    return "boolean";
+  }
+  if (field instanceof z.ZodNumber) {
+    return (field.format ?? "").includes("int") ? "integer" : "number";
+  }
+  if (field instanceof z.ZodDate) {
+    return "timestamp";
+  }
+  if (field instanceof z.ZodISODateTime) {
+    return field._zod.def.local ? "text" : "timestamp";
+  }
+  if (field instanceof z.ZodIPv4 || field instanceof z.ZodIPv6) {
+    return "ip";
+  }
+  if (field instanceof z.ZodCIDRv4 || field instanceof z.ZodCIDRv6) {
+    return "ip_block";
+  }
+  if (field instanceof z.ZodEnum) {
+    return valuesKind(field.options);
+  }
+  if (field instanceof z.ZodLiteral) {
+    return valuesKind(field.values);
+  }
+  return "text";
+}
+
+/** Return a dumped value as a cell; an array or object is compact JSON text. */
+function modelCell(value: unknown): Cell {
+  if (typeof value === "object" && value !== null) {
+    return JSON.stringify(value);
+  }
+  return (value ?? null) as Cell;
+}
+
+/** Options {@link tabularFromModels} takes. */
+export interface TabularFromModelsOptions {
+  /** Kinds overriding the inferred ones, by column. */
+  readonly columnKinds?: Readonly<Record<string, ColumnKind>> | undefined;
+}
+
+/**
+ * Return `items` as one complete table with `schema`'s fields as columns.
+ *
+ * Columns are the fields in declaration order. Each kind comes from the
+ * field's schema, optional, nullable and default wrappers removed: a date or
+ * a `z.iso.datetime()` that requires an offset is `timestamp`; `z.ipv4()` or
+ * `z.ipv6()` is `ip`, `z.cidrv4()` or `z.cidrv6()` is `ip_block`; an enum or
+ * literal takes the kind its values share; anything else is `text`, and an
+ * array or object is compact JSON text. `columnKinds` overrides per column,
+ * which is how a column becomes `big_integer` or `fqdn`; a key that is not a
+ * column throws {@link OCToolError}. Field descriptions fill
+ * `column_descriptions` when any field has one.
+ */
+export function tabularFromModels(
+  schema: z.ZodObject,
+  items: Iterable<unknown>,
+  options: TabularFromModelsOptions = {},
+): TabularEnvelope {
+  const fields = Object.entries(schema.shape as Record<string, z.ZodType>).map(
+    ([name, field]) => ({ name, ...unwrapped(field) }),
+  );
+  const columns = fields.map((field) => field.name);
+  const overrides = options.columnKinds ?? {};
+  const unknown = Object.keys(overrides)
+    .filter((name) => !columns.includes(name))
+    .sort();
+  if (unknown.length > 0) {
+    throw new OCToolError(
+      `columnKinds names unknown columns: ${unknown.join(", ")}`,
+    );
+  }
+  const rows = [...items].map((item) => {
+    const dump = JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
+    return columns.map((name) => modelCell(dump[name]));
+  });
+  const descriptions = fields.map((field) => field.description ?? null);
+  return TabularEnvelope.parse({
+    columns,
+    rows,
+    row_count: rows.length,
+    truncated: false,
+    column_kinds: fields.map(
+      (field) => overrides[field.name] ?? columnKind(field.inner),
+    ),
+    column_descriptions: descriptions.some((entry) => entry !== null)
+      ? descriptions
+      : null,
+  });
 }

@@ -8,7 +8,11 @@
  *
  * @packageDocumentation
  */
-export { validateTabular } from "./cells.js";
+export {
+  type TabularFromModelsOptions,
+  tabularFromModels,
+  validateTabular,
+} from "./cells.js";
 export {
   type ConvertOptions,
   convertTool,

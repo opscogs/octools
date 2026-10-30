@@ -15,6 +15,7 @@ import * as z from "zod";
 import {
   type Access,
   ArtifactEnvelope,
+  type ColumnKind,
   type Finding,
   type ListingStyle,
   type JsonSchema,
@@ -36,6 +37,7 @@ import {
   stripTitles,
   summarizeProvider,
   summarizeTool,
+  tabularFromModels,
   toAnthropicTool,
   toMcpTool,
   validateProvider,
@@ -134,6 +136,64 @@ function convertFormat(input: Record<string, unknown>): unknown {
   }
 }
 
+const NESTED = z.object({ a: z.int() });
+const FIELD_TYPES: Readonly<Record<string, () => z.ZodType>> = {
+  boolean: () => z.boolean(),
+  integer: () => z.int(),
+  number: () => z.number(),
+  text: () => z.string(),
+  timestamp: () => z.iso.datetime({ offset: true }),
+  datetime: () => z.iso.datetime({ local: true }),
+  ip: () => z.ipv4(),
+  ip_block: () => z.cidrv4(),
+  literal_text: () => z.enum(["a", "b"]),
+  literal_integer: () => z.literal([1, 2]),
+  literal_mixed: () => z.literal(["a", 1]),
+  list: () => z.array(z.string()),
+  object: () => z.record(z.string(), z.int()),
+  nested: () => NESTED,
+  union: () => z.union([z.int(), z.string()]),
+};
+
+interface FixtureField {
+  name: string;
+  type: string;
+  description?: string;
+  nullable?: boolean;
+}
+
+function modelField(field: FixtureField): z.ZodType {
+  const build = FIELD_TYPES[field.type];
+  if (build === undefined) {
+    throw new Error(`unknown field type ${field.type}`);
+  }
+  const base = build();
+  const described =
+    field.description === undefined ? base : base.describe(field.description);
+  return field.nullable === true
+    ? described.nullable().default(null)
+    : described;
+}
+
+function fromModels(input: Record<string, unknown>): unknown {
+  const fields = input["fields"] as FixtureField[];
+  const schema = z.object(
+    Object.fromEntries(fields.map((field) => [field.name, modelField(field)])),
+  );
+  const items = (input["items"] as unknown[]).map((item) => schema.parse(item));
+  try {
+    return tabularFromModels(schema, items, {
+      columnKinds: input["column_kinds"] as
+        Record<string, ColumnKind> | undefined,
+    });
+  } catch (error) {
+    if (error instanceof OCToolError) {
+      throw new FixtureError("invalid_column");
+    }
+    throw error;
+  }
+}
+
 /** One runner per fixture directory under `spec/fixtures/`. */
 export const RUNNERS: Readonly<Record<string, Runner>> = {
   OCTool: (input) =>
@@ -147,6 +207,7 @@ export const RUNNERS: Readonly<Record<string, Runner>> = {
     )
       .allTools()
       .map((tool) => tool.name),
+  tabular_from_models: fromModels,
   to_anthropic_tool: (input) => convert(toAnthropicTool, input),
   to_mcp_tool: (input) => convert(toMcpTool, input),
   select_tools: (input) =>

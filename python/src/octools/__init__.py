@@ -7,7 +7,7 @@ dependencies so every OpsCogs library can depend on it.
 
 from pathlib import Path
 
-from octools.cells import validate_tabular
+from octools.cells import tabular_from_models, validate_tabular
 from octools.convert import (
     ANTHROPIC_NAME_RE,
     MCP_META_NAMESPACE,
@@ -169,6 +169,7 @@ __all__ = [
     "strip_titles",
     "summarize_provider",
     "summarize_tool",
+    "tabular_from_models",
     "tabular_schema",
     "to_anthropic_tool",
     "to_mcp_tool",

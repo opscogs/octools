@@ -1,0 +1,147 @@
+{
+  "description": "Each field type maps to its kind, and a list, object or nested cell is compact JSON.",
+  "input": {
+    "fields": [
+      {
+        "name": "flag",
+        "type": "boolean"
+      },
+      {
+        "name": "size",
+        "type": "integer"
+      },
+      {
+        "name": "ratio",
+        "type": "number"
+      },
+      {
+        "name": "label",
+        "type": "text"
+      },
+      {
+        "name": "seen",
+        "type": "timestamp"
+      },
+      {
+        "name": "local",
+        "type": "datetime"
+      },
+      {
+        "name": "addr",
+        "type": "ip"
+      },
+      {
+        "name": "block",
+        "type": "ip_block"
+      },
+      {
+        "name": "choice",
+        "type": "literal_text"
+      },
+      {
+        "name": "level",
+        "type": "literal_integer"
+      },
+      {
+        "name": "mixed",
+        "type": "literal_mixed"
+      },
+      {
+        "name": "names",
+        "type": "list"
+      },
+      {
+        "name": "sizes",
+        "type": "object"
+      },
+      {
+        "name": "inner",
+        "type": "nested"
+      },
+      {
+        "name": "either",
+        "type": "union"
+      }
+    ],
+    "items": [
+      {
+        "flag": true,
+        "size": 7,
+        "ratio": 1.5,
+        "label": "alpha",
+        "seen": "2026-01-01T00:00:00Z",
+        "local": "2026-01-01T00:00:00",
+        "addr": "10.0.0.1",
+        "block": "10.0.0.0/8",
+        "choice": "a",
+        "level": 1,
+        "mixed": 1,
+        "names": ["a", "b"],
+        "sizes": {
+          "a": 1
+        },
+        "inner": {
+          "a": 1
+        },
+        "either": 1
+      }
+    ]
+  },
+  "expected": {
+    "columns": [
+      "flag",
+      "size",
+      "ratio",
+      "label",
+      "seen",
+      "local",
+      "addr",
+      "block",
+      "choice",
+      "level",
+      "mixed",
+      "names",
+      "sizes",
+      "inner",
+      "either"
+    ],
+    "rows": [
+      [
+        true,
+        7,
+        1.5,
+        "alpha",
+        "2026-01-01T00:00:00Z",
+        "2026-01-01T00:00:00",
+        "10.0.0.1",
+        "10.0.0.0/8",
+        "a",
+        1,
+        1,
+        "[\"a\",\"b\"]",
+        "{\"a\":1}",
+        "{\"a\":1}",
+        1
+      ]
+    ],
+    "row_count": 1,
+    "truncated": false,
+    "column_kinds": [
+      "boolean",
+      "integer",
+      "number",
+      "text",
+      "timestamp",
+      "text",
+      "ip",
+      "ip_block",
+      "text",
+      "integer",
+      "text",
+      "text",
+      "text",
+      "text",
+      "text"
+    ]
+  }
+}

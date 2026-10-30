@@ -31,6 +31,7 @@ it("exports exactly the public names", () => {
       "toAnthropicTool",
       "toMcpTool",
       "selectTools",
+      "tabularFromModels",
       "validateProvider",
       "validateTags",
       "validateTool",

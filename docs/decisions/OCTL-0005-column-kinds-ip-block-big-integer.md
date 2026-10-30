@@ -1,7 +1,7 @@
 ---
 status: accepted
-version: 1.1.1
-date: 2026-10-08
+version: 1.2.0
+date: 2026-10-30
 decision-makers: OpsCogs maintainers
 ---
 
@@ -262,6 +262,33 @@ column_descriptions: list[str | None] | None = Field(
   ([OCTL-0002](./OCTL-0002-result-paging.md)) may send them on the first
   page and leave them out of later pages to save tokens. A reader keeps the
   descriptions from the first page.
+
+### Building a table from a model: `tabular_from_models`
+
+`tabular_from_models(model, items, *, column_kinds=None)` is the one mapping
+from a field's type to a column kind, so producers cannot derive it
+differently. Columns are the model's fields in declaration order. The kind comes
+from the annotation alone, never from the values, so a column keeps its kind on
+every page:
+
+| Field type                               | Kind                           |
+| ---------------------------------------- | ------------------------------ |
+| `bool`, `int`, `float`                   | `boolean`, `integer`, `number` |
+| `Optional[X]`                            | the kind of `X`                |
+| An enum or `Literal`                     | the kind its values share      |
+| `AwareDatetime`                          | `timestamp`                    |
+| An IP address type                       | `ip`                           |
+| An IP network or interface type          | `ip_block`                     |
+| A list, dict or nested model             | `text`, as compact JSON        |
+| Anything else, `datetime` and `date` too | `text`                         |
+
+A plain `datetime` is `text` because it may lack the offset the `timestamp` kind
+requires; a producer whose values carry one overrides the column. `big_integer`
+and `fqdn` come only from the `column_kinds` override, since an annotation
+cannot signal them. A list, dict or nested cell is JSON text because a cell is a
+scalar. `column_descriptions` fills from field descriptions when any exists. The
+result is one complete table; a producer that caps it sets the paging fields on
+a copy.
 
 ### Renderer guidance
 

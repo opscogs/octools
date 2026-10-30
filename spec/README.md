@@ -53,30 +53,32 @@ The directory names the operation; `input` holds its arguments as JSON and
 | `invalid_envelope`   | an envelope fails parsing, strict or tolerant                  |
 | `invalid_style`      | a listing style is outside `LISTING_STYLES`                    |
 | `invalid_format`     | a converter id is outside `TOOL_FORMATS`                       |
+| `invalid_column`     | an override names a column the model does not have             |
 
 Operations and their `input` keys:
 
-| Operation                                 | `input`                                                                  | `expected`                      |
-| ----------------------------------------- | ------------------------------------------------------------------------ | ------------------------------- |
-| `OCTool`                                  | `tool`                                                                   | the descriptor, defaults filled |
-| `read_envelope`                           | `model` (`records`, `tabular`, `artifact`), `data` (object or JSON text) | the envelope, read tolerantly   |
-| `validate_envelope`                       | `model`, `data`                                                          | the envelope, parsed strictly   |
-| `validate_tabular`                        | `envelope`                                                               | findings                        |
-| `validate_tool`                           | `tool`, optional `unchecked` (fields set after construction)             | findings                        |
-| `validate_provider`, `check_tool_listing` | `tools` or `listings`                                                    | findings                        |
-| `merge_providers`                         | `providers`, each `{"tools": [...]}`                                     | the merged listing's names      |
-| `to_mcp_tool`, `to_anthropic_tool`        | `tool`, optional `name_prefix`                                           | the converted tool              |
-| `convert_tool`                            | `tool`, `format`, optional `name_prefix`                                 | the converted tool              |
-| `select_tools`                            | `tools`, `tags`                                                          | the selected listing's names    |
-| `validate_tags`                           | `tools`                                                                  | findings                        |
-| `strict_clean`                            | `schema`                                                                 | findings                        |
-| `strip_keys`                              | `schema`, optional `keys`, `prefixes`                                    | the schema                      |
-| `strip_titles`, `close_objects`           | `schema`                                                                 | the schema                      |
-| `count_sentences`                         | `text`                                                                   | an integer                      |
-| `summarize_tool`                          | `tool`                                                                   | the listing row                 |
-| `summarize_provider`                      | `tools`, optional `access`                                               | listing rows                    |
-| `render_listing`                          | `tools`, optional `style`, `access`, `pretty`                            | the rendered text               |
-| `render_markdown_table`                   | `rows`, `columns`                                                        | the rendered text               |
+| Operation                                 | `input`                                                                                         | `expected`                      |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------- |
+| `OCTool`                                  | `tool`                                                                                          | the descriptor, defaults filled |
+| `read_envelope`                           | `model` (`records`, `tabular`, `artifact`), `data` (object or JSON text)                        | the envelope, read tolerantly   |
+| `validate_envelope`                       | `model`, `data`                                                                                 | the envelope, parsed strictly   |
+| `validate_tabular`                        | `envelope`                                                                                      | findings                        |
+| `validate_tool`                           | `tool`, optional `unchecked` (fields set after construction)                                    | findings                        |
+| `validate_provider`, `check_tool_listing` | `tools` or `listings`                                                                           | findings                        |
+| `merge_providers`                         | `providers`, each `{"tools": [...]}`                                                            | the merged listing's names      |
+| `to_mcp_tool`, `to_anthropic_tool`        | `tool`, optional `name_prefix`                                                                  | the converted tool              |
+| `convert_tool`                            | `tool`, `format`, optional `name_prefix`                                                        | the converted tool              |
+| `select_tools`                            | `tools`, `tags`                                                                                 | the selected listing's names    |
+| `validate_tags`                           | `tools`                                                                                         | findings                        |
+| `tabular_from_models`                     | `fields` (`name`, `type`, optional `description`, `nullable`), `items`, optional `column_kinds` | the envelope                    |
+| `strict_clean`                            | `schema`                                                                                        | findings                        |
+| `strip_keys`                              | `schema`, optional `keys`, `prefixes`                                                           | the schema                      |
+| `strip_titles`, `close_objects`           | `schema`                                                                                        | the schema                      |
+| `count_sentences`                         | `text`                                                                                          | an integer                      |
+| `summarize_tool`                          | `tool`                                                                                          | the listing row                 |
+| `summarize_provider`                      | `tools`, optional `access`                                                                      | listing rows                    |
+| `render_listing`                          | `tools`, optional `style`, `access`, `pretty`                                                   | the rendered text               |
+| `render_markdown_table`                   | `rows`, `columns`                                                                               | the rendered text               |
 
 A runner for each operation lives in each implementation's test suite.
 A fixture directory with no runner fails the suite.

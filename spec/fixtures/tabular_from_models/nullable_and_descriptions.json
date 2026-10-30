@@ -1,0 +1,30 @@
+{
+  "description": "Optional fields unwrap, an absent value is null, and descriptions fill when any field has one.",
+  "input": {
+    "fields": [
+      {
+        "name": "size",
+        "type": "integer",
+        "nullable": true,
+        "description": "Bytes."
+      },
+      {
+        "name": "label",
+        "type": "text"
+      }
+    ],
+    "items": [
+      {
+        "label": "alpha"
+      }
+    ]
+  },
+  "expected": {
+    "columns": ["size", "label"],
+    "rows": [[null, "alpha"]],
+    "row_count": 1,
+    "truncated": false,
+    "column_kinds": ["integer", "text"],
+    "column_descriptions": ["Bytes.", null]
+  }
+}
