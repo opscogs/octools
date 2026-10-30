@@ -67,6 +67,8 @@ Operations and their `input` keys:
 | `merge_providers`                         | `providers`, each `{"tools": [...]}`                                     | the merged listing's names      |
 | `to_mcp_tool`, `to_anthropic_tool`        | `tool`, optional `name_prefix`                                           | the converted tool              |
 | `convert_tool`                            | `tool`, `format`, optional `name_prefix`                                 | the converted tool              |
+| `select_tools`                            | `tools`, `tags`                                                          | the selected listing's names    |
+| `validate_tags`                           | `tools`                                                                  | findings                        |
 | `strict_clean`                            | `schema`                                                                 | findings                        |
 | `strip_keys`                              | `schema`, optional `keys`, `prefixes`                                    | the schema                      |
 | `strip_titles`, `close_objects`           | `schema`                                                                 | the schema                      |

@@ -8,6 +8,7 @@ import {
   type ToolProvider,
   checkToolListing,
   mergeProviders,
+  selectTools,
   validateProvider,
 } from "../src/index.js";
 
@@ -114,5 +115,13 @@ describe("foreign items", () => {
     expect(validateProvider(listing(item))[0]?.message).toContain(
       shown.slice(1, -1),
     );
+  });
+});
+
+describe("selectTools", () => {
+  it("rejects a bare string", () => {
+    expect(() =>
+      selectTools(mergeProviders(), { tags: "recommended" }),
+    ).toThrow(OCToolError);
   });
 });

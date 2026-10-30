@@ -145,6 +145,7 @@ ECHO_RECORDS = OCTool(
     output_schema=records_schema(EchoRecord),
     func=echo_records,
     access="local",
+    tags=("recommended",),
 )
 ECHO_ALIAS = OCTool(
     name="echo",
@@ -171,6 +172,7 @@ BLOCK_SIZES = OCTool(
     output_schema=tabular_schema(),
     func=block_sizes,
     access="local",
+    tags=("recommended",),
 )
 RENDER_BADGE = OCTool(
     name="render_badge",
@@ -184,6 +186,7 @@ RENDER_BADGE = OCTool(
     result_kind="artifact",
     func=render_badge,
     access="local",
+    tags=("advanced",),
     meta={"renderer": "svgstatic"},
 )
 TOOLS: tuple[OCTool, ...] = (ECHO_RECORDS, ECHO_ALIAS, BLOCK_SIZES, RENDER_BADGE)

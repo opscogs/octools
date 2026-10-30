@@ -77,6 +77,13 @@
       "additionalProperties": true,
       "default": {},
       "type": "object"
+    },
+    "tags": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
     }
   },
   "required": ["name", "description", "input_schema", "access"],

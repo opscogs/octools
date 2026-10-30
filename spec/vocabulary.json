@@ -98,6 +98,13 @@
       "type": "Sensitivity",
       "values": ["inherits_input"],
       "values_constant": null
+    },
+    "tool_tags": {
+      "fallback": null,
+      "fallback_constant": "TOOL_TAG_FALLBACK",
+      "type": "ToolTag",
+      "values": ["recommended", "advanced"],
+      "values_constant": "TOOL_TAGS"
     }
   }
 }

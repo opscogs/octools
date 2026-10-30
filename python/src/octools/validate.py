@@ -11,7 +11,13 @@ import re
 from collections.abc import Mapping
 from dataclasses import replace
 
-from octools.descriptor import NAME_RE, OCTool, ToolProvider, check_tool_listing
+from octools.descriptor import (
+    NAME_RE,
+    TOOL_TAGS,
+    OCTool,
+    ToolProvider,
+    check_tool_listing,
+)
 from octools.findings import Finding
 from octools.schema import strict_clean
 
@@ -154,6 +160,26 @@ def validate_provider(provider: ToolProvider) -> list[Finding]:
     return findings
 
 
+def validate_tags(provider: ToolProvider) -> list[Finding]:
+    """Report every tag outside ``TOOL_TAGS``; one ``unknown_tag`` finding each.
+
+    Opt-in, like ``validate_tabular``, so ``validate_provider`` stays
+    unchanged. Items that are not tools are ``validate_provider``'s to report.
+    """
+    return [
+        Finding(
+            rule="unknown_tag",
+            message=f"tag {tag!r} is not one of {TOOL_TAGS}",
+            tool=tool.name,
+            path=f"/tags/{index}",
+        )
+        for tool in provider.all_tools()
+        if isinstance(tool, OCTool)
+        for index, tag in enumerate(tool.tags)
+        if tag not in TOOL_TAGS
+    ]
+
+
 __all__ = [
     "ALIAS_OF_KEY",
     "MAX_SENTENCES",
@@ -161,5 +187,6 @@ __all__ = [
     "SCHEMA_ESCAPE_KEY",
     "count_sentences",
     "validate_provider",
+    "validate_tags",
     "validate_tool",
 ]

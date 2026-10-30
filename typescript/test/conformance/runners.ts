@@ -30,6 +30,7 @@ import {
   readEnvelope,
   renderListing,
   renderMarkdownTable,
+  selectTools,
   strictClean,
   stripKeys,
   stripTitles,
@@ -39,6 +40,7 @@ import {
   toMcpTool,
   validateProvider,
   validateTabular,
+  validateTags,
   validateTool,
 } from "../../src/index.js";
 import type { ErrorCode } from "../../src/errors.js";
@@ -147,7 +149,12 @@ export const RUNNERS: Readonly<Record<string, Runner>> = {
       .map((tool) => tool.name),
   to_anthropic_tool: (input) => convert(toAnthropicTool, input),
   to_mcp_tool: (input) => convert(toMcpTool, input),
+  select_tools: (input) =>
+    selectTools(provider(input), { tags: input["tags"] as string[] })
+      .allTools()
+      .map((tool) => tool.name),
   validate_provider: (input) => findings(validateProvider(provider(input))),
+  validate_tags: (input) => findings(validateTags(provider(input))),
   validate_tool: (input) =>
     findings(
       validateTool(

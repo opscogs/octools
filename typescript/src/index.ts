@@ -22,6 +22,7 @@ export {
   type ToolProvider,
   checkToolListing,
   mergeProviders,
+  selectTools,
 } from "./descriptor.js";
 export {
   ArtifactEnvelope,
@@ -72,7 +73,12 @@ export {
   stripKeys,
   stripTitles,
 } from "./schema.js";
-export { countSentences, validateProvider, validateTool } from "./validate.js";
+export {
+  countSentences,
+  validateProvider,
+  validateTags,
+  validateTool,
+} from "./validate.js";
 export {
   ACCESS_FALLBACK,
   ACCESS_KINDS,
@@ -99,6 +105,8 @@ export {
   STRICT_TYPES,
   TABULAR_DEF_NAME,
   TOOL_FORMATS,
+  TOOL_TAGS,
+  TOOL_TAG_FALLBACK,
   VOCABULARY_FALLBACKS,
   type Access,
   type ColumnKind,
@@ -107,4 +115,5 @@ export {
   type ResultKind,
   type Sensitivity,
   type ToolFormat,
+  type ToolTag,
 } from "./vocabulary.js";

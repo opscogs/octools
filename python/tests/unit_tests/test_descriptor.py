@@ -16,6 +16,7 @@ from octools import (
     check_tool_listing,
     example,
     merge_providers,
+    select_tools,
     validate_provider,
 )
 from octools.example import ECHO_RECORDS, TOOLS, ExampleProvider
@@ -221,3 +222,8 @@ def test_merge_providers_still_sees_an_unstable_member():
     merged = merge_providers(ShufflingProvider())
     assert [f.rule for f in check_tool_listing(merged)] == ["unstable_order"]
     assert [f.rule for f in validate_provider(merged)] == ["unstable_order"]
+
+
+def test_select_tools_rejects_a_bare_string():
+    with pytest.raises(OCToolError, match="iterable of strings"):
+        select_tools(merge_providers(), tags="recommended")

@@ -115,6 +115,7 @@ def test_mcp_lossless_round_trip(tool):
         idempotent_hint=mcp["annotations"]["idempotentHint"],
         deprecated=mcp["_meta"][f"{MCP_META_NAMESPACE}deprecated"],
         meta=mcp["_meta"][f"{MCP_META_NAMESPACE}meta"],
+        tags=tuple(mcp["_meta"].get(f"{MCP_META_NAMESPACE}tags", ())),
     )
     assert rebuilt == tool
 

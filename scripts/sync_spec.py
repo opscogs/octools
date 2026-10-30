@@ -54,6 +54,8 @@ from octools import (
     STRICT_TYPES,
     TABULAR_DEF_NAME,
     TOOL_FORMATS,
+    TOOL_TAG_FALLBACK,
+    TOOL_TAGS,
     Finding,
     NoTitleGenerator,
     OCTool,
@@ -182,6 +184,9 @@ def vocabulary() -> dict[str, object]:
             typing.get_args(Sensitivity),
             "SENSITIVITY_FALLBACK",
             SENSITIVITY_FALLBACK,
+        ),
+        "tool_tags": _vocabulary_entry(
+            "ToolTag", "TOOL_TAGS", TOOL_TAGS, "TOOL_TAG_FALLBACK", TOOL_TAG_FALLBACK
         ),
     }
     constants: dict[str, object] = {

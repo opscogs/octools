@@ -23,6 +23,7 @@ import {
   MIN_SENTENCES,
   NAME_RE,
   SCHEMA_ESCAPE_KEY,
+  TOOL_TAGS,
 } from "./vocabulary.js";
 
 // Python's whitespace set, so counts match the Python implementation.
@@ -160,4 +161,31 @@ export function validateProvider(provider: ToolProvider): Finding[] {
     }
   });
   return findings;
+}
+
+/**
+ * Report every tag outside {@link TOOL_TAGS}; one `unknown_tag` finding each.
+ *
+ * Opt-in, like `validateTabular`, so `validateProvider` stays unchanged.
+ * Items that are not tools are `validateProvider`'s to report.
+ */
+export function validateTags(provider: ToolProvider): Finding[] {
+  const known: readonly string[] = TOOL_TAGS;
+  const items: readonly unknown[] = provider.allTools();
+  return items.flatMap((item) =>
+    item instanceof OCTool
+      ? item.tags.flatMap((tag, index) =>
+          known.includes(tag)
+            ? []
+            : [
+                new Finding({
+                  rule: "unknown_tag",
+                  message: `tag ${JSON.stringify(tag)} is not one of ${known.join(", ")}`,
+                  tool: item.name,
+                  path: `/tags/${String(index)}`,
+                }),
+              ],
+        )
+      : [],
+  );
 }

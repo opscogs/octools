@@ -70,6 +70,7 @@ def test_vocabulary_matches_the_package(sync_spec):
         **octools.VOCABULARY_FALLBACKS,
         "access": octools.ACCESS_FALLBACK,
         "result_kind": octools.RESULT_KIND_FALLBACK,
+        "tool_tags": octools.TOOL_TAG_FALLBACK,
     }
     for entry in vocabulary["vocabularies"].values():
         assert entry["type"] in octools.__all__

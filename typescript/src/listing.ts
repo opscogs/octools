@@ -42,6 +42,7 @@ export interface ListedTool {
   readonly inputSchema: Readonly<Record<string, unknown>>;
   readonly deprecated: boolean;
   readonly meta: Readonly<Record<string, unknown>>;
+  readonly tags?: readonly string[] | undefined;
 }
 
 /** Anything that lists its tools in a fixed order; every `ToolProvider` is one. */
@@ -73,6 +74,7 @@ export interface ToolSummaryRow {
   deprecated: boolean;
   alias_of: string | null;
   inputs: InputSummaryRow[];
+  tags?: string[];
 }
 
 /** One top-level argument of a tool: name, rendered type, requiredness. */
@@ -125,6 +127,7 @@ export class ToolSummary {
   /** The replacement a deprecated alias names in its `meta`, else `null`. */
   readonly aliasOf: string | null;
   readonly inputs: readonly InputSummary[];
+  readonly tags: readonly string[];
 
   /** Build a frozen summary from its row. */
   constructor(row: ToolSummaryRow) {
@@ -144,6 +147,7 @@ export class ToolSummary {
     this.inputs = Object.freeze(
       row.inputs.map((item) => new InputSummary(item)),
     );
+    this.tags = Object.freeze([...(row.tags ?? [])]);
     Object.freeze(this);
   }
 
@@ -164,6 +168,7 @@ export class ToolSummary {
       deprecated: this.deprecated,
       alias_of: this.aliasOf,
       inputs: this.inputs.map((item) => item.asRow()),
+      ...(this.tags.length > 0 ? { tags: [...this.tags] } : {}),
     };
   }
 }
@@ -303,6 +308,7 @@ export function summarizeTool(tool: ListedTool): ToolSummary {
     deprecated: tool.deprecated,
     alias_of: typeof alias === "string" && alias !== "" ? alias : null,
     inputs: inputs(tool.inputSchema),
+    tags: [...(tool.tags ?? [])],
   });
 }
 

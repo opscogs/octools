@@ -1,0 +1,21 @@
+{
+  "description": "An item that is not a tool is not selected.",
+  "input": {
+    "tools": [
+      {
+        "name": "one_tool",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"]
+      },
+      "foreign"
+    ],
+    "tags": ["recommended"]
+  },
+  "expected": ["one_tool"]
+}

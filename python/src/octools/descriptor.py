@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import inspect
 import re
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, Literal, Protocol, get_args, runtime_checkable
 
@@ -39,6 +39,15 @@ RESULT_KINDS: tuple[str, ...] = get_args(ResultKind)
 ACCESS_KINDS: tuple[str, ...] = get_args(Access)
 RESULT_KIND_FALLBACK: ResultKind = "records"
 """How a reader of a tool listing reads a ``result_kind`` it does not know."""
+ToolTag = Literal["recommended", "advanced"]
+"""The well-known tags; ``TOOL_TAGS`` lists the same values."""
+TOOL_TAGS: tuple[str, ...] = get_args(ToolTag)
+"""Every well-known tag, in documentation order."""
+TOOL_TAG_FALLBACK: ToolTag | None = None
+"""How a reader of a tool listing reads a tag it does not know: it ignores it.
+
+A tool carrying only unknown tags is therefore never loaded by default.
+"""
 ACCESS_FALLBACK: Access = "remote"
 """How a reader of a tool listing reads an ``access`` it does not know.
 
@@ -91,6 +100,7 @@ class OCTool:
     idempotent_hint: bool = True
     deprecated: bool = False
     meta: Mapping[str, Any] = field(default_factory=dict)
+    tags: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         """Validate the structural invariants; raise ``OCToolError`` on failure."""
@@ -148,6 +158,11 @@ class OCTool:
             isinstance(self.meta, Mapping),
             f"tool {self.name!r}: meta must be a mapping",
         )
+        _require(
+            isinstance(self.tags, tuple)
+            and all(isinstance(tag, str) and tag.strip() for tag in self.tags),
+            f"tool {self.name!r}: tags must be a tuple of non-empty strings",
+        )
 
 
 @runtime_checkable
@@ -185,6 +200,34 @@ def merge_providers(*providers: ToolProvider) -> ToolProvider:
     ``duplicate_name`` instead of silently dropping one of them.
     """
     return _MergedProvider(tuple(providers))
+
+
+@dataclass(frozen=True)
+class _SelectedProvider:
+    """The tools of one provider that carry any of the given tags."""
+
+    provider: ToolProvider
+    tags: frozenset[str]
+
+    def all_tools(self) -> Sequence[OCTool]:
+        """Return the matching tools in the provider's order."""
+        return tuple(
+            tool
+            for tool in self.provider.all_tools()
+            if isinstance(tool, OCTool) and self.tags.intersection(tool.tags)
+        )
+
+
+def select_tools(provider: ToolProvider, *, tags: Iterable[str]) -> ToolProvider:
+    """Return a provider listing only the tools carrying any of ``tags``.
+
+    A host calls this before converting, so it needs no consumer's ``meta``
+    key: ``select_tools(merged, tags={"recommended"})``. Order is kept, and
+    the result reads the underlying provider on every ``all_tools()`` call.
+    A bare string raises ``OCToolError``, since it would match by character.
+    """
+    _require(not isinstance(tags, str), "tags must be an iterable of strings")
+    return _SelectedProvider(provider, frozenset(tags))
 
 
 def _listed_names(provider: ToolProvider) -> list[str]:
@@ -233,11 +276,15 @@ __all__ = [
     "RESULT_KINDS",
     "RESULT_KIND_FALLBACK",
     "SPEC_VERSION",
+    "TOOL_TAGS",
+    "TOOL_TAG_FALLBACK",
     "Access",
     "OCTool",
     "OCToolError",
     "ResultKind",
     "ToolProvider",
+    "ToolTag",
     "check_tool_listing",
     "merge_providers",
+    "select_tools",
 ]

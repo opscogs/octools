@@ -66,6 +66,8 @@ export interface OCToolInit {
   readonly deprecated?: boolean | undefined;
   /** Free-form JSON data for the runtime. Defaults to `{}`. */
   readonly meta?: Readonly<Record<string, unknown>> | undefined;
+  /** What the tool is, for a host to select by. Defaults to none. */
+  readonly tags?: readonly string[] | undefined;
 }
 
 const FIELDS: ReadonlySet<string> = new Set([
@@ -83,6 +85,7 @@ const FIELDS: ReadonlySet<string> = new Set([
   "idempotentHint",
   "deprecated",
   "meta",
+  "tags",
 ]);
 const HINTS = ["readOnlyHint", "destructiveHint", "idempotentHint"] as const;
 const ASYNC_TAGS: ReadonlySet<string> = new Set([
@@ -161,6 +164,8 @@ export class OCTool {
   readonly deprecated: boolean;
   /** Free-form JSON data for the runtime. */
   readonly meta: Readonly<Record<string, unknown>>;
+  /** What the tool is, for a host to select by; `recommended` or `advanced`. */
+  readonly tags: readonly string[];
 
   /** Build a frozen descriptor; throw {@link OCToolError} on invalid data. */
   constructor(init: OCToolInit) {
@@ -183,7 +188,9 @@ export class OCTool {
     this.idempotentHint = given(init.idempotentHint, true);
     this.deprecated = given(init.deprecated, false);
     this.meta = given(init.meta, {});
+    this.tags = given(init.tags, []);
     this.check();
+    this.tags = Object.freeze([...this.tags]);
     Object.freeze(this);
   }
 
@@ -236,6 +243,10 @@ export class OCTool {
       `${label}: deprecated must be a boolean`,
     );
     ensure(isObject(this.meta), `${label}: meta must be a JSON object`);
+    ensure(
+      Array.isArray(this.tags) && this.tags.every(isBlankFree),
+      `${label}: tags must be an array of non-empty strings`,
+    );
   }
 }
 
@@ -263,6 +274,36 @@ export function mergeProviders(...providers: ToolProvider[]): ToolProvider {
   return Object.freeze({
     allTools: (): readonly OCTool[] =>
       Object.freeze(parts.flatMap((provider) => [...provider.allTools()])),
+  });
+}
+
+/**
+ * Return a provider listing only the tools carrying any of `options.tags`.
+ *
+ * A host calls this before converting, so it needs no consumer's `meta` key:
+ * `selectTools(merged, { tags: ["recommended"] })`. Order is kept, and the
+ * result reads the underlying provider on every `allTools()` call. A bare
+ * string throws {@link OCToolError}, since it would match by character.
+ */
+export function selectTools(
+  provider: ToolProvider,
+  options: { readonly tags: Iterable<string> },
+): ToolProvider {
+  ensure(
+    typeof options.tags !== "string",
+    "tags must be an iterable of strings",
+  );
+  const tags = new Set(options.tags);
+  return Object.freeze({
+    allTools: (): readonly OCTool[] =>
+      Object.freeze(
+        provider
+          .allTools()
+          .filter(
+            (tool) =>
+              tool instanceof OCTool && tool.tags.some((tag) => tags.has(tag)),
+          ),
+      ),
   });
 }
 

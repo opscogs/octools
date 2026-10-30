@@ -30,6 +30,7 @@ from octools import (
     read_envelope,
     render_listing,
     render_markdown_table,
+    select_tools,
     strict_clean,
     strip_keys,
     strip_titles,
@@ -39,6 +40,7 @@ from octools import (
     to_mcp_tool,
     validate_provider,
     validate_tabular,
+    validate_tags,
     validate_tool,
 )
 
@@ -67,6 +69,8 @@ def plain(value: object) -> Any:
 
 
 def build_tool(data: dict[str, Any]) -> OCTool:
+    if isinstance(data.get("tags"), list):
+        data = {**data, "tags": tuple(data["tags"])}
     try:
         return OCTool(func=_handler, **data)
     except (OCToolError, TypeError) as exc:
@@ -194,6 +198,10 @@ RUNNERS: dict[str, Callable[[dict[str, Any]], object]] = {
     "render_markdown_table": lambda data: render_markdown_table(
         data["rows"], data["columns"]
     ),
+    "select_tools": lambda data: [
+        tool.name
+        for tool in select_tools(provider(data), tags=data["tags"]).all_tools()
+    ],
     "strict_clean": lambda data: findings(strict_clean(data["schema"])),
     "strip_keys": lambda data: strip_keys(
         data["schema"], keys=data.get("keys", ()), prefixes=data.get("prefixes", ())
@@ -211,6 +219,7 @@ RUNNERS: dict[str, Callable[[dict[str, Any]], object]] = {
     ),
     "validate_provider": lambda data: findings(validate_provider(provider(data))),
     "validate_tabular": tabular,
+    "validate_tags": lambda data: findings(validate_tags(provider(data))),
     "validate_tool": tool_findings,
 }
 """One runner per fixture directory under ``spec/fixtures/``."""

@@ -58,6 +58,7 @@ fields this mapping uses). Everything but `func` survives, because
 | `access`                                    | `_meta["com.opscogs.octools/access"]`                          |
 | `target`                                    | `_meta["com.opscogs.octools/target"]` (only when set)          |
 | `result_kind`                               | `_meta["com.opscogs.octools/result_kind"]`                     |
+| `tags`                                      | `_meta["com.opscogs.octools/tags"]` (only when set)            |
 | `deprecated`                                | `_meta["com.opscogs.octools/deprecated"]`                      |
 | `meta`                                      | `_meta["com.opscogs.octools/meta"]` (copy)                     |
 | `SPEC_VERSION`                              | `_meta["com.opscogs.octools/spec_version"]`                    |
@@ -130,7 +131,8 @@ altered, even one literally called `title`.
 
 Dropped, because the API has no slot for them: `title`, `output_schema`,
 the three hints, `access` and `target`, `result_kind`, `deprecated`,
-`meta`, and `func`. A runtime keeps those in its own registry, which is
+`meta`, `tags`, and `func`. A host filters with `select_tools` before
+converting, and a runtime keeps those in its own registry, which is
 where approval policy, result rendering and deprecation warnings already
 read them. `strict` is not emitted either: turning strict mode on is a
 runtime decision, and a strict-clean input schema is what makes it

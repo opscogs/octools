@@ -25,13 +25,17 @@ from octools.descriptor import (
     RESULT_KIND_FALLBACK,
     RESULT_KINDS,
     SPEC_VERSION,
+    TOOL_TAG_FALLBACK,
+    TOOL_TAGS,
     Access,
     OCTool,
     OCToolError,
     ResultKind,
     ToolProvider,
+    ToolTag,
     check_tool_listing,
     merge_providers,
+    select_tools,
 )
 from octools.envelopes import (
     COLUMN_KIND_FALLBACK,
@@ -87,6 +91,7 @@ from octools.validate import (
     SCHEMA_ESCAPE_KEY,
     count_sentences,
     validate_provider,
+    validate_tags,
     validate_tool,
 )
 
@@ -120,6 +125,8 @@ __all__ = [
     "STRICT_TYPES",
     "TABULAR_DEF_NAME",
     "TOOL_FORMATS",
+    "TOOL_TAGS",
+    "TOOL_TAG_FALLBACK",
     "VOCABULARY_FALLBACKS",
     "Access",
     "ArtifactEnvelope",
@@ -141,6 +148,7 @@ __all__ = [
     "ToolFormat",
     "ToolProvider",
     "ToolSummary",
+    "ToolTag",
     "__version__",
     "artifact_schema",
     "check_tool_listing",
@@ -155,6 +163,7 @@ __all__ = [
     "render_listing",
     "render_markdown_table",
     "schema_for",
+    "select_tools",
     "strict_clean",
     "strip_keys",
     "strip_titles",
@@ -165,5 +174,6 @@ __all__ = [
     "to_mcp_tool",
     "validate_provider",
     "validate_tabular",
+    "validate_tags",
     "validate_tool",
 ]

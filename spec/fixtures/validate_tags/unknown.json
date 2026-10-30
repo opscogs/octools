@@ -1,0 +1,26 @@
+{
+  "description": "Each unknown tag is one finding at its index.",
+  "input": {
+    "tools": [
+      {
+        "name": "one_tool",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended", "custom"]
+      },
+      "foreign"
+    ]
+  },
+  "expected": [
+    {
+      "rule": "unknown_tag",
+      "tool": "one_tool",
+      "path": "/tags/1"
+    }
+  ]
+}

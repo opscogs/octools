@@ -33,6 +33,7 @@ subclass in TypeScript). Policy rules (marked
 | `idempotent_hint`  | `bool`                            | `True`      | MCP `idempotentHint`; meaningful when not read-only.                                                                                                                  |
 | `deprecated`       | `bool`                            | `False`     | An alias kept alive after a rename; must name the replacement in `meta["alias_of"]` (*validator*).                                                                    |
 | `meta`             | `Mapping[str, Any]`               | `{}`        | Library facts the consumer may read, plain snake_case keys: `min_api_version`, `schema_escape`, `alias_of`. Exported to MCP under `_meta["com.opscogs.octools/meta"]`.         |
+| `tags`             | `tuple[str, ...]`                 | `()`        | What the tool is, for a host to select by: `recommended` (load by default) or `advanced` (load on request). See [Tool tags](#tool-tags). |
 
 The table gives the Python names and types. In TypeScript every field is
 camelCase (`input_schema` is `inputSchema`, `read_only_hint` is
@@ -711,6 +712,40 @@ raises `TypeError` when `model` is not one of the three envelope types.
 
     const table = readEnvelope(TabularEnvelope, text);
     ```
+
+## Tool tags
+
+`tags` says what a tool is, so a host that merges providers can choose what to
+load without knowing any consumer's `meta` key. `TOOL_TAGS` lists the
+well-known values, and a reader ignores a tag it does not know, so a tool
+carrying only unknown tags is never loaded by default. A host still decides
+what it loads.
+
+=== "Python"
+
+    ```python
+    from octools import merge_providers, select_tools, to_mcp_tool
+
+    merged = merge_providers(my_tools, partner_tools)
+    default = select_tools(merged, tags={"recommended"})
+    definitions = [to_mcp_tool(tool) for tool in default.all_tools()]
+    ```
+
+=== "TypeScript"
+
+    ```ts
+    import { mergeProviders, selectTools, toMcpTool } from "@opscogs/octools";
+
+    const merged = mergeProviders(myTools, partnerTools);
+    const initial = selectTools(merged, { tags: ["recommended"] });
+    const definitions = initial.allTools().map((tool) => toMcpTool(tool));
+    ```
+
+`select_tools` keeps a tool carrying any given tag, in listing order. It
+returns a provider, so listings, converters and validators work on the result.
+`validate_tags(provider)` reports each tag outside `TOOL_TAGS` as
+`unknown_tag`; it is opt-in, and `validate_provider` does not report tags. A
+provider that groups tools with a `meta` key moves that value to `tags`.
 
 ## Escape conditions
 

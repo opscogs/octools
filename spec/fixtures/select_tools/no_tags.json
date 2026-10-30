@@ -1,0 +1,52 @@
+{
+  "description": "No tags select nothing.",
+  "input": {
+    "tools": [
+      {
+        "name": "one_tool",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"]
+      },
+      {
+        "name": "two_tool",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["advanced"]
+      },
+      {
+        "name": "three_tool",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "four_tool",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["advanced", "recommended"]
+      }
+    ],
+    "tags": []
+  },
+  "expected": []
+}
