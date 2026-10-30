@@ -18,6 +18,7 @@ import {
   MCP_META_NAMESPACE,
   MCP_NAME_RE,
   SPEC_VERSION,
+  TOOL_FORMATS,
 } from "./vocabulary.js";
 
 /** Options both converters take. */
@@ -131,4 +132,28 @@ export function toAnthropicTool(
     schema["additionalProperties"] = false;
   }
   return { name, description: tool.description, input_schema: schema };
+}
+
+/**
+ * Return `tool` in the shape of the converter `format` names.
+ *
+ * `format` is one of {@link TOOL_FORMATS}; these ids name converters and are
+ * separate from the listing styles. Throws {@link OCToolError} for an
+ * unknown id rather than falling back, since the output would be for the
+ * wrong target.
+ */
+export function convertTool(
+  tool: OCTool,
+  format: string,
+  options: ConvertOptions = {},
+): Record<string, unknown> {
+  if (format === "mcp") {
+    return toMcpTool(tool, options);
+  }
+  if (format === "anthropic") {
+    return toAnthropicTool(tool, options);
+  }
+  throw new OCToolError(
+    `format must be one of ${TOOL_FORMATS.join(", ")}, got ${JSON.stringify(format)}`,
+  );
 }

@@ -73,6 +73,7 @@ Each name maps one to one onto a name in the Python package's `__all__`.
 | `merge_providers`, `check_tool_listing`                                | `mergeProviders`, `checkToolListing`                                                  |
 | `validate_tool`, `validate_provider`, `count_sentences`                | `validateTool`, `validateProvider`, `countSentences`                                  |
 | `to_mcp_tool(tool, name_prefix=...)`, `to_anthropic_tool`              | `toMcpTool(tool, { namePrefix })`, `toAnthropicTool`                                  |
+| `convert_tool(tool, format, name_prefix=...)`, `TOOL_FORMATS`          | `convertTool(tool, format, { namePrefix })`, `TOOL_FORMATS`                           |
 | `summarize_tool`, `summarize_provider(provider, access=...)`           | `summarizeTool`, `summarizeProvider(provider, { access })`                            |
 | `render_listing(provider, style=..., access=..., pretty=...)`          | `renderListing(provider, { style, access, pretty })`; a bad style throws `RangeError` |
 | `render_markdown_table`, `ToolSummary.as_row()`, `InputSummary`        | `renderMarkdownTable`, `ToolSummary.asRow()`, `InputSummary`                          |

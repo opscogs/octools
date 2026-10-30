@@ -1,0 +1,25 @@
+{
+  "description": "The anthropic format is to_anthropic_tool.",
+  "input": {
+    "tool": {
+      "name": "cluster_info",
+      "description": "Return the cluster identity and versions. Use it before any other call.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "remote"
+    },
+    "format": "anthropic"
+  },
+  "expected": {
+    "name": "cluster_info",
+    "description": "Return the cluster identity and versions. Use it before any other call.",
+    "input_schema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  }
+}

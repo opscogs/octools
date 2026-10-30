@@ -15,6 +15,7 @@ from typing import Any
 from pydantic import ValidationError
 
 from octools import (
+    TOOL_FORMATS,
     ArtifactEnvelope,
     Finding,
     OCTool,
@@ -23,6 +24,7 @@ from octools import (
     TabularEnvelope,
     check_tool_listing,
     close_objects,
+    convert_tool,
     count_sentences,
     merge_providers,
     read_envelope,
@@ -139,6 +141,19 @@ def convert(convert_fn: Callable[..., dict[str, Any]], data: dict[str, Any]) -> 
         raise FixtureError("invalid_name") from exc
 
 
+def convert_format(data: dict[str, Any]) -> object:
+    tool = build_tool(data["tool"])
+    try:
+        return convert_tool(
+            tool, data["format"], name_prefix=data.get("name_prefix", "")
+        )
+    except OCToolError as exc:
+        code = (
+            "invalid_format" if data["format"] not in TOOL_FORMATS else "invalid_name"
+        )
+        raise FixtureError(code) from exc
+
+
 def tabular(data: dict[str, Any]) -> object:
     try:
         table = TabularEnvelope.model_validate(data["envelope"])
@@ -168,6 +183,7 @@ RUNNERS: dict[str, Callable[[dict[str, Any]], object]] = {
     "OCTool": lambda data: descriptor(build_tool(data["tool"])),
     "check_tool_listing": lambda data: findings(check_tool_listing(provider(data))),
     "close_objects": lambda data: close_objects(data["schema"]),
+    "convert_tool": convert_format,
     "count_sentences": lambda data: count_sentences(data["text"]),
     "merge_providers": lambda data: [
         tool.name

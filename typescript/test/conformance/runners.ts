@@ -20,9 +20,11 @@ import {
   type JsonSchema,
   OCToolError,
   RecordsEnvelope,
+  TOOL_FORMATS,
   TabularEnvelope,
   checkToolListing,
   closeObjects,
+  convertTool,
   countSentences,
   mergeProviders,
   readEnvelope,
@@ -114,11 +116,28 @@ function convert(
   }
 }
 
+function convertFormat(input: Record<string, unknown>): unknown {
+  const tool = buildTool(input["tool"] as Record<string, unknown>);
+  const format = input["format"] as string;
+  try {
+    return convertTool(tool, format, {
+      namePrefix: input["name_prefix"] as string | undefined,
+    });
+  } catch (error) {
+    if (error instanceof OCToolError) {
+      const known = (TOOL_FORMATS as readonly string[]).includes(format);
+      throw new FixtureError(known ? "invalid_name" : "invalid_format");
+    }
+    throw error;
+  }
+}
+
 /** One runner per fixture directory under `spec/fixtures/`. */
 export const RUNNERS: Readonly<Record<string, Runner>> = {
   OCTool: (input) =>
     descriptor(buildTool(input["tool"] as Record<string, unknown>)),
   check_tool_listing: (input) => findings(checkToolListing(provider(input))),
+  convert_tool: convertFormat,
   count_sentences: (input) => countSentences(input["text"] as string),
   merge_providers: (input) =>
     mergeProviders(

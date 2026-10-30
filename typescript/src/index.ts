@@ -9,7 +9,12 @@
  * @packageDocumentation
  */
 export { validateTabular } from "./cells.js";
-export { type ConvertOptions, toAnthropicTool, toMcpTool } from "./convert.js";
+export {
+  type ConvertOptions,
+  convertTool,
+  toAnthropicTool,
+  toMcpTool,
+} from "./convert.js";
 export {
   OCTool,
   type OCToolInit,
@@ -91,6 +96,7 @@ export {
   STRICT_KEYWORDS,
   STRICT_TYPES,
   TABULAR_DEF_NAME,
+  TOOL_FORMATS,
   VOCABULARY_FALLBACKS,
   type Access,
   type ColumnKind,
@@ -98,4 +104,5 @@ export {
   type ListingStyle,
   type ResultKind,
   type Sensitivity,
+  type ToolFormat,
 } from "./vocabulary.js";

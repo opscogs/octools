@@ -52,6 +52,7 @@ The directory names the operation; `input` holds its arguments as JSON and
 | `invalid_name`       | a converted name, prefix included, breaks the target's pattern |
 | `invalid_envelope`   | an envelope fails parsing, strict or tolerant                  |
 | `invalid_style`      | a listing style is outside `LISTING_STYLES`                    |
+| `invalid_format`     | a converter id is outside `TOOL_FORMATS`                       |
 
 Operations and their `input` keys:
 
@@ -65,6 +66,7 @@ Operations and their `input` keys:
 | `validate_provider`, `check_tool_listing` | `tools` or `listings`                                                    | findings                        |
 | `merge_providers`                         | `providers`, each `{"tools": [...]}`                                     | the merged listing's names      |
 | `to_mcp_tool`, `to_anthropic_tool`        | `tool`, optional `name_prefix`                                           | the converted tool              |
+| `convert_tool`                            | `tool`, `format`, optional `name_prefix`                                 | the converted tool              |
 | `strict_clean`                            | `schema`                                                                 | findings                        |
 | `strip_keys`                              | `schema`, optional `keys`, `prefixes`                                    | the schema                      |
 | `strip_titles`, `close_objects`           | `schema`                                                                 | the schema                      |

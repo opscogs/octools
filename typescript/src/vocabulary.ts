@@ -160,3 +160,8 @@ export const ALIAS_OF_KEY = "alias_of";
 export const LISTING_STYLES = ["table", "md", "txt", "json"] as const;
 /** A listing style: `table`, `md`, `txt` or `json`. */
 export type ListingStyle = (typeof LISTING_STYLES)[number];
+
+/** Every converter id, in documentation order. */
+export const TOOL_FORMATS = ["mcp", "anthropic"] as const;
+/** A converter id: `mcp` or `anthropic`. */
+export type ToolFormat = (typeof TOOL_FORMATS)[number];

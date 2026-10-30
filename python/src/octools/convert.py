@@ -11,8 +11,8 @@ it drops.
 from __future__ import annotations
 
 import re
-from collections.abc import Mapping
-from typing import Any, cast
+from collections.abc import Callable, Mapping
+from typing import Any, Literal, cast, get_args
 
 from octools.descriptor import SPEC_VERSION, OCTool, OCToolError
 from octools.schema import strip_keys
@@ -105,10 +105,36 @@ def to_anthropic_tool(tool: OCTool, *, name_prefix: str = "") -> dict[str, Any]:
     return {"name": name, "description": tool.description, "input_schema": schema}
 
 
+ToolFormat = Literal["mcp", "anthropic"]
+"""A converter id; ``TOOL_FORMATS`` lists the same values."""
+TOOL_FORMATS: tuple[str, ...] = get_args(ToolFormat)
+"""Every converter id, in documentation order."""
+_CONVERTERS: Mapping[str, Callable[..., dict[str, Any]]] = {
+    "mcp": to_mcp_tool,
+    "anthropic": to_anthropic_tool,
+}
+
+
+def convert_tool(tool: OCTool, format: str, *, name_prefix: str = "") -> dict[str, Any]:
+    """Return ``tool`` in the shape of the converter ``format`` names.
+
+    ``format`` is one of ``TOOL_FORMATS``; these ids name converters and are
+    separate from the listing styles. An unknown id raises ``OCToolError``
+    rather than falling back, since the output would be for the wrong target.
+    """
+    converter = _CONVERTERS.get(format)
+    if converter is None:
+        raise OCToolError(f"format must be one of {TOOL_FORMATS}, got {format!r}")
+    return converter(tool, name_prefix=name_prefix)
+
+
 __all__ = [
     "ANTHROPIC_NAME_RE",
     "MCP_META_NAMESPACE",
     "MCP_NAME_RE",
+    "TOOL_FORMATS",
+    "ToolFormat",
+    "convert_tool",
     "to_anthropic_tool",
     "to_mcp_tool",
 ]

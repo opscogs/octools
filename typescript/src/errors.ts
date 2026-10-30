@@ -30,6 +30,7 @@ export const ERROR_CODES = [
   "invalid_name",
   "invalid_envelope",
   "invalid_style",
+  "invalid_format",
 ] as const;
 
 /** One of {@link ERROR_CODES}. */

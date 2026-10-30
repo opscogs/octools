@@ -1,6 +1,6 @@
 # Converters
 
-Version: **1.2.0** · Date: 2026-10-08
+Version: **1.3.0** · Date: 2026-10-30
 
 The converters turn an `OCTool` into the registration object a target
 expects, as plain data: dicts in Python, plain objects in TypeScript. No
@@ -101,6 +101,16 @@ it before dispatching to `func`.
 The reverse mapping is mechanical, and the test suite proves it: an
 `OCTool` rebuilt from `to_mcp_tool(tool)` plus the original `func`
 compares equal to `tool`.
+
+## Choosing a converter by id: `convert_tool(tool, format, *, name_prefix="")`
+
+TypeScript: `convertTool(tool, format, { namePrefix })`.
+
+`TOOL_FORMATS` lists the converter ids, `"mcp"` and `"anthropic"`. A
+consumer that offers an export format takes its choices from `TOOL_FORMATS`
+and calls `convert_tool`, so a new converter reaches it with no code change.
+An unknown id raises `OCToolError`. These ids are separate from the listing
+styles in `LISTING_STYLES`.
 
 ## Anthropic: `to_anthropic_tool(tool, *, name_prefix="")`
 

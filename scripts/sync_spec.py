@@ -53,6 +53,7 @@ from octools import (
     STRICT_KEYWORDS,
     STRICT_TYPES,
     TABULAR_DEF_NAME,
+    TOOL_FORMATS,
     Finding,
     NoTitleGenerator,
     OCTool,
@@ -198,6 +199,7 @@ def vocabulary() -> dict[str, object]:
         "STRICT_KEYWORDS": sorted(STRICT_KEYWORDS),
         "STRICT_TYPES": sorted(STRICT_TYPES),
         "TABULAR_DEF_NAME": TABULAR_DEF_NAME,
+        "TOOL_FORMATS": list(TOOL_FORMATS),
     }
     return {
         "constants": constants,

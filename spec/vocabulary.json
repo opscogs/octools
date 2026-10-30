@@ -48,7 +48,8 @@
       "object",
       "string"
     ],
-    "TABULAR_DEF_NAME": "TabularEnvelope"
+    "TABULAR_DEF_NAME": "TabularEnvelope",
+    "TOOL_FORMATS": ["mcp", "anthropic"]
   },
   "spec_version": "1.1",
   "vocabularies": {
