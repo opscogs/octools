@@ -773,8 +773,27 @@ what it loads.
 
 `select_tools` keeps a tool carrying any given tag, in listing order. It
 returns a provider, so listings, converters and validators work on the result.
-`validate_tags(provider)` reports each tag outside `TOOL_TAGS` as
-`unknown_tag`; it is opt-in, and `validate_provider` does not report tags. A
+To require a tag from each of two sets, nest the calls:
+
+=== "Python"
+
+    ```python
+    selected = select_tools(select_tools(merged, tags={"network"}), tags={"recommended"})
+    ```
+
+=== "TypeScript"
+
+    ```ts
+    const selected = selectTools(selectTools(merged, { tags: ["network"] }), {
+      tags: ["recommended"],
+    });
+    ```
+
+A provider may add its own domain tags, such as `network`, beside the
+well-known ones. `validate_tags(provider, allowed={"network"})`
+(`validateTags(provider, { allowed: ["network"] })`) reports each tag outside
+`TOOL_TAGS` and `allowed` as `unknown_tag`; with no `allowed` it checks against
+`TOOL_TAGS` alone. It is opt-in, and `validate_provider` does not report tags. A
 provider that groups tools with a `meta` key moves that value to `tags`.
 
 ## Escape conditions

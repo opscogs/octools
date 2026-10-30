@@ -224,7 +224,12 @@ export const RUNNERS: Readonly<Record<string, Runner>> = {
       .allTools()
       .map((tool) => tool.name),
   validate_provider: (input) => findings(validateProvider(provider(input))),
-  validate_tags: (input) => findings(validateTags(provider(input))),
+  validate_tags: (input) =>
+    findings(
+      validateTags(provider(input), {
+        allowed: input["allowed"] as string[] | undefined,
+      }),
+    ),
   validate_tool: (input) =>
     findings(
       validateTool(

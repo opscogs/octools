@@ -1,0 +1,26 @@
+{
+  "description": "A tag outside both TOOL_TAGS and allowed is still a finding.",
+  "input": {
+    "tools": [
+      {
+        "name": "one_tool",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["custom", "other"]
+      }
+    ],
+    "allowed": ["custom"]
+  },
+  "expected": [
+    {
+      "rule": "unknown_tag",
+      "tool": "one_tool",
+      "path": "/tags/1"
+    }
+  ]
+}

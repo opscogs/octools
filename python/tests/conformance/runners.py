@@ -279,7 +279,9 @@ RUNNERS: dict[str, Callable[[dict[str, Any]], object]] = {
     ),
     "validate_provider": lambda data: findings(validate_provider(provider(data))),
     "validate_tabular": tabular,
-    "validate_tags": lambda data: findings(validate_tags(provider(data))),
+    "validate_tags": lambda data: findings(
+        validate_tags(provider(data), allowed=data.get("allowed", ()))
+    ),
     "validate_tool": tool_findings,
 }
 """One runner per fixture directory under ``spec/fixtures/``."""

@@ -78,6 +78,7 @@ export {
   stripTitles,
 } from "./schema.js";
 export {
+  type ValidateTagsOptions,
   countSentences,
   validateProvider,
   validateTags,

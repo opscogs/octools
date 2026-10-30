@@ -10,6 +10,7 @@ import {
   mergeProviders,
   selectTools,
   validateProvider,
+  validateTags,
 } from "../src/index.js";
 
 const BASE: OCToolInit = {
@@ -119,6 +120,26 @@ describe("foreign items", () => {
 });
 
 describe("selectTools", () => {
+  it("requires every tag when nested", () => {
+    const tool = (name: string, tags: string[]): OCTool =>
+      new OCTool({ ...BASE, name, tags });
+    const tools = [
+      tool("both_tags", ["network", "recommended"]),
+      tool("one_tag", ["network"]),
+    ];
+    const provider = { allTools: () => tools };
+    const selected = selectTools(selectTools(provider, { tags: ["network"] }), {
+      tags: ["recommended"],
+    });
+    expect(selected.allTools().map((item) => item.name)).toEqual(["both_tags"]);
+  });
+
+  it("rejects a bare string for validateTags", () => {
+    expect(() => validateTags(mergeProviders(), { allowed: "custom" })).toThrow(
+      OCToolError,
+    );
+  });
+
   it("rejects a bare string", () => {
     expect(() =>
       selectTools(mergeProviders(), { tags: "recommended" }),
