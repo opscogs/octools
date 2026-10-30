@@ -1,6 +1,6 @@
 # The OCTool descriptor
 
-Version: **1.2.0** · Date: 2026-10-08
+Version: **1.2.1** · Date: 2026-10-30
 
 `OCTool` is a frozen descriptor of one capability a library offers to an
 agent runtime: a keyword-only dataclass in Python, a class built with
@@ -545,8 +545,11 @@ serializes its `warnings`, empty or not.
 ```
 
 `reference` is whatever the injected sink returned; the library never
-chooses a filename. `role` says what the artifact is to the run, such as
-`csv`, `plan` or `summary`; it is free text, not a closed vocabulary, so
+chooses a filename. A sink in a multi-tenant host returns a reference
+relative to the caller's storage root, or an opaque id, never an absolute
+host path, so a result never reveals where or for whom it is stored.
+`role` says what the artifact is to the run, such as `csv`, `plan` or
+`summary`; it is free text, not a closed vocabulary, so
 it has no fallback. `width`, `height` and `role` are omitted when unset,
 as is every optional envelope field left at `None`. `artifacts` lists
 further outputs beside the primary.
