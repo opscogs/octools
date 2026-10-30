@@ -281,15 +281,19 @@ every page:
 | An IP network or interface type          | `ip_block`                                                           |
 | A list, dict or nested model             | `text`, as compact JSON                                              |
 | A non-string value in a `text` column    | compact JSON                                                         |
+| `z.bigint()` (TypeScript)                | `big_integer`, as a decimal string                                   |
 | Anything else, `datetime` and `date` too | `text`                                                               |
 
 A plain `datetime` is `text` because it may lack the offset the `timestamp` kind
-requires; a producer whose values carry one overrides the column. `big_integer`
-and `fqdn` come only from the `column_kinds` override, since an annotation
-cannot signal them. A list, dict or nested cell is JSON text because a cell is a
+requires; a producer whose values carry one overrides the column. In
+Python `big_integer` and `fqdn` come only from the `column_kinds` override,
+since an annotation cannot signal them. In TypeScript `z.bigint()` does signal
+`big_integer`, and its cells are decimal strings, so overriding it to `integer`
+fails `validate_tabular`. A list, dict or nested cell is JSON text because a cell is a
 scalar, and any other non-string value in a `text` column is too, so a union
 such as `int | str` still passes `validate_tabular`. A value the dump omits is a
-null cell. `column_descriptions` fills from field descriptions when any exists.
+null cell, and so is a non-finite float, which JSON cannot carry, nested values
+included. `column_descriptions` fills from field descriptions when any exists.
 `truncated` and `next_cursor` describe a capped read and go through the
 envelope's own checks.
 

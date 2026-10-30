@@ -380,6 +380,7 @@ declaration order, and the kind comes from the type alone:
 | An IP network or interface type           | `ip_block`                     |
 | A list, dict or nested model | `text`, as compact JSON |
 | A non-string value in a `text` column | compact JSON |
+| `z.bigint()` (TypeScript) | `big_integer`, as a decimal string |
 | Anything else, `datetime` and `date` too  | `text`                         |
 
 A plain `datetime` is `text` because it may lack the offset `timestamp`
@@ -387,7 +388,7 @@ requires. `column_kinds` overrides per column, which is how a column becomes
 `timestamp` from a plain `datetime`, or `big_integer` or `fqdn`; a key that is
 not a column raises `OCToolError`. Field descriptions fill
 `column_descriptions` when any field has one, and a value the dump omits is a
-null cell. `truncated` and `next_cursor` (`nextCursor`) describe a capped read
+null cell, as is a non-finite float. `truncated` and `next_cursor` (`nextCursor`) describe a capped read
 and go through the envelope's own checks. Run `validate_tabular` on the result
 in your tests: an `int` beyond 2^53 - 1 needs the `big_integer`
 override.

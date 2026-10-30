@@ -239,12 +239,25 @@ def _column_kind(annotation: object) -> ColumnKind:
     return _TYPE_KINDS.get(annotation, "text")
 
 
+def _finite(value: object) -> object:
+    """Return ``value`` with every non-finite float, nested too, as ``None``."""
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    if isinstance(value, list):
+        return [_finite(entry) for entry in value]
+    if isinstance(value, dict):
+        return {key: _finite(entry) for key, entry in value.items()}
+    return value
+
+
 def _model_cell(value: object, kind: ColumnKind) -> Cell:
     """Return a dumped value as a cell of ``kind``.
 
-    A list or dict is compact JSON text, and so is any other non-string value
-    in a text column, so a union such as ``int | str`` still fits its kind.
+    A non-finite float is null, as JSON has no form for it. A list or dict is
+    compact JSON text, and so is any other non-string value in a text column,
+    so a union such as ``int | str`` still fits its kind.
     """
+    value = _finite(value)
     if isinstance(value, list | dict) or (
         kind == "text" and not isinstance(value, str | None)
     ):
@@ -270,10 +283,11 @@ def tabular_from_models(
     a network or interface ``ip_block``; a union, enum or ``Literal`` takes
     the kind its members share, ``number`` for a mix of integers and numbers;
     anything else is ``text``. A list, dict or nested model is compact JSON
-    text, as is any other non-string value in a text column. ``column_kinds``
-    overrides per column, which is how a column becomes ``big_integer`` or
-    ``fqdn``; a key that is not a column raises ``OCToolError``. Field
-    descriptions fill ``column_descriptions`` when any field has one.
+    text, as is any other non-string value in a text column, and a non-finite
+    float is null. ``column_kinds`` overrides per column, which is how a column
+    becomes ``big_integer`` or ``fqdn``; a key that is not a column raises
+    ``OCToolError``. Field descriptions fill ``column_descriptions`` when any
+    field has one.
     ``truncated`` and ``next_cursor`` describe a capped read, under the
     envelope's own checks.
     """

@@ -172,6 +172,18 @@ def test_tabular_from_models_reads_enums_and_skips_excluded_fields():
     assert validate_tabular(table) == []
 
 
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_tabular_from_models_reads_a_non_finite_float_as_null(value):
+    class Row(BaseModel):
+        ratio: float
+        ratios: list[float]
+        either: float | str
+
+    table = tabular_from_models(Row, [Row(ratio=value, ratios=[value], either=value)])
+    assert table.rows == [[None, "[null]", None]]
+    assert validate_tabular(table) == []
+
+
 def test_tabular_from_models_keeps_omitted_and_aliased_values_as_columns():
     class Row(BaseModel):
         model_config = ConfigDict(serialize_by_alias=True, populate_by_name=True)

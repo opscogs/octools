@@ -277,6 +277,34 @@ describe("tabularFromModels", () => {
     expect(validateTabular(table)).toEqual([]);
   });
 
+  it("reads a bigint as a big_integer decimal string", () => {
+    const schema = z.object({
+      size: z.bigint(),
+      nested: z.object({ size: z.bigint() }),
+      plain: z.bigint(),
+    });
+    const size = 9007199254740993n;
+    const table = tabularFromModels(
+      schema,
+      [{ size, nested: { size }, plain: size }],
+      { columnKinds: { plain: "text" } },
+    );
+    expect(table.column_kinds).toEqual(["big_integer", "text", "text"]);
+    expect(table.rows).toEqual([
+      ["9007199254740993", '{"size":"9007199254740993"}', "9007199254740993"],
+    ]);
+    expect(validateTabular(table)).toEqual([]);
+  });
+
+  it("reads a non-finite number as null", () => {
+    const schema = z.object({ ratio: z.number(), ratios: z.array(z.number()) });
+    const table = tabularFromModels(schema, [
+      { ratio: Number.NaN, ratios: [Number.POSITIVE_INFINITY] },
+    ]);
+    expect(table.rows).toEqual([[null, "[null]"]]);
+    expect(validateTabular(table)).toEqual([]);
+  });
+
   it("leaves an empty literal set as text", () => {
     const schema = z.object({ none: z.enum({}) });
     expect(tabularFromModels(schema, []).column_kinds).toEqual(["text"]);

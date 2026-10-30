@@ -253,6 +253,9 @@ function columnKind(field: z.ZodType): ColumnKind {
   if (field instanceof z.ZodNumber) {
     return (field.format ?? "").includes("int") ? "integer" : "number";
   }
+  if (field instanceof z.ZodBigInt) {
+    return "big_integer";
+  }
   if (field instanceof z.ZodDate) {
     return "timestamp";
   }
@@ -301,6 +304,11 @@ function modelCell(value: unknown, kind: ColumnKind): Cell {
   return value as Cell;
 }
 
+/** Return a `bigint` as its decimal string, which JSON can carry. */
+function bigintText(_key: string, value: unknown): unknown {
+  return typeof value === "bigint" ? value.toString() : value;
+}
+
 /** Options {@link tabularFromModels} takes. */
 export interface TabularFromModelsOptions {
   /** Kinds overriding the inferred ones, by column. */
@@ -318,10 +326,12 @@ export interface TabularFromModelsOptions {
  * null cell. Each kind comes from the field's schema, optional, nullable and
  * default wrappers removed: a date or a `z.iso.datetime()` that requires an
  * offset is `timestamp`; `z.ipv4()` or `z.ipv6()` is `ip`, `z.cidrv4()` or
- * `z.cidrv6()` is `ip_block`; a union, enum or literal takes the kind its
+ * `z.cidrv6()` is `ip_block`; `z.bigint()` is `big_integer`, its cells
+ * decimal strings; a union, enum or literal takes the kind its
  * members share, `number` for a mix of integers and numbers; anything else
  * is `text`. An array or object is compact JSON text, as is any other
- * non-string value in a text column. `columnKinds` overrides per column,
+ * non-string value in a text column, and a non-finite number is null.
+ * `columnKinds` overrides per column,
  * which is how a column becomes `big_integer` or `fqdn`; a key that is not a
  * column throws {@link OCToolError}. Field descriptions fill
  * `column_descriptions` when any field has one. `truncated` and `nextCursor`
@@ -350,7 +360,10 @@ export function tabularFromModels(
     kind: overrides[field.name] ?? columnKind(field.inner),
   }));
   const rows = [...items].map((item) => {
-    const dump = JSON.parse(JSON.stringify(item)) as Record<string, unknown>;
+    const dump = JSON.parse(JSON.stringify(item, bigintText)) as Record<
+      string,
+      unknown
+    >;
     return typed.map(({ name, kind }) => modelCell(dump[name], kind));
   });
   const descriptions = fields.map((field) => field.description ?? null);
