@@ -14,8 +14,8 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal
 
-from octools.descriptor import Access, OCTool, ResultKind, ToolProvider
-from octools.validate import ALIAS_OF_KEY, SENTENCE_RE
+from octools.descriptor import ALIAS_OF_KEY, Access, OCTool, ResultKind, ToolProvider
+from octools.validate import SENTENCE_RE
 
 ListingStyle = Literal["table", "md", "txt", "json"]
 LISTING_STYLES: tuple[ListingStyle, ...] = ("table", "md", "txt", "json")

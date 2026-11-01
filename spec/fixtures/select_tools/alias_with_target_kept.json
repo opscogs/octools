@@ -1,0 +1,35 @@
+{
+  "description": "A deprecated alias is kept, in order, when its alias_of target is selected.",
+  "input": {
+    "tools": [
+      {
+        "name": "cluster_info_v2",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"]
+      },
+      {
+        "name": "cluster_info",
+        "description": "Return the cluster identity and versions. Use it before any other call.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"],
+        "deprecated": true,
+        "meta": {
+          "alias_of": "cluster_info_v2"
+        }
+      }
+    ],
+    "tags": ["recommended"]
+  },
+  "expected": ["cluster_info_v2", "cluster_info"]
+}

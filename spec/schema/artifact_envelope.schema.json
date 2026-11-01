@@ -52,6 +52,18 @@
           ],
           "default": null,
           "description": "What the artifact is to the run, such as csv, plan or summary."
+        },
+        "uri": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Address a client can open to fetch the artifact; opaque to octools, omitted when unset."
         }
       },
       "required": ["reference", "media_type", "bytes"],

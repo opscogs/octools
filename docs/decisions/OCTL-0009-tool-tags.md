@@ -1,7 +1,7 @@
 ---
 status: accepted
-version: 1.0.0
-date: 2026-10-30
+version: 1.1.0
+date: 2026-11-01
 decision-makers: OpsCogs maintainers
 ---
 
@@ -42,6 +42,10 @@ time, and a reader that ignores what it does not know stays safe.
 - `select_tools(provider, tags=...)` returns a provider listing the tools that
   carry any given tag, in order. It returns a provider, so listings, converters
   and validators compose with it, and it works on a merged provider.
+- `select_tools` drops a deprecated alias whose `meta["alias_of"]` target is
+  not selected, so its result passes `validate_provider` without a host
+  pruning stranded aliases itself. Tags decide the selection; an alias only
+  follows its target.
 - Nesting two `select_tools` calls requires a tag from each set. There is no
   exclusion form; one arrives only on a consumer's request.
 - `to_mcp_tool` publishes tags as `_meta["com.opscogs.octools/tags"]` when any
@@ -102,4 +106,5 @@ Spec fixtures under `select_tools`, `validate_tags`, `OCTool`, `to_mcp_tool`,
 
 ## More Information
 
-Ships in octools 1.3.0 with `SPEC_VERSION` `"1.2"`.
+Ships in octools 1.3.0 with `SPEC_VERSION` `"1.2"`; the alias rule ships in
+octools 1.3.1.

@@ -142,6 +142,22 @@ describe("readEnvelope", () => {
     });
   });
 
+  it.each(["role", "uri"])(
+    "keeps %s when set and drops it when null",
+    (field) => {
+      const set = { ...REF, [field]: "x" };
+      const data = { artifact: set, artifacts: [{ ...REF, [field]: null }] };
+      const expected = {
+        artifact: set,
+        artifacts: [REF],
+        warnings: [],
+        sensitivity: "inherits_input",
+      };
+      expect(readEnvelope(ArtifactEnvelope, data)).toEqual(expected);
+      expect(ArtifactEnvelope.parse(data)).toEqual(expected);
+    },
+  );
+
   it("raises SyntaxError on malformed text", () => {
     expect(() => readEnvelope(TabularEnvelope, "{")).toThrow(SyntaxError);
   });

@@ -15,10 +15,10 @@ Status key: ✅ accepted · 📝 proposed · ❌ rejected · ⚠️ deprecated �
 | [OCTL-0002](OCTL-0002-result-paging.md)                        | Result paging                                | ✅ accepted | 1.4.1   | 2026-10-08 |
 | [OCTL-0004](OCTL-0004-merge-providers.md)                      | Merging providers                            | ✅ accepted | 1.1.1   | 2026-10-08 |
 | [OCTL-0005](OCTL-0005-column-kinds-ip-block-big-integer.md)    | Column kinds `ip_block` and `big_integer`    | ✅ accepted | 1.2.0   | 2026-10-30 |
-| [OCTL-0006](OCTL-0006-tolerant-readers.md)                     | Tolerant readers                             | ✅ accepted | 1.4.0   | 2026-10-30 |
+| [OCTL-0006](OCTL-0006-tolerant-readers.md)                     | Tolerant readers                             | ✅ accepted | 1.5.0   | 2026-11-01 |
 | [OCTL-0007](OCTL-0007-human-readable-listings.md)              | Human-readable listings                      | ✅ accepted | 1.0.1   | 2026-10-08 |
 | [OCTL-0008](OCTL-0008-language-neutral-spec-and-typescript.md) | Language-neutral spec and TypeScript package | ✅ accepted | 1.0.0   | 2026-10-08 |
-| [OCTL-0009](OCTL-0009-tool-tags.md)                            | Tool tags                                    | ✅ accepted | 1.0.0   | 2026-10-30 |
+| [OCTL-0009](OCTL-0009-tool-tags.md)                            | Tool tags                                    | ✅ accepted | 1.1.0   | 2026-11-01 |
 
 ## History
 
@@ -26,6 +26,8 @@ Newest entries first.
 
 | Date       | ADR       | Version | Status      | Change                                                                                                                                                                                                                        |
 | ---------- | --------- | ------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-11-01 | OCTL-0009 | 1.1.0   | ✅ accepted | `select_tools` drops a deprecated alias whose `alias_of` target is not selected; octools 1.3.1                                                                                                                                |
+| 2026-11-01 | OCTL-0006 | 1.5.0   | ✅ accepted | `ArtifactRef.uri`, optional opaque address a client can open, omitted when unset, no fallback; `SPEC_VERSION` `"1.3"`; octools 1.3.1                                                                                          |
 | 2026-10-30 | OCTL-0005 | 1.2.0   | ✅ accepted | `tabular_from_models`: kind from the type alone, unions take the kind their members share, `AwareDatetime` is `timestamp`, a plain `datetime` is `text`, non-scalar and non-string text cells are compact JSON; octools 1.3.0 |
 | 2026-10-30 | OCTL-0009 | 1.0.0   | ✅ accepted | Accepted; `tags` on `OCTool`, `select_tools` with nesting, opt-in `validate_tags` with `allowed`, MCP `_meta` only, no toolset type; octools 1.3.0                                                                            |
 | 2026-10-30 | OCTL-0006 | 1.4.0   | ✅ accepted | `source` defined on all three envelopes as a closed `SourceRef`, omitted when unset, malformed value dropped on read; `SPEC_VERSION` `"1.2"`                                                                                  |

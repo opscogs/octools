@@ -20,7 +20,7 @@ from octools import (
     validate_provider,
     validate_tags,
 )
-from octools.example import ECHO_RECORDS, TOOLS, ExampleProvider
+from octools.example import ECHO_ALIAS, ECHO_RECORDS, TOOLS, ExampleProvider
 from tests.support import build_tool
 
 OBJECT = {"type": "object", "properties": {}, "additionalProperties": False}
@@ -49,7 +49,7 @@ def make(**overrides) -> OCTool:
 
 
 def test_spec_version_and_literals():
-    assert SPEC_VERSION == "1.2"
+    assert SPEC_VERSION == "1.3"
     assert RESULT_KINDS == ("records", "artifact")
     assert ACCESS_KINDS == ("local", "remote")
     assert RESULT_KIND_FALLBACK in RESULT_KINDS
@@ -239,6 +239,31 @@ def test_nested_select_tools_requires_every_tag():
         select_tools(Listing(), tags={"network"}), tags={"recommended"}
     )
     assert selected.all_tools() == tools[:1]
+
+
+@pytest.mark.parametrize(
+    ("target_tags", "expected"),
+    [
+        (("advanced",), ["other_tool"]),
+        (("recommended",), ["echo_records", "echo", "other_tool"]),
+    ],
+)
+def test_select_tools_drops_a_deprecated_alias_without_its_target(
+    target_tags, expected
+):
+    tools = (
+        dataclasses.replace(ECHO_RECORDS, tags=target_tags),
+        dataclasses.replace(ECHO_ALIAS, tags=("recommended",)),
+        dataclasses.replace(ECHO_RECORDS, name="other_tool", tags=("recommended",)),
+    )
+
+    class Listing:
+        def all_tools(self):
+            return tools
+
+    selected = select_tools(Listing(), tags={"recommended"})
+    assert [t.name for t in selected.all_tools()] == expected
+    assert validate_provider(selected) == []
 
 
 def test_validate_tags_rejects_a_bare_string():

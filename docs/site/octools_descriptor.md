@@ -1,13 +1,13 @@
 # The OCTool descriptor
 
-Version: **1.3.0** · Date: 2026-10-30
+Version: **1.3.1** · Date: 2026-11-01
 
 `OCTool` is a frozen descriptor of one capability a library offers to an
 agent runtime: a keyword-only dataclass in Python, a class built with
 `new OCTool({ ... })` in TypeScript. This page is the reference: every
 field, the result envelopes, when a tool may skip a result schema, what
 "strict-clean" means for an input schema, and how the format and the
-tools themselves evolve. `octools.SPEC_VERSION` is `"1.2"`.
+tools themselves evolve. `octools.SPEC_VERSION` is `"1.3"`.
 
 ## Fields
 
@@ -582,7 +582,10 @@ relative to the caller's storage root, or an opaque id, never an absolute
 host path, so a result never reveals where or for whom it is stored.
 `role` says what the artifact is to the run, such as `csv`, `plan` or
 `summary`; it is free text, not a closed vocabulary, so
-it has no fallback. `width`, `height` and `role` are omitted when unset,
+it has no fallback. `uri` is an address a client can open to fetch the
+artifact when `reference` is not one it can resolve, such as a resource a
+remote host serves; the value is opaque to `octools`. `width`, `height`,
+`role` and `uri` are omitted when unset,
 as is every optional envelope field left at `None`. `artifacts` lists
 further outputs beside the primary.
 `sensitivity` is `"inherits_input"` today: per-field extras cannot
@@ -774,6 +777,8 @@ what it loads.
 
 `select_tools` keeps a tool carrying any given tag, in listing order. It
 returns a provider, so listings, converters and validators work on the result.
+A deprecated alias whose `meta["alias_of"]` target is not selected is dropped,
+so the result passes `validate_provider` without a host pruning it.
 To require a tag from each of two sets, nest the calls:
 
 === "Python"
@@ -854,7 +859,7 @@ model it as a closed object or move it out of the input schema.
 
 ## Versioning and deprecation
 
-`SPEC_VERSION` is `"1.2"`, the format version of the descriptor and the
+`SPEC_VERSION` is `"1.3"`, the format version of the descriptor and the
 envelopes. Under the compatibility contract below, a spec minor is
 additive and a spec major is one of the "must not" changes. A reader
 checks the major only; a test that pins the whole string fails on every

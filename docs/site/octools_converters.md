@@ -1,6 +1,6 @@
 # Converters
 
-Version: **1.3.0** · Date: 2026-10-30
+Version: **1.3.1** · Date: 2026-11-01
 
 The converters turn an `OCTool` into the registration object a target
 expects, as plain data: dicts in Python, plain objects in TypeScript. No
@@ -83,7 +83,7 @@ Example:
   "outputSchema": { "type": "object", "properties": {} },
   "annotations": { "readOnlyHint": true, "destructiveHint": false, "idempotentHint": true },
   "_meta": {
-    "com.opscogs.octools/spec_version": "1.2",
+    "com.opscogs.octools/spec_version": "1.3",
     "com.opscogs.octools/access": "remote",
     "com.opscogs.octools/result_kind": "records",
     "com.opscogs.octools/deprecated": false,

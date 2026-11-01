@@ -12,6 +12,7 @@ from collections.abc import Iterable, Mapping
 from dataclasses import replace
 
 from octools.descriptor import (
+    ALIAS_OF_KEY,
     NAME_RE,
     TOOL_TAGS,
     OCTool,
@@ -27,8 +28,6 @@ MIN_SENTENCES = 2
 MAX_SENTENCES = 4
 SCHEMA_ESCAPE_KEY = "schema_escape"
 """``meta`` key recording why a tool has no closed ``output_schema``."""
-ALIAS_OF_KEY = "alias_of"
-"""``meta`` key on a deprecated alias naming the tool it stands for."""
 
 
 def count_sentences(text: str) -> int:

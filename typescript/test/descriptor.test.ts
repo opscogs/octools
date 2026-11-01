@@ -134,6 +134,36 @@ describe("selectTools", () => {
     expect(selected.allTools().map((item) => item.name)).toEqual(["both_tags"]);
   });
 
+  it.each([
+    ["drops a deprecated alias without its target", ["advanced"], ["other"]],
+    [
+      "keeps a deprecated alias with its target",
+      ["recommended"],
+      ["target", "alias", "other"],
+    ],
+  ])("%s", (_, targetTags, expected) => {
+    const tools = [
+      new OCTool({ ...BASE, name: "target", tags: targetTags }),
+      new OCTool({
+        ...BASE,
+        name: "alias",
+        tags: ["recommended"],
+        deprecated: true,
+        meta: { alias_of: "target" },
+      }),
+      new OCTool({ ...BASE, name: "other", tags: ["recommended"] }),
+    ];
+    const selected = selectTools(
+      { allTools: () => tools },
+      {
+        tags: ["recommended"],
+      },
+    );
+    expect(selected.allTools().map((item) => item.name)).toEqual(expected);
+    const rules = validateProvider(selected).map((finding) => finding.rule);
+    expect(rules).not.toContain("alias_target_missing");
+  });
+
   it("rejects a bare string for validateTags", () => {
     expect(() => validateTags(mergeProviders(), { allowed: "custom" })).toThrow(
       OCToolError,

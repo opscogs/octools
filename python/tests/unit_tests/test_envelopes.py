@@ -417,28 +417,40 @@ def test_artifact_envelope_defaults():
 
 
 @pytest.mark.parametrize(
-    ("role", "dumped_ref"),
+    ("field", "value", "description"),
     [
-        (None, {"reference": "r", "media_type": "text/csv", "bytes": 1}),
         (
+            "role",
             "csv",
-            {"reference": "r", "media_type": "text/csv", "bytes": 1, "role": "csv"},
+            "What the artifact is to the run, such as csv, plan or summary.",
+        ),
+        (
+            "uri",
+            "demo://artifacts/0",
+            (
+                "Address a client can open to fetch the artifact; opaque to octools, "
+                "omitted when unset."
+            ),
         ),
     ],
 )
-def test_artifact_ref_role_is_dumped_only_when_set(role, dumped_ref):
-    ref = ArtifactRef(reference="r", media_type="text/csv", bytes=1, role=role)
+@pytest.mark.parametrize("unset", [False, True])
+def test_artifact_ref_optional_text_is_dumped_only_when_set(
+    field, value, description, unset
+):
+    base = {"reference": "r", "media_type": "text/csv", "bytes": 1}
+    ref = ArtifactRef(**base, **{field: None if unset else value})
     env = ArtifactEnvelope(artifact=ref, artifacts=[ref])
     dumped = env.model_dump(mode="json")
-    assert dumped["artifact"] == dumped["artifacts"][0] == dumped_ref
+    expected = base if unset else {**base, field: value}
+    assert dumped["artifact"] == dumped["artifacts"][0] == expected
     assert ArtifactEnvelope.model_validate(dumped) == env
-    assert read_envelope(ArtifactEnvelope, json.dumps(dumped)).artifact.role == role
-    prop = artifact_schema()["$defs"]["ArtifactRef"]["properties"]["role"]
+    read = read_envelope(ArtifactEnvelope, json.dumps(dumped)).artifact
+    assert getattr(read, field) == (None if unset else value)
+    prop = artifact_schema()["$defs"]["ArtifactRef"]["properties"][field]
     assert prop["anyOf"] == [{"type": "string"}, {"type": "null"}]
-    assert prop["description"] == (
-        "What the artifact is to the run, such as csv, plan or summary."
-    )
-    assert "role" not in VOCABULARY_FALLBACKS
+    assert prop["description"] == description
+    assert field not in VOCABULARY_FALLBACKS
 
 
 @pytest.mark.parametrize(("build", "model"), PAGED_ENVELOPES)
