@@ -1,0 +1,39 @@
+{
+  "description": "uri is kept when set and omitted when null.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120,
+        "uri": "demo://artifacts/0"
+      },
+      "artifacts": [
+        {
+          "reference": "mem://1.csv",
+          "media_type": "text/csv",
+          "bytes": 120,
+          "uri": null
+        }
+      ]
+    }
+  },
+  "expected": {
+    "artifact": {
+      "reference": "mem://0.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 120,
+      "uri": "demo://artifacts/0"
+    },
+    "artifacts": [
+      {
+        "reference": "mem://1.csv",
+        "media_type": "text/csv",
+        "bytes": 120
+      }
+    ],
+    "warnings": [],
+    "sensitivity": "inherits_input"
+  }
+}

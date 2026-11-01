@@ -19,7 +19,7 @@ from typing import Any, Literal, Protocol, get_args, runtime_checkable
 
 from octools.findings import Finding
 
-SPEC_VERSION = "1.2"
+SPEC_VERSION = "1.3"
 """Format version of the ``OCTool`` descriptor and the result envelopes.
 
 Readers check the major only. A minor bump adds only what a reader may drop
@@ -53,6 +53,8 @@ ACCESS_FALLBACK: Access = "remote"
 
 ``remote`` is the safer policy assumption.
 """
+ALIAS_OF_KEY = "alias_of"
+"""``meta`` key on a deprecated alias naming the tool it stands for."""
 
 
 class OCToolError(ValueError):
@@ -210,12 +212,20 @@ class _SelectedProvider:
     tags: frozenset[str]
 
     def all_tools(self) -> Sequence[OCTool]:
-        """Return the matching tools in the provider's order."""
-        return tuple(
+        """Return the matching tools in the provider's order, aliases pruned."""
+        matched = [
             tool
             for tool in self.provider.all_tools()
             if isinstance(tool, OCTool) and self.tags.intersection(tool.tags)
-        )
+        ]
+        names = {tool.name for tool in matched}
+        return tuple(tool for tool in matched if not _stranded(tool, names))
+
+
+def _stranded(tool: OCTool, names: set[str]) -> bool:
+    """Tell whether ``tool`` is a deprecated alias with no target in ``names``."""
+    alias = tool.meta.get(ALIAS_OF_KEY)
+    return tool.deprecated and isinstance(alias, str) and alias not in names
 
 
 def select_tools(provider: ToolProvider, *, tags: Iterable[str]) -> ToolProvider:
@@ -224,7 +234,9 @@ def select_tools(provider: ToolProvider, *, tags: Iterable[str]) -> ToolProvider
     A host calls this before converting, so it needs no consumer's ``meta``
     key: ``select_tools(merged, tags={"recommended"})``. Order is kept, and
     the result reads the underlying provider on every ``all_tools()`` call.
-    A bare string raises ``OCToolError``, since it would match by character.
+    A deprecated alias whose ``meta["alias_of"]`` target is not selected is
+    dropped, so the result passes ``validate_provider``. A bare string raises
+    ``OCToolError``, since it would match by character.
     """
     _require(not isinstance(tags, str), "tags must be an iterable of strings")
     return _SelectedProvider(provider, frozenset(tags))

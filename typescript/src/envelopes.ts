@@ -310,6 +310,8 @@ export interface ArtifactRef {
   height?: number;
   /** What the artifact is to the run, such as csv, plan or summary. */
   role?: string;
+  /** Address a client can open to fetch the artifact; opaque to octools. */
+  uri?: string;
 }
 
 /** An artifact reference as a strict parse accepts it. */
@@ -320,6 +322,7 @@ export interface ArtifactRefInput {
   width?: number | null | undefined;
   height?: number | null | undefined;
   role?: string | null | undefined;
+  uri?: string | null | undefined;
 }
 
 /** Result of a tool that produces a file rather than data to read. */
@@ -643,6 +646,14 @@ const artifactRefShape = {
     .nullable()
     .default(null)
     .describe("What the artifact is to the run, such as csv, plan or summary."),
+  uri: z
+    .string()
+    .nullable()
+    .default(null)
+    .describe(
+      "Address a client can open to fetch the artifact; opaque to octools, " +
+        "omitted when unset.",
+    ),
 };
 
 const ARTIFACT_REF_KEYS: ReadonlySet<string> = new Set(
@@ -661,6 +672,7 @@ export const ArtifactRef: z.ZodType<ArtifactRef, ArtifactRefInput> = z
     if (value.width !== null) out.width = value.width;
     if (value.height !== null) out.height = value.height;
     if (value.role !== null) out.role = value.role;
+    if (value.uri !== null) out.uri = value.uri;
     return out;
   })
   .meta({

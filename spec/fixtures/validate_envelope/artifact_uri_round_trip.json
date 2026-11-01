@@ -1,0 +1,30 @@
+{
+  "description": "A strict parse keeps uri and gives the same dump.",
+  "input": {
+    "model": "artifact",
+    "data": {
+      "artifact": {
+        "reference": "mem://0.svg",
+        "media_type": "image/svg+xml",
+        "bytes": 120,
+        "role": "summary",
+        "uri": "demo://artifacts/0"
+      },
+      "artifacts": [],
+      "warnings": [],
+      "sensitivity": "inherits_input"
+    }
+  },
+  "expected": {
+    "artifact": {
+      "reference": "mem://0.svg",
+      "media_type": "image/svg+xml",
+      "bytes": 120,
+      "role": "summary",
+      "uri": "demo://artifacts/0"
+    },
+    "artifacts": [],
+    "warnings": [],
+    "sensitivity": "inherits_input"
+  }
+}

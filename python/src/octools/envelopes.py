@@ -547,6 +547,12 @@ class ArtifactRef(_Envelope):
         exclude_if=_is_none,
         description="What the artifact is to the run, such as csv, plan or summary.",
     )
+    uri: str | None = Field(
+        default=None,
+        exclude_if=_is_none,
+        description="Address a client can open to fetch the artifact; opaque to "
+        "octools, omitted when unset.",
+    )
 
 
 class ArtifactEnvelope(_Envelope):

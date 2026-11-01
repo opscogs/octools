@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2026-11-01
+
+### Added 1.3.1
+
+- `ArtifactRef.uri`, an optional address a client can open to fetch the artifact, opaque to octools and omitted when unset, in Python, TypeScript and `spec/` (OCI-689) (CLI-UR-0004)
+
+### Changed 1.3.1
+
+- `SPEC_VERSION` is `"1.3"`; a consumer test pinning `"1.2"` must update (OCI-689)
+
+### Fixed 1.3.1
+
+- `select_tools` drops a deprecated alias whose `meta["alias_of"]` target is not selected, so the selection passes `validate_provider` (OCI-689) (OCSC-UR-0004)
+
 ## [1.3.0] - 2026-10-30
 
 ### Added 1.3.0

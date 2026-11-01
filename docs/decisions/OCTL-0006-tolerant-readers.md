@@ -1,7 +1,7 @@
 ---
 status: accepted
-version: 1.4.0
-date: 2026-10-30
+version: 1.5.0
+date: 2026-11-01
 decision-makers: OpsCogs maintainers
 ---
 
@@ -195,7 +195,10 @@ The compatibility contract for every release within a major:
   what the artifact is to the run, such as `csv`, `plan` or `summary`,
   left out of the dump when unset; it is not a closed vocabulary, so it
   has no fallback, and an `ArtifactRef` subclass uses it rather than a
-  field of its own. A consumer's own
+  field of its own. `ArtifactRef` also defines `uri`, an optional address a
+  client can open to fetch the artifact when `reference` is not one it can
+  resolve; the value is opaque to `octools`, left out of the dump when
+  unset, with no fallback. A consumer's own
   subclass fields use a consumer prefix
   (`<pkg>_...`) unless the field is being proposed upstream, and a subclass
   field that collides with a later `octools` field is the consumer's to
@@ -358,7 +361,8 @@ dump and schema rule, `warnings` on every envelope, the reserved names
 `role` and `source`, and `ArtifactRef.role` ship in octools 1.1.0 with
 `SPEC_VERSION` `"1.1"`, beside `stop_reason` and `resumable`
 ([OCTL-0002](./OCTL-0002-result-paging.md)). `source` ships in octools 1.3.0
-with `SPEC_VERSION` `"1.2"`.
+with `SPEC_VERSION` `"1.2"`. `ArtifactRef.uri` ships in octools 1.3.1 with
+`SPEC_VERSION` `"1.3"`.
 
 The published docs carry the contract (descriptor versioning section), the
 per-vocabulary fallback table, the reserved subclass field names, the

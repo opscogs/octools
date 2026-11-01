@@ -18,6 +18,7 @@ import type { JsonSchema } from "./internal/jsonSchema.js";
 import { strip } from "./internal/pytext.js";
 import {
   ACCESS_KINDS,
+  ALIAS_OF_KEY,
   type Access,
   NAME_RE,
   RESULT_KINDS,
@@ -282,8 +283,10 @@ export function mergeProviders(...providers: ToolProvider[]): ToolProvider {
  *
  * A host calls this before converting, so it needs no consumer's `meta` key:
  * `selectTools(merged, { tags: ["recommended"] })`. Order is kept, and the
- * result reads the underlying provider on every `allTools()` call. A bare
- * string throws {@link OCToolError}, since it would match by character.
+ * result reads the underlying provider on every `allTools()` call. A
+ * deprecated alias whose `meta["alias_of"]` target is not selected is dropped,
+ * so the result passes `validateProvider`. A bare string throws
+ * {@link OCToolError}, since it would match by character.
  */
 export function selectTools(
   provider: ToolProvider,
@@ -295,16 +298,23 @@ export function selectTools(
   );
   const tags = new Set(options.tags);
   return Object.freeze({
-    allTools: (): readonly OCTool[] =>
-      Object.freeze(
-        provider
-          .allTools()
-          .filter(
-            (tool) =>
-              tool instanceof OCTool && tool.tags.some((tag) => tags.has(tag)),
-          ),
-      ),
+    allTools: (): readonly OCTool[] => {
+      const matched = provider
+        .allTools()
+        .filter(
+          (tool): tool is OCTool =>
+            tool instanceof OCTool && tool.tags.some((tag) => tags.has(tag)),
+        );
+      const names = new Set(matched.map((tool) => tool.name));
+      return Object.freeze(matched.filter((tool) => !stranded(tool, names)));
+    },
   });
+}
+
+/** True when `tool` is a deprecated alias whose target is not in `names`. */
+function stranded(tool: OCTool, names: ReadonlySet<string>): boolean {
+  const alias = tool.meta[ALIAS_OF_KEY];
+  return tool.deprecated && typeof alias === "string" && !names.has(alias);
 }
 
 /** Return the type of a listed item that is not an `OCTool`, for a message. */
