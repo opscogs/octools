@@ -1,7 +1,7 @@
 ---
 status: accepted
-version: 1.2.0
-date: 2026-10-30
+version: 1.3.0
+date: 2026-11-09
 decision-makers: OpsCogs maintainers
 ---
 
@@ -62,10 +62,12 @@ The descriptor is the `OCTool` dataclass:
 - MCP vocabulary: `name`, optional `title`, `description`, `input_schema`,
   `output_schema`, and `read_only_hint`, `destructive_hint`,
   `idempotent_hint`.
-- `name` matches `^[a-z][a-z0-9_]{0,47}$` (`NAME_RE`). Forty-eight
-  characters leave room for a runtime prefix (`name_prefix` on the
-  converters) under the tightest common tool-name limit, 64 characters. The
-  converters check the prefixed name against each target's own rule: MCP's
+- `name` matches `^[a-z][a-z0-9_]{0,47}$` (`NAME_RE`). The 48 characters
+  count the provider's namespace, which `prefix_tools` applies at
+  publication ([OCTL-0010](./OCTL-0010-provider-namespaces.md)); the 16 to
+  the tightest common tool-name limit, 64 characters, stay for the prefix an
+  agent host adds when it routes to a server. The converters' `name_prefix`
+  concatenates and checks the result against each target's own rule: MCP's
   `^[A-Za-z0-9_.-]{1,128}$` and Anthropic's `^[a-zA-Z0-9_-]{1,128}$`.
 - `description` is two to four sentences.
 - Input schemas are strict-clean; `strict_clean` reports anything outside

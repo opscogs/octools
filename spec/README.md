@@ -46,14 +46,14 @@ The directory names the operation; `input` holds its arguments as JSON and
   when unset, `resumable` only when `truncated` is true).
 - **Errors** are data: `{"error": "<code>"}`.
 
-| Error code           | Raised when                                                    |
-| -------------------- | -------------------------------------------------------------- |
-| `invalid_descriptor` | a descriptor fails construction                                |
-| `invalid_name`       | a converted name, prefix included, breaks the target's pattern |
-| `invalid_envelope`   | an envelope fails parsing, strict or tolerant                  |
-| `invalid_style`      | a listing style is outside `LISTING_STYLES`                    |
-| `invalid_format`     | a converter id is outside `TOOL_FORMATS`                       |
-| `invalid_column`     | an override names a column the model does not have             |
+| Error code           | Raised when                                                                |
+| -------------------- | -------------------------------------------------------------------------- |
+| `invalid_descriptor` | a descriptor fails construction                                            |
+| `invalid_name`       | a converted or prefixed name, prefix included, breaks the target's pattern |
+| `invalid_envelope`   | an envelope fails parsing, strict or tolerant                              |
+| `invalid_style`      | a listing style is outside `LISTING_STYLES`                                |
+| `invalid_format`     | a converter id is outside `TOOL_FORMATS`                                   |
+| `invalid_column`     | an override names a column the model does not have                         |
 
 Operations and their `input` keys:
 
@@ -70,6 +70,8 @@ Operations and their `input` keys:
 | `convert_tool`                            | `tool`, `format`, optional `name_prefix`                                                                                    | the converted tool              |
 | `select_tools`                            | `tools`, `tags`                                                                                                             | the selected listing's names    |
 | `validate_tags`                           | `tools`, optional `allowed`                                                                                                 | findings                        |
+| `validate_namespace`                      | `tools`, `namespace`                                                                                                        | findings                        |
+| `prefix_tools`                            | `tools`, `name_prefix`                                                                                                      | the prefixed descriptors        |
 | `tabular_from_models`                     | `fields` (`name`, `type`, optional `description`, `nullable`), `items`, optional `column_kinds`, `truncated`, `next_cursor` | the envelope                    |
 | `strict_clean`                            | `schema`                                                                                                                    | findings                        |
 | `strip_keys`                              | `schema`, optional `keys`, `prefixes`                                                                                       | the schema                      |

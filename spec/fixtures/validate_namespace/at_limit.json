@@ -1,0 +1,19 @@
+{
+  "description": "A namespace of 16 characters, digits after the first, is accepted.",
+  "input": {
+    "tools": [
+      {
+        "name": "abcdefghijklmno9_get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "namespace": "abcdefghijklmno9"
+  },
+  "expected": []
+}

@@ -16,7 +16,11 @@ from octools import (
     check_tool_listing,
     example,
     merge_providers,
+    prefix_tools,
     select_tools,
+    to_anthropic_tool,
+    to_mcp_tool,
+    validate_namespace,
     validate_provider,
     validate_tags,
 )
@@ -274,3 +278,56 @@ def test_validate_tags_rejects_a_bare_string():
 def test_select_tools_rejects_a_bare_string():
     with pytest.raises(OCToolError, match="iterable of strings"):
         select_tools(merge_providers(), tags="recommended")
+
+
+def test_select_tools_drops_a_chain_of_aliases_without_its_root():
+    root = dataclasses.replace(ECHO_RECORDS, tags=("advanced",))
+    old = dataclasses.replace(ECHO_ALIAS, tags=("recommended",))
+    older = dataclasses.replace(old, name="older_echo", meta={"alias_of": "echo"})
+
+    class Listing:
+        def all_tools(self):
+            return (older, root, old)
+
+    selected = select_tools(Listing(), tags={"recommended"})
+    assert selected.all_tools() == ()
+    assert validate_provider(selected) == []
+
+
+def test_prefix_tools_keeps_each_func_and_is_idempotent():
+    once = prefix_tools(TOOLS, "demo_")
+    assert [tool.func for tool in once] == [tool.func for tool in TOOLS]
+    assert prefix_tools(once, "demo_") == once
+    assert validate_namespace(_Fixed(once), "demo") == []
+    assert validate_provider(_Fixed(once)) == []
+
+
+def test_prefix_tools_round_trips_both_converters():
+    for tool in prefix_tools(TOOLS, "demo_"):
+        assert to_mcp_tool(tool)["name"] == tool.name
+        assert to_anthropic_tool(tool)["name"] == tool.name
+
+
+def test_prefix_tools_leaves_the_source_untouched():
+    schema = {
+        "type": "object",
+        "properties": {"q": {"type": "string", "description": "See echo."}},
+        "additionalProperties": False,
+    }
+    tools = (make(name="echo", input_schema=schema), make(name="other"))
+    (prefixed, _) = prefix_tools(tools, "demo_")
+    assert prefixed.input_schema["properties"]["q"]["description"] == "See demo_echo."
+    assert schema["properties"]["q"]["description"] == "See echo."
+
+
+def test_prefix_tools_rejects_an_item_that_is_not_a_tool():
+    with pytest.raises(OCToolError, match="not an OCTool"):
+        prefix_tools([ECHO_RECORDS, "echo"], "demo_")
+
+
+class _Fixed:
+    def __init__(self, tools):
+        self.tools = tuple(tools)
+
+    def all_tools(self):
+        return self.tools

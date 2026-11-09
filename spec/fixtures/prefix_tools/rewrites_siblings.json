@@ -1,0 +1,130 @@
+{
+  "description": "Every tool is renamed, and each whole-word sibling name in a description or an input-schema description is rewritten; data keywords, longer words and non-siblings stay.",
+  "input": {
+    "tools": [
+      {
+        "name": "list_tables",
+        "description": "List every table in the catalog. Use describe_table for one table's columns.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "describe_table",
+        "description": "Return one table's columns. Call `list_tables` first to find the name.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "string",
+              "description": "A name from list_tables, not from describe_tables."
+            },
+            "default": {
+              "type": "string",
+              "description": "Shown when list_tables has no match."
+            },
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "A column describe_table returns."
+              },
+              "default": ["list_tables"]
+            },
+            "mode": {
+              "enum": ["list_tables", "describe_table"],
+              "default": {
+                "description": "list_tables"
+              }
+            }
+          },
+          "required": ["table", "default", "columns", "mode"],
+          "additionalProperties": false,
+          "$defs": {
+            "description": {
+              "type": "string",
+              "description": "See describe_table."
+            }
+          }
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_list_tables",
+      "description": "List every table in the catalog. Use acme_describe_table for one table's columns.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_describe_table",
+      "description": "Return one table's columns. Call `acme_list_tables` first to find the name.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "table": {
+            "type": "string",
+            "description": "A name from acme_list_tables, not from describe_tables."
+          },
+          "default": {
+            "type": "string",
+            "description": "Shown when acme_list_tables has no match."
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "A column acme_describe_table returns."
+            },
+            "default": ["list_tables"]
+          },
+          "mode": {
+            "enum": ["list_tables", "describe_table"],
+            "default": {
+              "description": "list_tables"
+            }
+          }
+        },
+        "required": ["table", "default", "columns", "mode"],
+        "additionalProperties": false,
+        "$defs": {
+          "description": {
+            "type": "string",
+            "description": "See acme_describe_table."
+          }
+        }
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

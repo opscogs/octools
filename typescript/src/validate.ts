@@ -23,6 +23,7 @@ import {
   MAX_SENTENCES,
   MIN_SENTENCES,
   NAME_RE,
+  NAMESPACE_RE,
   SCHEMA_ESCAPE_KEY,
   TOOL_TAGS,
 } from "./vocabulary.js";
@@ -162,6 +163,52 @@ export function validateProvider(provider: ToolProvider): Finding[] {
     }
   });
   return findings;
+}
+
+/**
+ * Report a missing or malformed namespace, or names outside it.
+ *
+ * `namespace_missing` when `namespace` is empty; `namespace_pattern` when it
+ * does not match {@link NAMESPACE_RE}; either one stops the check. Otherwise
+ * `name_outside_namespace` for each tool whose name does not start with
+ * `<namespace>_`. Opt-in, like `validateTags`, so `validateProvider` stays
+ * unchanged. Items that are not tools are `validateProvider`'s to report.
+ */
+export function validateNamespace(
+  provider: ToolProvider,
+  namespace: string,
+): Finding[] {
+  if (namespace === "") {
+    return [
+      new Finding({
+        rule: "namespace_missing",
+        message: "no namespace is declared",
+      }),
+    ];
+  }
+  if (!NAMESPACE_RE.test(namespace)) {
+    return [
+      new Finding({
+        rule: "namespace_pattern",
+        message: `namespace ${JSON.stringify(namespace)} must match ${NAMESPACE_RE.source}`,
+      }),
+    ];
+  }
+  const prefix = `${namespace}_`;
+  const items: readonly unknown[] = provider.allTools();
+  return items
+    .filter(
+      (item): item is OCTool =>
+        item instanceof OCTool && !item.name.startsWith(prefix),
+    )
+    .map(
+      (tool) =>
+        new Finding({
+          rule: "name_outside_namespace",
+          message: `name does not start with ${JSON.stringify(prefix)}`,
+          tool: tool.name,
+        }),
+    );
 }
 
 /** Options {@link validateTags} takes. */

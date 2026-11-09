@@ -8,7 +8,11 @@ import {
   type ToolProvider,
   checkToolListing,
   mergeProviders,
+  prefixTools,
   selectTools,
+  toAnthropicTool,
+  toMcpTool,
+  validateNamespace,
   validateProvider,
   validateTags,
 } from "../src/index.js";
@@ -173,6 +177,75 @@ describe("selectTools", () => {
   it("rejects a bare string", () => {
     expect(() =>
       selectTools(mergeProviders(), { tags: "recommended" }),
+    ).toThrow(OCToolError);
+  });
+});
+
+describe("selectTools alias chains", () => {
+  it("drops an alias of a dropped alias", () => {
+    const tools = [
+      new OCTool({
+        ...BASE,
+        name: "older",
+        tags: ["recommended"],
+        deprecated: true,
+        meta: { alias_of: "old" },
+      }),
+      new OCTool({ ...BASE, name: "root", tags: ["advanced"] }),
+      new OCTool({
+        ...BASE,
+        name: "old",
+        tags: ["recommended"],
+        deprecated: true,
+        meta: { alias_of: "root" },
+      }),
+    ];
+    const selected = selectTools(listing(...tools), { tags: ["recommended"] });
+    expect(selected.allTools()).toEqual([]);
+    expect(validateProvider(selected)).toEqual([]);
+  });
+});
+
+describe("prefixTools", () => {
+  const func = (): Record<string, never> => ({});
+  const outputSchema = BASE.inputSchema;
+  const tools = [
+    new OCTool({
+      ...BASE,
+      name: "get_rows",
+      func,
+      title: "Rows",
+      outputSchema,
+    }),
+    new OCTool({
+      ...BASE,
+      name: "fetch_rows",
+      outputSchema,
+      description: "Return rows. Use get_rows instead.",
+      deprecated: true,
+      meta: { alias_of: "get_rows" },
+    }),
+  ];
+
+  it("keeps each func, is idempotent and conforms", () => {
+    const once = prefixTools(tools, "demo_");
+    expect(Object.isFrozen(once)).toBe(true);
+    expect(once.map((tool) => tool.func)).toEqual(
+      tools.map((tool) => tool.func),
+    );
+    expect(once[0]?.title).toBe("Rows");
+    expect(prefixTools(once, "demo_")).toEqual(once);
+    expect(validateNamespace(listing(...once), "demo")).toEqual([]);
+    expect(validateProvider(listing(...once))).toEqual([]);
+    for (const tool of once) {
+      expect(toMcpTool(tool)["name"]).toBe(tool.name);
+      expect(toAnthropicTool(tool)["name"]).toBe(tool.name);
+    }
+  });
+
+  it("rejects an item that is not a tool", () => {
+    expect(() =>
+      prefixTools(["get_rows"] as unknown as OCTool[], "demo_"),
     ).toThrow(OCToolError);
   });
 });

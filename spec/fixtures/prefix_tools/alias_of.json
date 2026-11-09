@@ -1,0 +1,78 @@
+{
+  "description": "A deprecated alias keeps pointing at its target under the prefixed name.",
+  "input": {
+    "tools": [
+      {
+        "name": "get_rows",
+        "description": "Return rows of one table. Prefer it over fetch_rows.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "fetch_rows",
+        "description": "Return rows of one table. Use get_rows instead.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "deprecated": true,
+        "meta": {
+          "alias_of": "get_rows",
+          "since": "1.0"
+        }
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_get_rows",
+      "description": "Return rows of one table. Prefer it over acme_fetch_rows.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_fetch_rows",
+      "description": "Return rows of one table. Use acme_get_rows instead.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": true,
+      "meta": {
+        "alias_of": "acme_get_rows",
+        "since": "1.0"
+      },
+      "tags": []
+    }
+  ]
+}

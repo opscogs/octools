@@ -1,0 +1,35 @@
+{
+  "description": "A namespace with an uppercase letter is one finding, and names are not checked.",
+  "input": {
+    "tools": [
+      {
+        "name": "demo_get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "demo_list_tables",
+        "description": "List every table. Use it first.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "namespace": "Demo"
+  },
+  "expected": [
+    {
+      "rule": "namespace_pattern",
+      "tool": null,
+      "path": null
+    }
+  ]
+}

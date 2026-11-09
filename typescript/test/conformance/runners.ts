@@ -28,6 +28,7 @@ import {
   convertTool,
   countSentences,
   mergeProviders,
+  prefixTools,
   readEnvelope,
   renderListing,
   renderMarkdownTable,
@@ -40,6 +41,7 @@ import {
   tabularFromModels,
   toAnthropicTool,
   toMcpTool,
+  validateNamespace,
   validateProvider,
   validateTabular,
   validateTags,
@@ -112,6 +114,18 @@ function convert(
     return converter(tool, {
       namePrefix: input["name_prefix"] as string | undefined,
     });
+  } catch (error) {
+    if (error instanceof OCToolError) {
+      throw new FixtureError("invalid_name");
+    }
+    throw error;
+  }
+}
+
+function prefixed(input: Record<string, unknown>): unknown {
+  const tools = (input["tools"] as Record<string, unknown>[]).map(buildTool);
+  try {
+    return prefixTools(tools, input["name_prefix"] as string).map(descriptor);
   } catch (error) {
     if (error instanceof OCToolError) {
       throw new FixtureError("invalid_name");
@@ -223,6 +237,8 @@ export const RUNNERS: Readonly<Record<string, Runner>> = {
     selectTools(provider(input), { tags: input["tags"] as string[] })
       .allTools()
       .map((tool) => tool.name),
+  validate_namespace: (input) =>
+    findings(validateNamespace(provider(input), input["namespace"] as string)),
   validate_provider: (input) => findings(validateProvider(provider(input))),
   validate_tags: (input) =>
     findings(
@@ -246,6 +262,7 @@ export const RUNNERS: Readonly<Record<string, Runner>> = {
       prefixes: (input["prefixes"] as string[] | undefined) ?? [],
     }),
   strip_titles: (input) => stripTitles(input["schema"] as JsonSchema),
+  prefix_tools: prefixed,
   read_envelope: (input) => envelope(input, true),
   validate_envelope: (input) => envelope(input, false),
   validate_tabular: (input) =>

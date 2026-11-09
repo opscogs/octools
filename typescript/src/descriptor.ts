@@ -285,7 +285,8 @@ export function mergeProviders(...providers: ToolProvider[]): ToolProvider {
  * `selectTools(merged, { tags: ["recommended"] })`. Order is kept, and the
  * result reads the underlying provider on every `allTools()` call. A
  * deprecated alias whose `meta["alias_of"]` target is not selected is dropped,
- * so the result passes `validateProvider`. A bare string throws
+ * and so is an alias of a dropped alias, until every kept alias names a kept
+ * tool, so the result passes `validateProvider`. A target is never pulled in. A bare string throws
  * {@link OCToolError}, since it would match by character.
  */
 export function selectTools(
@@ -299,14 +300,19 @@ export function selectTools(
   const tags = new Set(options.tags);
   return Object.freeze({
     allTools: (): readonly OCTool[] => {
-      const matched = provider
+      let matched = provider
         .allTools()
         .filter(
           (tool): tool is OCTool =>
             tool instanceof OCTool && tool.tags.some((tag) => tags.has(tag)),
         );
-      const names = new Set(matched.map((tool) => tool.name));
-      return Object.freeze(matched.filter((tool) => !stranded(tool, names)));
+      let kept = matched;
+      do {
+        matched = kept;
+        const names = new Set(matched.map((tool) => tool.name));
+        kept = matched.filter((tool) => !stranded(tool, names));
+      } while (kept.length !== matched.length);
+      return Object.freeze(kept);
     },
   });
 }
@@ -315,6 +321,146 @@ export function selectTools(
 function stranded(tool: OCTool, names: ReadonlySet<string>): boolean {
   const alias = tool.meta[ALIAS_OF_KEY];
   return tool.deprecated && typeof alias === "string" && !names.has(alias);
+}
+
+/** Schema keywords whose values are instance data, never rewritten. */
+const DATA_KEYWORDS: ReadonlySet<string> = new Set([
+  "const",
+  "default",
+  "enum",
+  "examples",
+]);
+/** Schema keywords whose keys are names and whose values are schemas. */
+const NAME_MAPS: ReadonlySet<string> = new Set([
+  "$defs",
+  "definitions",
+  "dependentSchemas",
+  "patternProperties",
+  "properties",
+]);
+
+/** Return a copy of schema `node` with every `description` rewritten. */
+function rewriteSchema(
+  node: unknown,
+  rewrite: (text: string) => string,
+): unknown {
+  if (Array.isArray(node)) {
+    return node.map((sub) => rewriteSchema(sub, rewrite));
+  }
+  if (!isObject(node)) {
+    return node;
+  }
+  return Object.fromEntries(
+    Object.entries(node).map(([key, value]) => {
+      if (key === "description" && typeof value === "string") {
+        return [key, rewrite(value)];
+      }
+      if (NAME_MAPS.has(key) && isObject(value)) {
+        return [
+          key,
+          Object.fromEntries(
+            Object.entries(value).map(([name, sub]) => [
+              name,
+              rewriteSchema(sub, rewrite),
+            ]),
+          ),
+        ];
+      }
+      return [
+        key,
+        DATA_KEYWORDS.has(key) ? value : rewriteSchema(value, rewrite),
+      ];
+    }),
+  );
+}
+
+/**
+ * Return a function replacing each whole-word key of `renames` in text.
+ *
+ * A word is a run of ASCII letters, digits and underscores, so an occurrence
+ * inside a longer name (`demo_get_rows`, `get_rows_all`) is left alone.
+ */
+function renamer(
+  renames: ReadonlyMap<string, string>,
+): (text: string) => string {
+  const changed = [...renames]
+    .filter(([from, to]) => from !== to)
+    .map(([from]) => from)
+    .sort((a, b) => b.length - a.length);
+  if (changed.length === 0) {
+    return (text) => text;
+  }
+  // Tool names match NAME_RE, so they hold no RegExp metacharacter.
+  const pattern = new RegExp(
+    `(?<![A-Za-z0-9_])(?:${changed.join("|")})(?![A-Za-z0-9_])`,
+    "g",
+  );
+  return (text) => text.replace(pattern, (word) => String(renames.get(word)));
+}
+
+/** Return `name` with `namePrefix` prepended unless it already starts so. */
+function withPrefix(name: string, namePrefix: string): string {
+  return name.startsWith(namePrefix) ? name : `${namePrefix}${name}`;
+}
+
+/**
+ * Return copies of `tools` published under `namePrefix`.
+ *
+ * Each copy keeps its own `func`; a name already starting with `namePrefix`
+ * is kept, so applying the prefix twice changes nothing.
+ * `meta["alias_of"]` is prefixed the same way. Every whole-word occurrence
+ * of a sibling's name, in `description` and in any `description` of
+ * `inputSchema` (instance data such as `enum` and `default` excepted),
+ * becomes the sibling's published name; an occurrence already prefixed and
+ * words that name no sibling stay as they are. A prefixed name that breaks
+ * {@link NAME_RE}, or an item that is not an `OCTool`, throws
+ * {@link OCToolError}. A host dispatches by the returned descriptors' names.
+ */
+export function prefixTools(
+  tools: Iterable<OCTool>,
+  namePrefix: string,
+): readonly OCTool[] {
+  const listed: readonly unknown[] = [...tools];
+  for (const item of listed) {
+    ensure(item instanceof OCTool, `${typeName(item)} is not an OCTool`);
+  }
+  const octools = listed as readonly OCTool[];
+  const names = octools.map((tool) => withPrefix(tool.name, namePrefix));
+  const renames = new Map(
+    octools.map((tool, index) => [tool.name, String(names[index])]),
+  );
+  for (const name of names) {
+    ensure(
+      NAME_RE.test(name),
+      `tool name ${show(name)} does not match ${NAME_RE.source}`,
+    );
+  }
+  const rename = renamer(renames);
+  return Object.freeze(
+    octools.map((tool, index) => {
+      const alias = tool.meta[ALIAS_OF_KEY];
+      return new OCTool({
+        name: String(names[index]),
+        func: tool.func,
+        access: tool.access,
+        target: tool.target,
+        outputSchema: tool.outputSchema,
+        resultKind: tool.resultKind,
+        title: tool.title,
+        readOnlyHint: tool.readOnlyHint,
+        destructiveHint: tool.destructiveHint,
+        idempotentHint: tool.idempotentHint,
+        deprecated: tool.deprecated,
+        tags: tool.tags,
+        description: rename(tool.description),
+        inputSchema: rewriteSchema(tool.inputSchema, rename) as JsonSchema,
+        meta:
+          typeof alias === "string"
+            ? { ...tool.meta, [ALIAS_OF_KEY]: withPrefix(alias, namePrefix) }
+            : tool.meta,
+      });
+    }),
+  );
 }
 
 /** Return the type of a listed item that is not an `OCTool`, for a message. */

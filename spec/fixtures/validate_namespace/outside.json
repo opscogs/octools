@@ -1,0 +1,51 @@
+{
+  "description": "Each tool whose name lacks the namespace and an underscore is one finding; an item that is not a tool is skipped.",
+  "input": {
+    "tools": [
+      {
+        "name": "demo_get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "other_get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "demolist_tables",
+        "description": "List every table. Use it first.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      "foreign"
+    ],
+    "namespace": "demo"
+  },
+  "expected": [
+    {
+      "rule": "name_outside_namespace",
+      "tool": "other_get_rows",
+      "path": null
+    },
+    {
+      "rule": "name_outside_namespace",
+      "tool": "demolist_tables",
+      "path": null
+    }
+  ]
+}

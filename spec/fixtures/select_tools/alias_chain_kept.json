@@ -1,0 +1,61 @@
+{
+  "description": "A chain of aliases whose root is selected keeps every alias.",
+  "input": {
+    "tools": [
+      {
+        "name": "purge_items",
+        "description": "Remove the queued items. Use it after a review.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"]
+      },
+      {
+        "name": "old_purge",
+        "description": "Remove the queued items. Use it after a review.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"],
+        "deprecated": true,
+        "meta": {
+          "alias_of": "purge_items"
+        }
+      },
+      {
+        "name": "older_purge",
+        "description": "Remove the queued items. Use it after a review.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"],
+        "deprecated": true,
+        "meta": {
+          "alias_of": "old_purge"
+        }
+      },
+      {
+        "name": "list_items",
+        "description": "Remove the queued items. Use it after a review.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "tags": ["recommended"]
+      }
+    ],
+    "tags": ["recommended"]
+  },
+  "expected": ["purge_items", "old_purge", "older_purge", "list_items"]
+}

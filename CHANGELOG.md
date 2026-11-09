@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - Unreleased
+
+### Added 1.4.0
+
+- `prefix_tools` publishes tools under a prefix, idempotently, keeping each `func`, prefixing `meta["alias_of"]` and rewriting whole-word sibling names in descriptions and input-schema descriptions, per OCTL-0010 (OCI-709) (OCNT-UR-0164)
+- `NAMESPACE_RE` and the opt-in `validate_namespace`, reporting `namespace_missing`, `namespace_pattern` and `name_outside_namespace`, per OCTL-0010 (OCI-709)
+
+### Fixed 1.4.0
+
+- `select_tools` also drops a deprecated alias of a dropped alias, so a chain of aliases whose root is not selected passes `validate_provider` (OCI-709) (OCSC-UR-0009)
+
 ## [1.3.1] - 2026-11-01
 
 ### Added 1.3.1

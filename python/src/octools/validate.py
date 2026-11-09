@@ -14,6 +14,7 @@ from dataclasses import replace
 from octools.descriptor import (
     ALIAS_OF_KEY,
     NAME_RE,
+    NAMESPACE_RE,
     TOOL_TAGS,
     OCTool,
     OCToolError,
@@ -187,12 +188,44 @@ def validate_tags(
     ]
 
 
+def validate_namespace(provider: ToolProvider, namespace: str) -> list[Finding]:
+    """Report a missing or malformed namespace, or names outside it.
+
+    ``namespace_missing`` when ``namespace`` is empty; ``namespace_pattern``
+    when it does not match ``NAMESPACE_RE``; either one stops the check.
+    Otherwise ``name_outside_namespace`` for each tool whose name does not
+    start with ``<namespace>_``. Opt-in, like ``validate_tags``, so
+    ``validate_provider`` stays unchanged. Items that are not tools are
+    ``validate_provider``'s to report.
+    """
+    if not namespace:
+        return [Finding(rule="namespace_missing", message="no namespace is declared")]
+    if not NAMESPACE_RE.fullmatch(namespace):
+        return [
+            Finding(
+                rule="namespace_pattern",
+                message=f"namespace {namespace!r} must match {NAMESPACE_RE.pattern}",
+            )
+        ]
+    prefix = f"{namespace}_"
+    return [
+        Finding(
+            rule="name_outside_namespace",
+            message=f"name does not start with {prefix!r}",
+            tool=tool.name,
+        )
+        for tool in provider.all_tools()
+        if isinstance(tool, OCTool) and not tool.name.startswith(prefix)
+    ]
+
+
 __all__ = [
     "ALIAS_OF_KEY",
     "MAX_SENTENCES",
     "MIN_SENTENCES",
     "SCHEMA_ESCAPE_KEY",
     "count_sentences",
+    "validate_namespace",
     "validate_provider",
     "validate_tags",
     "validate_tool",
