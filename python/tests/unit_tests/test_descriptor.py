@@ -341,6 +341,32 @@ def test_prefix_tools_rewrites_a_one_word_name_only_in_code(text, expected):
     assert prefix_tools(tools, "demo")[0].description == expected
 
 
+def test_prefix_tools_rewrites_only_descriptions():
+    schema = {
+        "type": "object",
+        "title": "get_rows input",
+        "properties": {
+            "q": {"type": "string", "title": "get_rows", "description": "See get_rows."}
+        },
+        "additionalProperties": False,
+    }
+    tool = make(
+        name="get_rows",
+        title="Like get_rows",
+        input_schema=schema,
+        meta={"alias_of": "get_rows", "note": "see get_rows"},
+    )
+    (published,) = prefix_tools([tool], "demo")
+    assert published.title == "Like get_rows"
+    assert published.meta == {"alias_of": "demo_get_rows", "note": "see get_rows"}
+    assert published.input_schema["title"] == "get_rows input"
+    assert published.input_schema["properties"]["q"] == {
+        "type": "string",
+        "title": "get_rows",
+        "description": "See demo_get_rows.",
+    }
+
+
 @pytest.mark.parametrize("names", [("get_rows", "demo_get_rows"), ("echo", "echo")])
 def test_prefix_tools_names_both_sources_of_a_collision(names):
     tools = [make(name=name) for name in names]

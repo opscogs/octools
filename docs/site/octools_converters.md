@@ -88,8 +88,11 @@ host registers and dispatches by the names the agent sees.
   span, between single backticks, so "ping the server" stays as written and
   `` `ping` `` becomes `` `acme_ping` ``. Write a one-word sibling name in
   backticks.
-- Instance data (`const`, `default`, `enum`, `examples`) and property names
-  are never rewritten.
+- Only descriptions are rewritten: the tool's `description` and every
+  `description` in its input and output schemas. Titles, schema `title`
+  keywords, instance data (`const`, `default`, `enum`, `examples`), property
+  names and `meta` values other than `alias_of` are not; rename a sibling
+  named there yourself.
 - A published name that breaks `NAME_RE` raises `OCToolError`, and so do two
   tools that would publish under one name (`get_rows` and `acme_get_rows`).
 

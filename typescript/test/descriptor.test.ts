@@ -273,6 +273,45 @@ describe("prefixTools", () => {
     },
   );
 
+  it("rewrites only descriptions", () => {
+    const tool = new OCTool({
+      ...BASE,
+      name: "get_rows",
+      title: "Like get_rows",
+      inputSchema: {
+        type: "object",
+        title: "get_rows input",
+        properties: {
+          q: {
+            type: "string",
+            title: "get_rows",
+            description: "See get_rows.",
+          },
+        },
+        additionalProperties: false,
+      },
+      meta: { alias_of: "get_rows", note: "see get_rows" },
+    });
+    const [published] = prefixTools([tool], "demo");
+    expect(published?.title).toBe("Like get_rows");
+    expect(published?.meta).toEqual({
+      alias_of: "demo_get_rows",
+      note: "see get_rows",
+    });
+    expect(published?.inputSchema).toEqual({
+      type: "object",
+      title: "get_rows input",
+      properties: {
+        q: {
+          type: "string",
+          title: "get_rows",
+          description: "See demo_get_rows.",
+        },
+      },
+      additionalProperties: false,
+    });
+  });
+
   it("rejects an item that is not a tool", () => {
     expect(() =>
       prefixTools(["get_rows"] as unknown as OCTool[], "demo_"),

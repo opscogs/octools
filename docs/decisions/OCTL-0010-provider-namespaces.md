@@ -68,9 +68,15 @@ renamed descriptors.
     publication.
   - An empty prefix renames nothing. A malformed prefix (`demo-`, `_`)
     yields names that break `NAME_RE` and raises `OCToolError`.
-  - `meta["alias_of"]` is prefixed the same way.
-  - Every whole-word reference to a sibling in `description` and in any
-    `description` inside `input_schema` or `output_schema` becomes the
+  - `meta["alias_of"]` is prefixed the same way, as a name, not rewritten as
+    text.
+  - Sibling references are rewritten in exactly three places: the tool's
+    `description`, every `description` inside `input_schema`, and every
+    `description` inside `output_schema`. Nothing else is rewritten: not the
+    tool's `title`, not schema `title` keywords, not instance data or
+    property keys, and not `meta` values other than `alias_of`. A provider
+    that names a sibling anywhere else renames it there itself.
+  - Every whole-word reference to a sibling in those descriptions becomes the
     sibling's published name. A reference is the sibling's listed name or,
     for a sibling already published, its bare form (`get_rows` for
     `demo_get_rows`), so a listing that mixes published and bare tools,
@@ -123,8 +129,8 @@ renamed descriptors.
 - Bad: a name is rewritten only where it stands as a whole word; a sibling
   named in prose by another spelling (`describe table`) is not found.
 - Bad: rewriting is limited to descriptions; a sibling named in an `enum` of
-  tool names, or in `title`, stays unprefixed, and the provider publishes
-  that value itself.
+  tool names, in a `title`, or in a `meta` value stays unprefixed, and the
+  provider publishes that value itself.
 
 ### Confirmation
 
