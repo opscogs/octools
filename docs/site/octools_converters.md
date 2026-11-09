@@ -66,13 +66,15 @@ host registers and dispatches by the names the agent sees.
     const anthropicTools = published.map((tool) => toAnthropicTool(tool));
     ```
 
+- A prefix without a trailing underscore gets one, so `"acme"` and `"acme_"`
+  give the same names.
 - A name that already starts with the prefix is kept, so applying it twice
   changes nothing, and a host prefix equal to the provider's namespace is a
   no-op.
 - `meta["alias_of"]` is prefixed the same way, so a deprecated alias still
   names its target.
 - Each whole-word occurrence of a sibling's name in `description`, and in any
-  `description` inside `input_schema`, becomes the sibling's published name:
+  `description` inside `input_schema` or `output_schema`, becomes the sibling's published name:
   "use `describe_table` for one table's columns" becomes "use
   `acme_describe_table` ...". A word is a run of letters, digits and
   underscores, so an occurrence already prefixed, or part of a longer name, is

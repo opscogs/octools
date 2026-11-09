@@ -306,17 +306,20 @@ def _with_prefix(name: str, name_prefix: str) -> str:
 def prefix_tools(tools: Iterable[OCTool], name_prefix: str) -> tuple[OCTool, ...]:
     """Return copies of ``tools`` published under ``name_prefix``.
 
-    Each copy keeps its own ``func``; a name already starting with
-    ``name_prefix`` is kept, so applying the prefix twice changes nothing.
-    ``meta["alias_of"]`` is prefixed the same way. Every whole-word
+    A prefix without a trailing underscore gets one, so ``"demo"`` and
+    ``"demo_"`` are the same prefix. Each copy keeps its own ``func``; a name
+    already starting with the prefix is kept, so applying it twice changes
+    nothing. ``meta["alias_of"]`` is prefixed the same way. Every whole-word
     occurrence of a sibling's name, in ``description`` and in any
-    ``description`` of ``input_schema`` (instance data such as ``enum`` and
-    ``default`` excepted), becomes the sibling's published name; an
-    occurrence already prefixed and words that name no sibling stay as they
-    are. A prefixed name that breaks ``NAME_RE``, or an item that is not an
-    ``OCTool``, raises ``OCToolError``. A host dispatches by the returned
-    descriptors' names.
+    ``description`` of ``input_schema`` or ``output_schema`` (instance data
+    such as ``enum`` and ``default`` excepted), becomes the sibling's
+    published name; an occurrence already prefixed and words that name no
+    sibling stay as they are. A prefixed name that breaks ``NAME_RE``, or an
+    item that is not an ``OCTool``, raises ``OCToolError``. A host
+    dispatches by the returned descriptors' names.
     """
+    if name_prefix and not name_prefix.endswith("_"):
+        name_prefix = f"{name_prefix}_"
     listed = tuple(tools)
     for item in listed:
         _require(isinstance(item, OCTool), f"{item!r} is not an OCTool")
@@ -341,6 +344,9 @@ def _prefixed(
     alias = meta.get(ALIAS_OF_KEY)
     if isinstance(alias, str):
         meta = {**meta, ALIAS_OF_KEY: _with_prefix(alias, name_prefix)}
+    output_schema = tool.output_schema
+    if output_schema is not None:
+        output_schema = cast(Mapping[str, Any], _rewrite_schema(output_schema, rename))
     return replace(
         tool,
         name=renames[tool.name],
@@ -348,6 +354,7 @@ def _prefixed(
         input_schema=cast(
             Mapping[str, Any], _rewrite_schema(tool.input_schema, rename)
         ),
+        output_schema=output_schema,
         meta=meta,
     )
 

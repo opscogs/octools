@@ -1,0 +1,107 @@
+{
+  "description": "Sibling names in output-schema descriptions are rewritten too; a tool without an output schema keeps none.",
+  "input": {
+    "tools": [
+      {
+        "name": "get_rows",
+        "description": "Return rows of one table. Use list_tables first.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local",
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "next": {
+              "type": ["string", "null"],
+              "description": "Pass it to get_rows for the next page."
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "One row, as list_tables names it."
+              }
+            }
+          },
+          "required": ["next", "rows"],
+          "additionalProperties": false,
+          "description": "Rows of one table; see list_tables."
+        }
+      },
+      {
+        "name": "list_tables",
+        "description": "List every table in the catalog. Use describe_table for one table's columns.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_get_rows",
+      "description": "Return rows of one table. Use acme_list_tables first.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "next": {
+            "type": ["string", "null"],
+            "description": "Pass it to acme_get_rows for the next page."
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "One row, as acme_list_tables names it."
+            }
+          }
+        },
+        "required": ["next", "rows"],
+        "additionalProperties": false,
+        "description": "Rows of one table; see acme_list_tables."
+      },
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_list_tables",
+      "description": "List every table in the catalog. Use describe_table for one table's columns.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

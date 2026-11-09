@@ -809,7 +809,7 @@ A provider publishes its tools under a namespace: the product's name, matching
 `NAMESPACE_RE` (`^[a-z][a-z0-9]{0,15}$`), then one underscore, then the tool
 name (`demo_get_rows`). Providers built for one product share its namespace.
 A provider keeps short names in its own tables and applies the namespace once
-when it builds its listing, with `prefix_tools(tools, "demo_")`
+when it builds its listing, with `prefix_tools(tools, "demo")`
 (`prefixTools`), which also rewrites references to sibling tools in
 descriptions; see the converters page.
 

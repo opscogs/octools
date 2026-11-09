@@ -54,12 +54,17 @@ renamed descriptors.
   host adds when it routes to a server.
 - `prefix_tools(tools, name_prefix)` returns renamed copies, each keeping its
   own `func`:
-  - A name that already starts with `name_prefix` is kept, so applying the
+  - A prefix without a trailing underscore gets one, so a host passes the
+    bare namespace (`demo`) or the namespace with its underscore (`demo_`)
+    and gets the same names.
+  - A name that already starts with the prefix is kept, so applying the
     prefix twice changes nothing.
   - `meta["alias_of"]` is prefixed the same way.
   - Every whole-word occurrence of a sibling's original name in `description`
-    and in any `description` inside `input_schema` becomes the sibling's
-    published name. A word is a run of ASCII letters, digits and underscores,
+    and in any `description` inside `input_schema` or `output_schema` becomes
+    the sibling's published name. The output schema is covered because the
+    MCP converter publishes it, and its field descriptions point an agent at
+    the next call as often as the input's do. A word is a run of ASCII letters, digits and underscores,
     so an occurrence that is already prefixed, or part of a longer name, is
     left alone, as are words that name no sibling.
   - Instance data in the schema (`const`, `default`, `enum`, `examples`) is
@@ -91,7 +96,8 @@ renamed descriptors.
 - Bad: a name is rewritten only where it stands as a whole word; a sibling
   named in prose by another spelling (`describe table`) is not found.
 - Bad: rewriting is limited to descriptions; a sibling named in an `enum` of
-  tool names stays unprefixed, and the provider publishes that value itself.
+  tool names, or in `title`, stays unprefixed, and the provider publishes
+  that value itself.
 
 ### Confirmation
 

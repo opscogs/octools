@@ -406,11 +406,13 @@ function withPrefix(name: string, namePrefix: string): string {
 /**
  * Return copies of `tools` published under `namePrefix`.
  *
- * Each copy keeps its own `func`; a name already starting with `namePrefix`
- * is kept, so applying the prefix twice changes nothing.
+ * A prefix without a trailing underscore gets one, so `"demo"` and `"demo_"`
+ * are the same prefix. Each copy keeps its own `func`; a name already
+ * starting with the prefix is kept, so applying it twice changes nothing.
  * `meta["alias_of"]` is prefixed the same way. Every whole-word occurrence
  * of a sibling's name, in `description` and in any `description` of
- * `inputSchema` (instance data such as `enum` and `default` excepted),
+ * `inputSchema` or `outputSchema` (instance data such as `enum` and
+ * `default` excepted),
  * becomes the sibling's published name; an occurrence already prefixed and
  * words that name no sibling stay as they are. A prefixed name that breaks
  * {@link NAME_RE}, or an item that is not an `OCTool`, throws
@@ -420,12 +422,16 @@ export function prefixTools(
   tools: Iterable<OCTool>,
   namePrefix: string,
 ): readonly OCTool[] {
+  const prefix =
+    namePrefix === "" || namePrefix.endsWith("_")
+      ? namePrefix
+      : `${namePrefix}_`;
   const listed: readonly unknown[] = [...tools];
   for (const item of listed) {
     ensure(item instanceof OCTool, `${typeName(item)} is not an OCTool`);
   }
   const octools = listed as readonly OCTool[];
-  const names = octools.map((tool) => withPrefix(tool.name, namePrefix));
+  const names = octools.map((tool) => withPrefix(tool.name, prefix));
   const renames = new Map(
     octools.map((tool, index) => [tool.name, String(names[index])]),
   );
@@ -444,7 +450,10 @@ export function prefixTools(
         func: tool.func,
         access: tool.access,
         target: tool.target,
-        outputSchema: tool.outputSchema,
+        outputSchema:
+          tool.outputSchema === null
+            ? null
+            : (rewriteSchema(tool.outputSchema, rename) as JsonSchema),
         resultKind: tool.resultKind,
         title: tool.title,
         readOnlyHint: tool.readOnlyHint,
@@ -456,7 +465,7 @@ export function prefixTools(
         inputSchema: rewriteSchema(tool.inputSchema, rename) as JsonSchema,
         meta:
           typeof alias === "string"
-            ? { ...tool.meta, [ALIAS_OF_KEY]: withPrefix(alias, namePrefix) }
+            ? { ...tool.meta, [ALIAS_OF_KEY]: withPrefix(alias, prefix) }
             : tool.meta,
       });
     }),
