@@ -318,3 +318,26 @@ describe("prefixTools", () => {
     ).toThrow(OCToolError);
   });
 });
+
+describe("validateNamespace", () => {
+  it.each([
+    ["other_rows", 'does not start with "demo_"'],
+    ["demo_", 'the name after "demo_"'],
+    ["demo__rows", 'the name after "demo_"'],
+    ["demo_1rows", 'the name after "demo_"'],
+  ])("says which part of %s failed", (name, part) => {
+    const findings = validateNamespace(
+      listing(
+        new OCTool({ ...BASE, name: "demo_rows" }),
+        new OCTool({ ...BASE, name }),
+      ),
+      "demo",
+    );
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({
+      rule: "name_outside_namespace",
+      tool: name,
+    });
+    expect(findings[0]?.message).toContain(part);
+  });
+});

@@ -165,13 +165,29 @@ export function validateProvider(provider: ToolProvider): Finding[] {
   return findings;
 }
 
+/** What follows `<namespace>_` in a published name. */
+const BARE_NAME_RE = /^[a-z][a-z0-9_]*$/;
+
+/** Return why `name` is outside the namespace `prefix`, or `null`. */
+function outsideNamespace(name: string, prefix: string): string | null {
+  if (!name.startsWith(prefix)) {
+    return `name does not start with ${JSON.stringify(prefix)}`;
+  }
+  if (!BARE_NAME_RE.test(name.slice(prefix.length))) {
+    return `the name after ${JSON.stringify(prefix)} must match ${BARE_NAME_RE.source}`;
+  }
+  return null;
+}
+
 /**
  * Report a missing or malformed namespace, or names outside it.
  *
  * `namespace_missing` when `namespace` is empty; `namespace_pattern` when it
  * does not match {@link NAMESPACE_RE}; either one stops the check. Otherwise
- * `name_outside_namespace` for each tool whose name does not start with
- * `<namespace>_`. Opt-in, like `validateTags`, so `validateProvider` stays
+ * `name_outside_namespace` for each tool whose name does not match
+ * `^<namespace>_[a-z][a-z0-9_]*$`: it must start with the namespace and an
+ * underscore, and what follows must itself be a name. The message says which
+ * part failed. Opt-in, like `validateTags`, so `validateProvider` stays
  * unchanged. Items that are not tools are `validateProvider`'s to report.
  */
 export function validateNamespace(
@@ -196,19 +212,21 @@ export function validateNamespace(
   }
   const prefix = `${namespace}_`;
   const items: readonly unknown[] = provider.allTools();
-  return items
-    .filter(
-      (item): item is OCTool =>
-        item instanceof OCTool && !item.name.startsWith(prefix),
-    )
-    .map(
-      (tool) =>
-        new Finding({
-          rule: "name_outside_namespace",
-          message: `name does not start with ${JSON.stringify(prefix)}`,
-          tool: tool.name,
-        }),
-    );
+  return items.flatMap((item) => {
+    if (!(item instanceof OCTool)) {
+      return [];
+    }
+    const reason = outsideNamespace(item.name, prefix);
+    return reason === null
+      ? []
+      : [
+          new Finding({
+            rule: "name_outside_namespace",
+            message: reason,
+            tool: item.name,
+          }),
+        ];
+  });
 }
 
 /** Options {@link validateTags} takes. */

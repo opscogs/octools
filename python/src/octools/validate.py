@@ -188,13 +188,28 @@ def validate_tags(
     ]
 
 
+_BARE_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+"""What follows ``<namespace>_`` in a published name."""
+
+
+def _outside_namespace(name: str, prefix: str) -> str | None:
+    """Return why ``name`` is outside the namespace ``prefix``, or ``None``."""
+    if not name.startswith(prefix):
+        return f"name does not start with {prefix!r}"
+    if not _BARE_NAME_RE.fullmatch(name.removeprefix(prefix)):
+        return f"the name after {prefix!r} must match {_BARE_NAME_RE.pattern}"
+    return None
+
+
 def validate_namespace(provider: ToolProvider, namespace: str) -> list[Finding]:
     """Report a missing or malformed namespace, or names outside it.
 
     ``namespace_missing`` when ``namespace`` is empty; ``namespace_pattern``
     when it does not match ``NAMESPACE_RE``; either one stops the check.
     Otherwise ``name_outside_namespace`` for each tool whose name does not
-    start with ``<namespace>_``. Opt-in, like ``validate_tags``, so
+    match ``^<namespace>_[a-z][a-z0-9_]*$``: it must start with the namespace
+    and an underscore, and what follows must itself be a name. The message
+    says which part failed. Opt-in, like ``validate_tags``, so
     ``validate_provider`` stays unchanged. Items that are not tools are
     ``validate_provider``'s to report.
     """
@@ -209,13 +224,10 @@ def validate_namespace(provider: ToolProvider, namespace: str) -> list[Finding]:
         ]
     prefix = f"{namespace}_"
     return [
-        Finding(
-            rule="name_outside_namespace",
-            message=f"name does not start with {prefix!r}",
-            tool=tool.name,
-        )
+        Finding(rule="name_outside_namespace", message=reason, tool=tool.name)
         for tool in provider.all_tools()
-        if isinstance(tool, OCTool) and not tool.name.startswith(prefix)
+        if isinstance(tool, OCTool)
+        and (reason := _outside_namespace(tool.name, prefix)) is not None
     ]
 
 

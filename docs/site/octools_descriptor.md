@@ -820,7 +820,7 @@ convention:
 | ------------------------ | ------------------------------------------------------------ |
 | `namespace_missing`      | the namespace is empty; nothing else is checked              |
 | `namespace_pattern`      | the namespace breaks `NAMESPACE_RE`; nothing else is checked |
-| `name_outside_namespace` | a tool's name does not start with `<namespace>_`             |
+| `name_outside_namespace` | a tool's name does not match `^<namespace>_[a-z][a-z0-9_]*$` (`demo_`, `demo__rows` and `demo_1rows` fail); the message says which part |
 
 It is opt-in, and `validate_provider` does not report namespaces. A consumer
 library that requires a namespace runs it in its own conformance check.

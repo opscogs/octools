@@ -113,10 +113,17 @@ renamed descriptors.
 - `validate_namespace(provider, namespace)` reports `namespace_missing` when
   `namespace` is empty, `namespace_pattern` when it breaks `NAMESPACE_RE`
   (either stops the check), and otherwise `name_outside_namespace` for each
-  tool whose name does not start with `<namespace>_`. It is opt-in under
+  tool whose name does not match `^<namespace>_[a-z][a-z0-9_]*$`: the name
+  starts with the namespace and an underscore, and what follows is itself a
+  name, so `demo_`, `demo__rows` and `demo_1rows` are outside `demo`. The
+  finding's message says which part failed. It is opt-in under
   [OCTL-0006](./OCTL-0006-tolerant-readers.md); `validate_provider` is
   unchanged. A consumer library makes it a conformance requirement of its
   own.
+  - It checks tool names only. An alias target outside the namespace is
+    already a missing tool to `validate_provider`, and a bare name that
+    repeats the namespace (`demo_demo_rows`) is visible only to the consumer
+    that holds the bare names, so neither is checked here.
 
 ### Consequences
 

@@ -1,0 +1,35 @@
+{
+  "description": "A name is outside the namespace when nothing follows the namespace.",
+  "input": {
+    "tools": [
+      {
+        "name": "demo_get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "demo_",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "namespace": "demo"
+  },
+  "expected": [
+    {
+      "rule": "name_outside_namespace",
+      "tool": "demo_",
+      "path": null
+    }
+  ]
+}
