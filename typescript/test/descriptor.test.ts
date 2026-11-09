@@ -243,6 +243,26 @@ describe("prefixTools", () => {
     }
   });
 
+  it.each([
+    ["Ping the host, then ping again.", "Ping the host, then ping again."],
+    [
+      "Run `ping` first. A ping is cheap.",
+      "Run `demo_ping` first. A ping is cheap.",
+    ],
+    ["Run `ping and get_rows`.", "Run `demo_ping and demo_get_rows`."],
+    [
+      "Call get_rows, then `get_rows`.",
+      "Call demo_get_rows, then `demo_get_rows`.",
+    ],
+    ["An open ` ping is prose.", "An open ` ping is prose."],
+  ])("rewrites a one-word name only in code: %s", (text, expected) => {
+    const listed = [
+      new OCTool({ ...BASE, name: "ping", description: text }),
+      new OCTool({ ...BASE, name: "get_rows" }),
+    ];
+    expect(prefixTools(listed, "demo")[0]?.description).toBe(expected);
+  });
+
   it.each([[["get_rows", "demo_get_rows"]], [["echo", "echo"]]])(
     "names both sources of a collision: %j",
     (names) => {

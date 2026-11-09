@@ -1,0 +1,82 @@
+{
+  "description": "A sibling name without an underscore is rewritten inside a backtick code span, including the bare form of a sibling already published.",
+  "input": {
+    "tools": [
+      {
+        "name": "ping",
+        "description": "Check that the cluster answers. Run `ping` before `status`, not `ping_all`.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "acme_status",
+        "description": "Report the cluster state. Call `status` after `ping` or after a ping.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "A host `ping` reached; ping it again if unsure."
+            }
+          },
+          "required": ["target"],
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_ping",
+      "description": "Check that the cluster answers. Run `acme_ping` before `acme_status`, not `ping_all`.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_status",
+      "description": "Report the cluster state. Call `acme_status` after `acme_ping` or after a ping.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "A host `acme_ping` reached; ping it again if unsure."
+          }
+        },
+        "required": ["target"],
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

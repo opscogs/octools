@@ -374,28 +374,48 @@ function rewriteSchema(
   );
 }
 
+/** A Markdown code span: text between single backticks. */
+const CODE_SPAN = "`[^`]*`";
+
+/** Return a pattern matching any of `names` as a whole word, longest first. */
+function wordPattern(names: readonly string[]): string {
+  // Tool names match NAME_RE, so they hold no RegExp metacharacter.
+  const words = [...names].sort((a, b) => b.length - a.length).join("|");
+  return `(?<![A-Za-z0-9_])(?:${words})(?![A-Za-z0-9_])`;
+}
+
 /**
  * Return a function replacing each whole-word key of `renames` in text.
  *
  * A word is a run of ASCII letters, digits and underscores, so an occurrence
- * inside a longer name (`demo_get_rows`, `get_rows_all`) is left alone.
+ * inside a longer name (`demo_get_rows`, `get_rows_all`) is left alone. A key
+ * holding an underscore (`get_rows`) is replaced anywhere; a key without one
+ * (`ping`) only inside a code span, so a common word in prose is never
+ * rewritten.
  */
 function renamer(
   renames: ReadonlyMap<string, string>,
 ): (text: string) => string {
   const changed = [...renames]
     .filter(([from, to]) => from !== to)
-    .map(([from]) => from)
-    .sort((a, b) => b.length - a.length);
+    .map(([from]) => from);
   if (changed.length === 0) {
     return (text) => text;
   }
-  // Tool names match NAME_RE, so they hold no RegExp metacharacter.
-  const pattern = new RegExp(
-    `(?<![A-Za-z0-9_])(?:${changed.join("|")})(?![A-Za-z0-9_])`,
+  const everywhere = changed.filter((name) => name.includes("_"));
+  const inCode = new RegExp(wordPattern(changed), "g");
+  const scan = new RegExp(
+    [
+      CODE_SPAN,
+      ...(everywhere.length > 0 ? [wordPattern(everywhere)] : []),
+    ].join("|"),
     "g",
   );
-  return (text) => text.replace(pattern, (word) => String(renames.get(word)));
+  const named = (word: string): string => String(renames.get(word));
+  return (text) =>
+    text.replace(scan, (token) =>
+      token.startsWith("`") ? token.replace(inCode, named) : named(token),
+    );
 }
 
 /** Return `name` with `namePrefix` prepended unless it already starts so. */

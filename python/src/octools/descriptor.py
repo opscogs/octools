@@ -284,18 +284,42 @@ def _rewrite_schema(node: object, rewrite: Callable[[str], str]) -> object:
     return node
 
 
+_CODE_SPAN = r"`[^`]*`"
+"""A Markdown code span: text between single backticks."""
+
+
+def _word_pattern(names: Sequence[str]) -> str:
+    """Return a pattern matching any of ``names`` as a whole word, longest first."""
+    words = "|".join(re.escape(name) for name in sorted(names, key=len, reverse=True))
+    return rf"(?<![A-Za-z0-9_])(?:{words})(?![A-Za-z0-9_])"
+
+
 def _renamer(renames: Mapping[str, str]) -> Callable[[str], str]:
     """Return a function replacing each whole-word key of ``renames`` in text.
 
     A word is a run of ASCII letters, digits and underscores, so an occurrence
     inside a longer name (``demo_get_rows``, ``get_rows_all``) is left alone.
+    A key holding an underscore (``get_rows``) is replaced anywhere; a key
+    without one (``ping``) only inside a code span, so a common word in prose
+    is never rewritten.
     """
-    changed = sorted((old for old, new in renames.items() if old != new), key=len)
+    changed = [old for old, new in renames.items() if old != new]
     if not changed:
         return lambda text: text
-    words = "|".join(re.escape(name) for name in reversed(changed))
-    pattern = re.compile(rf"(?<![A-Za-z0-9_])(?:{words})(?![A-Za-z0-9_])")
-    return lambda text: pattern.sub(lambda match: renames[match.group()], text)
+    everywhere = [name for name in changed if "_" in name]
+    in_code = re.compile(_word_pattern(changed))
+    scan = re.compile(
+        "|".join([_CODE_SPAN, *([_word_pattern(everywhere)] if everywhere else [])])
+    )
+
+    def replace(match: re.Match[str]) -> str:
+        """Rewrite one code span, or one name found in prose."""
+        token = match.group()
+        if token.startswith("`"):
+            return in_code.sub(lambda word: renames[word.group()], token)
+        return renames[token]
+
+    return lambda text: scan.sub(replace, text)
 
 
 def _with_prefix(name: str, name_prefix: str) -> str:

@@ -80,10 +80,16 @@ host registers and dispatches by the names the agent sees.
   sibling's published name: "use `describe_table` for one table's columns"
   becomes "use `acme_describe_table` ...". For a sibling already published,
   its bare form counts as a reference too, so `get_rows` becomes
-  `acme_get_rows` when the listing holds `acme_get_rows`. A word is a run of letters, digits and
-  underscores, so an occurrence already prefixed, or part of a longer name, is
-  left alone, as are words that name no sibling. Instance data (`const`,
-  `default`, `enum`, `examples`) and property names are never rewritten.
+  `acme_get_rows` when the listing holds `acme_get_rows`. A word is a run of
+  letters, digits and underscores, so an occurrence already prefixed, or part
+  of a longer name, is left alone, as are words that name no sibling.
+- A name with an underscore (`get_rows`) is rewritten wherever it stands as a
+  word. A one-word name (`ping`, `status`) is rewritten only inside a code
+  span, between single backticks, so "ping the server" stays as written and
+  `` `ping` `` becomes `` `acme_ping` ``. Write a one-word sibling name in
+  backticks.
+- Instance data (`const`, `default`, `enum`, `examples`) and property names
+  are never rewritten.
 - A published name that breaks `NAME_RE` raises `OCToolError`, and so do two
   tools that would publish under one name (`get_rows` and `acme_get_rows`).
 

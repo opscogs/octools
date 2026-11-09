@@ -311,13 +311,34 @@ def test_prefix_tools_round_trips_both_converters():
 def test_prefix_tools_leaves_the_source_untouched():
     schema = {
         "type": "object",
-        "properties": {"q": {"type": "string", "description": "See echo."}},
+        "properties": {"q": {"type": "string", "description": "See `echo`."}},
         "additionalProperties": False,
     }
     tools = (make(name="echo", input_schema=schema), make(name="other"))
     (prefixed, _) = prefix_tools(tools, "demo_")
-    assert prefixed.input_schema["properties"]["q"]["description"] == "See demo_echo."
-    assert schema["properties"]["q"]["description"] == "See echo."
+    assert prefixed.input_schema["properties"]["q"]["description"] == "See `demo_echo`."
+    assert schema["properties"]["q"]["description"] == "See `echo`."
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Ping the host, then ping again.", "Ping the host, then ping again."),
+        (
+            "Run `ping` first. A ping is cheap.",
+            "Run `demo_ping` first. A ping is cheap.",
+        ),
+        ("Run `ping and get_rows`.", "Run `demo_ping and demo_get_rows`."),
+        (
+            "Call get_rows, then `get_rows`.",
+            "Call demo_get_rows, then `demo_get_rows`.",
+        ),
+        ("An open ` ping is prose.", "An open ` ping is prose."),
+    ],
+)
+def test_prefix_tools_rewrites_a_one_word_name_only_in_code(text, expected):
+    tools = (make(name="ping", description=text), make(name="get_rows"))
+    assert prefix_tools(tools, "demo")[0].description == expected
 
 
 @pytest.mark.parametrize("names", [("get_rows", "demo_get_rows"), ("echo", "echo")])

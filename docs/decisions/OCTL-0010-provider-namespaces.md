@@ -80,6 +80,14 @@ renamed descriptors.
     input's do. A word is a run of ASCII letters, digits and underscores, so
     an occurrence that is already prefixed, or part of a longer name, is
     left alone, as are words that name no sibling.
+  - How a reference is matched depends on the name being matched, the
+    sibling's listed name or its bare form. A name holding an underscore
+    (`get_rows`) is rewritten wherever it stands as a whole word. A name
+    without one (`ping`, `status`) is rewritten only inside a code span, text
+    between single backticks, so "ping the server" stays prose and `` `ping` ``
+    becomes `` `demo_ping` ``. A one-word tool name is usually an ordinary
+    word too, and only the backticks say it names a tool. A provider
+    therefore writes a one-word sibling name in backticks.
   - Instance data in the schema (`const`, `default`, `enum`, `examples`) is
     never rewritten; under `properties`, `$defs`, `definitions`,
     `patternProperties` and `dependentSchemas` the keys are names and are
