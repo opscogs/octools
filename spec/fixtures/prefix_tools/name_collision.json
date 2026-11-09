@@ -26,6 +26,6 @@
     "name_prefix": "acme_"
   },
   "expected": {
-    "error": "invalid_name"
+    "error": "duplicate_name"
   }
 }

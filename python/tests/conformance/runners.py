@@ -56,6 +56,10 @@ ENVELOPES = {
 }
 
 
+COLLISION = "both publish as"
+"""The phrase a ``prefix_tools`` collision message carries, in both languages."""
+
+
 class FixtureError(Exception):
     """An operation failed in a way the spec names: ``code`` is the error data."""
 
@@ -244,7 +248,8 @@ def prefixed(data: dict[str, Any]) -> object:
     try:
         return [descriptor(tool) for tool in prefix_tools(tools, data["name_prefix"])]
     except OCToolError as exc:
-        raise FixtureError("invalid_name") from exc
+        code = "duplicate_name" if COLLISION in str(exc) else "invalid_name"
+        raise FixtureError(code) from exc
 
 
 def tool_findings(data: dict[str, Any]) -> object:

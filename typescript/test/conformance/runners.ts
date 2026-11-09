@@ -128,7 +128,12 @@ function prefixed(input: Record<string, unknown>): unknown {
     return prefixTools(tools, input["name_prefix"] as string).map(descriptor);
   } catch (error) {
     if (error instanceof OCToolError) {
-      throw new FixtureError("invalid_name");
+      // A collision message names both sources and says they "both publish as".
+      throw new FixtureError(
+        error.message.includes("both publish as")
+          ? "duplicate_name"
+          : "invalid_name",
+      );
     }
     throw error;
   }

@@ -46,14 +46,15 @@ The directory names the operation; `input` holds its arguments as JSON and
   when unset, `resumable` only when `truncated` is true).
 - **Errors** are data: `{"error": "<code>"}`.
 
-| Error code           | Raised when                                                                                                           |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `invalid_descriptor` | a descriptor fails construction                                                                                       |
-| `invalid_name`       | a converted or prefixed name, prefix included, breaks the target's pattern, or two tools would publish under one name |
-| `invalid_envelope`   | an envelope fails parsing, strict or tolerant                                                                         |
-| `invalid_style`      | a listing style is outside `LISTING_STYLES`                                                                           |
-| `invalid_format`     | a converter id is outside `TOOL_FORMATS`                                                                              |
-| `invalid_column`     | an override names a column the model does not have                                                                    |
+| Error code           | Raised when                                                                |
+| -------------------- | -------------------------------------------------------------------------- |
+| `invalid_descriptor` | a descriptor fails construction                                            |
+| `invalid_name`       | a converted or prefixed name, prefix included, breaks the target's pattern |
+| `duplicate_name`     | two tools would publish under one name, including one name listed twice    |
+| `invalid_envelope`   | an envelope fails parsing, strict or tolerant                              |
+| `invalid_style`      | a listing style is outside `LISTING_STYLES`                                |
+| `invalid_format`     | a converter id is outside `TOOL_FORMATS`                                   |
+| `invalid_column`     | an override names a column the model does not have                         |
 
 Operations and their `input` keys:
 

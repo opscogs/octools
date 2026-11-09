@@ -101,7 +101,9 @@ renamed descriptors.
   - Two tools that would publish under one name (`get_rows` and
     `demo_get_rows` under `demo_`) raise `OCToolError` naming both. A host
     prefixes after merging, so `merge_providers` does not see this
-    collision; `prefix_tools` must.
+    collision; `prefix_tools` must. The spec fixtures name this failure
+    `duplicate_name`, the rule `validate_provider` reports for the same clash
+    in a listing; every other naming failure is `invalid_name`.
   - A published name longer than 48 characters, or otherwise breaking
     `NAME_RE`, raises `OCToolError`, as does an item that is not an
     `OCTool`. A collision and an over-long published name are the two ways
