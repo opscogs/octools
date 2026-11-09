@@ -306,8 +306,9 @@ def _with_prefix(name: str, name_prefix: str) -> str:
 def prefix_tools(tools: Iterable[OCTool], name_prefix: str) -> tuple[OCTool, ...]:
     """Return copies of ``tools`` published under ``name_prefix``.
 
-    A prefix without a trailing underscore gets one, so ``"demo"`` and
-    ``"demo_"`` are the same prefix, and ``""`` renames nothing. Each copy
+    The prefix is lowercased, and one without a trailing underscore gets one,
+    so ``"Demo"``, ``"demo"`` and ``"demo_"`` are the same prefix; ``""``
+    renames nothing. Each copy
     keeps its own ``func``. A name already starting with the prefix counts as
     published and is kept, so applying it twice changes nothing; a bare name
     must therefore not start with its own namespace. ``meta["alias_of"]`` is
@@ -319,6 +320,7 @@ def prefix_tools(tools: Iterable[OCTool], name_prefix: str) -> tuple[OCTool, ...
     that breaks ``NAME_RE``, or an item that is not an ``OCTool``, raises
     ``OCToolError``. A host dispatches by the returned descriptors' names.
     """
+    name_prefix = name_prefix.lower()
     if name_prefix and not name_prefix.endswith("_"):
         name_prefix = f"{name_prefix}_"
     listed = tuple(tools)

@@ -1,0 +1,70 @@
+{
+  "description": "A prefix is lowercased before use, so Acme, ACME_ and acme_ give the same names.",
+  "input": {
+    "tools": [
+      {
+        "name": "list_tables",
+        "description": "List every table in the catalog. Use acme_describe_table for one table's columns.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "acme_describe_table",
+        "description": "Return one table's columns. Call list_tables first.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "Acme"
+  },
+  "expected": [
+    {
+      "name": "acme_list_tables",
+      "description": "List every table in the catalog. Use acme_describe_table for one table's columns.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_describe_table",
+      "description": "Return one table's columns. Call acme_list_tables first.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

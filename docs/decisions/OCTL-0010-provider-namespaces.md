@@ -58,16 +58,15 @@ renamed descriptors.
   host adds when it routes to a server.
 - `prefix_tools(tools, name_prefix)` returns renamed copies, each keeping its
   own `func`:
-  - A prefix without a trailing underscore gets one, so a host passes the
-    bare namespace (`demo`) or the namespace with its underscore (`demo_`)
-    and gets the same names.
+  - The prefix is lowercased, and one without a trailing underscore gets one,
+    so a host passes `Demo`, `demo` or `demo_` and gets the same names.
   - A name that already starts with the prefix counts as published and is
     kept, so applying the prefix twice changes nothing. A bare name that
     happens to start with the prefix (`demo_mode_status` under `demo_`) is
     therefore indistinguishable from a published one; a provider keeps its
     bare names free of its own namespace, which octools cannot check after
     publication.
-  - An empty prefix renames nothing. A malformed prefix (`Demo`, `demo-`)
+  - An empty prefix renames nothing. A malformed prefix (`demo-`, `_`)
     yields names that break `NAME_RE` and raises `OCToolError`.
   - `meta["alias_of"]` is prefixed the same way.
   - Every whole-word occurrence of a sibling's original name in `description`

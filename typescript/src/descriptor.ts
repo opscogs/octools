@@ -406,8 +406,9 @@ function withPrefix(name: string, namePrefix: string): string {
 /**
  * Return copies of `tools` published under `namePrefix`.
  *
- * A prefix without a trailing underscore gets one, so `"demo"` and `"demo_"`
- * are the same prefix, and `""` renames nothing. Each copy keeps its own
+ * The prefix is lowercased, and one without a trailing underscore gets one,
+ * so `"Demo"`, `"demo"` and `"demo_"` are the same prefix; `""` renames
+ * nothing. Each copy keeps its own
  * `func`. A name already starting with the prefix counts as published and
  * is kept, so applying it twice changes nothing; a bare name must therefore
  * not start with its own namespace.
@@ -424,10 +425,8 @@ export function prefixTools(
   tools: Iterable<OCTool>,
   namePrefix: string,
 ): readonly OCTool[] {
-  const prefix =
-    namePrefix === "" || namePrefix.endsWith("_")
-      ? namePrefix
-      : `${namePrefix}_`;
+  const lower = namePrefix.toLowerCase();
+  const prefix = lower === "" || lower.endsWith("_") ? lower : `${lower}_`;
   const listed: readonly unknown[] = [...tools];
   for (const item of listed) {
     ensure(item instanceof OCTool, `${typeName(item)} is not an OCTool`);

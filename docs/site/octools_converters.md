@@ -66,8 +66,8 @@ host registers and dispatches by the names the agent sees.
     const anthropicTools = published.map((tool) => toAnthropicTool(tool));
     ```
 
-- A prefix without a trailing underscore gets one, so `"acme"` and `"acme_"`
-  give the same names.
+- The prefix is lowercased, and one without a trailing underscore gets one,
+  so `"Acme"`, `"acme"` and `"acme_"` give the same names.
 - A name that already starts with the prefix counts as published and is
   kept, so applying it twice changes nothing, and a host prefix equal to the
   provider's namespace is a no-op. Keep bare names free of your own
