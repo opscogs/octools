@@ -1,7 +1,7 @@
 ---
 status: accepted
-version: 1.1.1
-date: 2026-10-08
+version: 1.2.0
+date: 2026-11-09
 decision-makers: OpsCogs maintainers
 ---
 
@@ -16,9 +16,12 @@ and the interesting failure - two libraries that give a tool the same name -
 exists only in the union. Without a union to validate, the `duplicate_name`
 rule fires only on a listing where a collision is impossible.
 
-`NAME_RE` is flat and has no namespace, so the collision is a real
-possibility rather than a theoretical one, and the consumer merging the
-listings is the only party who can see it.
+A provider's namespace ([OCTL-0010](./OCTL-0010-provider-namespaces.md))
+keeps products apart, but providers built for one product share it, so the
+collision is a real possibility rather than a theoretical one, and the
+consumer merging the listings is the only party who can see it. A merge
+published behind a host prefix goes through `prefix_tools` after merging, so
+references between members are rewritten too.
 
 ## Decision Drivers
 

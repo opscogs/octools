@@ -56,34 +56,35 @@ Wire keys are spelled exactly as the spec spells them (`column_kinds`,
 
 Each name maps one to one onto a name in the Python package's `__all__`.
 
-| Python                                                                 | TypeScript                                                                            |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `RecordsEnvelope[T]`                                                   | `RecordsEnvelope(item)` (a zod schema), type `RecordsEnvelope<T>`                     |
-| `TabularEnvelope`, `ArtifactEnvelope`, `ArtifactRef`                   | the same names: a zod schema and its output type                                      |
-| `Model.model_validate(data)`                                           | `Model.parse(data)`                                                                   |
-| `read_envelope`                                                        | `readEnvelope`                                                                        |
-| `records_schema`, `tabular_schema`, `artifact_schema`                  | `recordsSchema`, `tabularSchema`, `artifactSchema`                                    |
-| `validate_tabular`                                                     | `validateTabular`                                                                     |
-| `strict_clean`, `strip_keys(schema, keys=..., prefixes=...)`           | `strictClean`, `stripKeys(schema, { keys, prefixes })`                                |
-| `strip_titles`, `close_objects`                                        | `stripTitles`, `closeObjects`                                                         |
-| `schema_for(Model, mode=...)`, `input_schema_for`, `output_schema_for` | `schemaFor(schema, { io })`, `inputSchemaFor`, `outputSchemaFor`, taking zod schemas  |
-| `NoTitleGenerator`                                                     | none: `schemaFor` strips titles itself                                                |
-| `OCTool(name=..., input_schema=..., ...)`                              | `new OCTool({ name, inputSchema, ... })`: every field in camelCase                    |
-| `ToolProvider` (`all_tools()`)                                         | interface `ToolProvider` (`allTools()`)                                               |
-| `merge_providers`, `check_tool_listing`                                | `mergeProviders`, `checkToolListing`                                                  |
-| `tabular_from_models(model, items, column_kinds=...)`                  | `tabularFromModels(schema, items, { columnKinds })`                                   |
-| `select_tools(provider, tags=...)`, `validate_tags`                    | `selectTools(provider, { tags })`, `validateTags`                                     |
-| `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                          | `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                                         |
-| `validate_tool`, `validate_provider`, `count_sentences`                | `validateTool`, `validateProvider`, `countSentences`                                  |
-| `to_mcp_tool(tool, name_prefix=...)`, `to_anthropic_tool`              | `toMcpTool(tool, { namePrefix })`, `toAnthropicTool`                                  |
-| `convert_tool(tool, format, name_prefix=...)`, `TOOL_FORMATS`          | `convertTool(tool, format, { namePrefix })`, `TOOL_FORMATS`                           |
-| `summarize_tool`, `summarize_provider(provider, access=...)`           | `summarizeTool`, `summarizeProvider(provider, { access })`                            |
-| `render_listing(provider, style=..., access=..., pretty=...)`          | `renderListing(provider, { style, access, pretty })`; a bad style throws `RangeError` |
-| `render_markdown_table`, `ToolSummary.as_row()`, `InputSummary`        | `renderMarkdownTable`, `ToolSummary.asRow()`, `InputSummary`                          |
-| `Cell`, `ColumnKind`, `ColumnScale`, `Sensitivity`                     | the same type names                                                                   |
-| `Access`, `ResultKind`, `ListingStyle`                                 | the same type names                                                                   |
-| `Finding`, `OCToolError`                                               | the same class names                                                                  |
-| constants such as `SPEC_VERSION`, `COLUMN_KINDS`, `NAME_RE`            | the same names                                                                        |
+| Python                                                                        | TypeScript                                                                            |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `RecordsEnvelope[T]`                                                          | `RecordsEnvelope(item)` (a zod schema), type `RecordsEnvelope<T>`                     |
+| `TabularEnvelope`, `ArtifactEnvelope`, `ArtifactRef`                          | the same names: a zod schema and its output type                                      |
+| `Model.model_validate(data)`                                                  | `Model.parse(data)`                                                                   |
+| `read_envelope`                                                               | `readEnvelope`                                                                        |
+| `records_schema`, `tabular_schema`, `artifact_schema`                         | `recordsSchema`, `tabularSchema`, `artifactSchema`                                    |
+| `validate_tabular`                                                            | `validateTabular`                                                                     |
+| `strict_clean`, `strip_keys(schema, keys=..., prefixes=...)`                  | `strictClean`, `stripKeys(schema, { keys, prefixes })`                                |
+| `strip_titles`, `close_objects`                                               | `stripTitles`, `closeObjects`                                                         |
+| `schema_for(Model, mode=...)`, `input_schema_for`, `output_schema_for`        | `schemaFor(schema, { io })`, `inputSchemaFor`, `outputSchemaFor`, taking zod schemas  |
+| `NoTitleGenerator`                                                            | none: `schemaFor` strips titles itself                                                |
+| `OCTool(name=..., input_schema=..., ...)`                                     | `new OCTool({ name, inputSchema, ... })`: every field in camelCase                    |
+| `ToolProvider` (`all_tools()`)                                                | interface `ToolProvider` (`allTools()`)                                               |
+| `merge_providers`, `check_tool_listing`                                       | `mergeProviders`, `checkToolListing`                                                  |
+| `tabular_from_models(model, items, column_kinds=...)`                         | `tabularFromModels(schema, items, { columnKinds })`                                   |
+| `select_tools(provider, tags=...)`, `validate_tags`                           | `selectTools(provider, { tags })`, `validateTags`                                     |
+| `prefix_tools(tools, name_prefix)`, `validate_namespace(provider, namespace)` | `prefixTools(tools, namePrefix)`, `validateNamespace(provider, namespace)`            |
+| `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                                 | `SourceRef`, `TOOL_TAGS`, `TOOL_TAG_FALLBACK`                                         |
+| `validate_tool`, `validate_provider`, `count_sentences`                       | `validateTool`, `validateProvider`, `countSentences`                                  |
+| `to_mcp_tool(tool, name_prefix=...)`, `to_anthropic_tool`                     | `toMcpTool(tool, { namePrefix })`, `toAnthropicTool`                                  |
+| `convert_tool(tool, format, name_prefix=...)`, `TOOL_FORMATS`                 | `convertTool(tool, format, { namePrefix })`, `TOOL_FORMATS`                           |
+| `summarize_tool`, `summarize_provider(provider, access=...)`                  | `summarizeTool`, `summarizeProvider(provider, { access })`                            |
+| `render_listing(provider, style=..., access=..., pretty=...)`                 | `renderListing(provider, { style, access, pretty })`; a bad style throws `RangeError` |
+| `render_markdown_table`, `ToolSummary.as_row()`, `InputSummary`               | `renderMarkdownTable`, `ToolSummary.asRow()`, `InputSummary`                          |
+| `Cell`, `ColumnKind`, `ColumnScale`, `Sensitivity`                            | the same type names                                                                   |
+| `Access`, `ResultKind`, `ListingStyle`                                        | the same type names                                                                   |
+| `Finding`, `OCToolError`                                                      | the same class names                                                                  |
+| constants such as `SPEC_VERSION`, `COLUMN_KINDS`, `NAME_RE`                   | the same names                                                                        |
 
 The `*_RE` constants are `RegExp` objects, the `STRICT_*` sets are
 `ReadonlySet<string>`, and the vocabulary values are readonly arrays.

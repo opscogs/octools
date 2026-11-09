@@ -28,6 +28,7 @@ export class OCToolError extends Error {
 export const ERROR_CODES = [
   "invalid_descriptor",
   "invalid_name",
+  "duplicate_name",
   "invalid_envelope",
   "invalid_style",
   "invalid_format",

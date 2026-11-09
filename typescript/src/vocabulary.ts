@@ -87,13 +87,21 @@ export const VOCABULARY_FALLBACKS: Readonly<Record<string, string | null>> =
 /**
  * Tool names: lowercase snake_case, at most 48 characters.
  *
- * The tightest common tool-name limit is 64 characters; the 16 spare leave
- * room for the runtime's namespace prefix (for example `demo_`).
+ * The 48 count the provider's namespace (`demo_get_rows`). The tightest
+ * common tool-name limit is 64 characters; the 16 spare leave room for the
+ * prefix an agent host adds when it routes to a server.
  *
  * In Python, `$` also matches just before a final newline, so the Python
  * pattern accepts a name ending in `\n`; this RegExp's `$` does not.
  */
 export const NAME_RE = /^[a-z][a-z0-9_]{0,47}$/;
+/**
+ * Provider namespaces: lowercase letters and digits, at most 16 characters.
+ *
+ * A published name is `<namespace>_<name>`; the namespace holds no
+ * underscore, so the first underscore ends it.
+ */
+export const NAMESPACE_RE = /^[a-z][a-z0-9]{0,15}$/;
 /** The Anthropic tool name rule: 1-128 of `A-Z a-z 0-9 _ -`. */
 export const ANTHROPIC_NAME_RE = /^[a-zA-Z0-9_-]{1,128}$/;
 /** The MCP `Tool.name` rule: 1-128 of `A-Z a-z 0-9 _ - .`. */

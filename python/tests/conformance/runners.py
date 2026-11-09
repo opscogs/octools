@@ -29,6 +29,7 @@ from octools import (
     convert_tool,
     count_sentences,
     merge_providers,
+    prefix_tools,
     read_envelope,
     render_listing,
     render_markdown_table,
@@ -41,6 +42,7 @@ from octools import (
     tabular_from_models,
     to_anthropic_tool,
     to_mcp_tool,
+    validate_namespace,
     validate_provider,
     validate_tabular,
     validate_tags,
@@ -52,6 +54,10 @@ ENVELOPES = {
     "tabular": TabularEnvelope,
     "artifact": ArtifactEnvelope,
 }
+
+
+COLLISION = "both publish as"
+"""The phrase a ``prefix_tools`` collision message carries, in both languages."""
 
 
 class FixtureError(Exception):
@@ -237,6 +243,15 @@ def listing(data: dict[str, Any]) -> object:
         raise FixtureError("invalid_style") from exc
 
 
+def prefixed(data: dict[str, Any]) -> object:
+    tools = [build_tool(item) for item in data["tools"]]
+    try:
+        return [descriptor(tool) for tool in prefix_tools(tools, data["name_prefix"])]
+    except OCToolError as exc:
+        code = "duplicate_name" if COLLISION in str(exc) else "invalid_name"
+        raise FixtureError(code) from exc
+
+
 def tool_findings(data: dict[str, Any]) -> object:
     build = unchecked_tool if data.get("unchecked") else build_tool
     return findings(validate_tool(build(data["tool"])))
@@ -252,6 +267,7 @@ RUNNERS: dict[str, Callable[[dict[str, Any]], object]] = {
         tool.name
         for tool in merge_providers(*map(provider, data["providers"])).all_tools()
     ],
+    "prefix_tools": prefixed,
     "read_envelope": lambda data: envelope(data["model"], data["data"], tolerant=True),
     "render_listing": listing,
     "render_markdown_table": lambda data: render_markdown_table(
@@ -276,6 +292,9 @@ RUNNERS: dict[str, Callable[[dict[str, Any]], object]] = {
     "to_mcp_tool": lambda data: convert(to_mcp_tool, data),
     "validate_envelope": lambda data: envelope(
         data["model"], data["data"], tolerant=False
+    ),
+    "validate_namespace": lambda data: findings(
+        validate_namespace(provider(data), data["namespace"])
     ),
     "validate_provider": lambda data: findings(validate_provider(provider(data))),
     "validate_tabular": tabular,

@@ -1,0 +1,21 @@
+{
+  "description": "A prefixed name longer than the descriptor name rule allows is an error.",
+  "input": {
+    "tools": [
+      {
+        "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "description": "Return a row. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": {
+    "error": "invalid_name"
+  }
+}

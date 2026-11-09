@@ -1,0 +1,8 @@
+{
+  "description": "No tools give no tools.",
+  "input": {
+    "tools": [],
+    "name_prefix": "acme_"
+  },
+  "expected": []
+}

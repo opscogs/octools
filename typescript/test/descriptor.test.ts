@@ -8,7 +8,11 @@ import {
   type ToolProvider,
   checkToolListing,
   mergeProviders,
+  prefixTools,
   selectTools,
+  toAnthropicTool,
+  toMcpTool,
+  validateNamespace,
   validateProvider,
   validateTags,
 } from "../src/index.js";
@@ -174,5 +178,166 @@ describe("selectTools", () => {
     expect(() =>
       selectTools(mergeProviders(), { tags: "recommended" }),
     ).toThrow(OCToolError);
+  });
+});
+
+describe("selectTools alias chains", () => {
+  it("drops an alias of a dropped alias", () => {
+    const tools = [
+      new OCTool({
+        ...BASE,
+        name: "older",
+        tags: ["recommended"],
+        deprecated: true,
+        meta: { alias_of: "old" },
+      }),
+      new OCTool({ ...BASE, name: "root", tags: ["advanced"] }),
+      new OCTool({
+        ...BASE,
+        name: "old",
+        tags: ["recommended"],
+        deprecated: true,
+        meta: { alias_of: "root" },
+      }),
+    ];
+    const selected = selectTools(listing(...tools), { tags: ["recommended"] });
+    expect(selected.allTools()).toEqual([]);
+    expect(validateProvider(selected)).toEqual([]);
+  });
+});
+
+describe("prefixTools", () => {
+  const func = (): Record<string, never> => ({});
+  const outputSchema = BASE.inputSchema;
+  const tools = [
+    new OCTool({
+      ...BASE,
+      name: "get_rows",
+      func,
+      title: "Rows",
+      outputSchema,
+    }),
+    new OCTool({
+      ...BASE,
+      name: "fetch_rows",
+      outputSchema,
+      description: "Return rows. Use get_rows instead.",
+      deprecated: true,
+      meta: { alias_of: "get_rows" },
+    }),
+  ];
+
+  it("keeps each func, is idempotent and conforms", () => {
+    const once = prefixTools(tools, "demo_");
+    expect(Object.isFrozen(once)).toBe(true);
+    expect(once.map((tool) => tool.func)).toEqual(
+      tools.map((tool) => tool.func),
+    );
+    expect(once[0]?.title).toBe("Rows");
+    expect(prefixTools(once, "demo_")).toEqual(once);
+    expect(validateNamespace(listing(...once), "demo")).toEqual([]);
+    expect(validateProvider(listing(...once))).toEqual([]);
+    for (const tool of once) {
+      expect(toMcpTool(tool)["name"]).toBe(tool.name);
+      expect(toAnthropicTool(tool)["name"]).toBe(tool.name);
+    }
+  });
+
+  it.each([
+    ["Ping the host, then ping again.", "Ping the host, then ping again."],
+    [
+      "Run `ping` first. A ping is cheap.",
+      "Run `demo_ping` first. A ping is cheap.",
+    ],
+    ["Run `ping and get_rows`.", "Run `demo_ping and demo_get_rows`."],
+    [
+      "Call get_rows, then `get_rows`.",
+      "Call demo_get_rows, then `demo_get_rows`.",
+    ],
+    ["An open ` ping is prose.", "An open ` ping is prose."],
+  ])("rewrites a one-word name only in code: %s", (text, expected) => {
+    const listed = [
+      new OCTool({ ...BASE, name: "ping", description: text }),
+      new OCTool({ ...BASE, name: "get_rows" }),
+    ];
+    expect(prefixTools(listed, "demo")[0]?.description).toBe(expected);
+  });
+
+  it.each([[["get_rows", "demo_get_rows"]], [["echo", "echo"]]])(
+    "names both sources of a collision: %j",
+    (names) => {
+      const listed = names.map((name) => new OCTool({ ...BASE, name }));
+      expect(() => prefixTools(listed, "demo")).toThrow(
+        new RegExp(names.map((name) => `"${name}"`).join(".*")),
+      );
+    },
+  );
+
+  it("rewrites only descriptions", () => {
+    const tool = new OCTool({
+      ...BASE,
+      name: "get_rows",
+      title: "Like get_rows",
+      inputSchema: {
+        type: "object",
+        title: "get_rows input",
+        properties: {
+          q: {
+            type: "string",
+            title: "get_rows",
+            description: "See get_rows.",
+          },
+        },
+        additionalProperties: false,
+      },
+      meta: { alias_of: "get_rows", note: "see get_rows" },
+    });
+    const [published] = prefixTools([tool], "demo");
+    expect(published?.title).toBe("Like get_rows");
+    expect(published?.meta).toEqual({
+      alias_of: "demo_get_rows",
+      note: "see get_rows",
+    });
+    expect(published?.inputSchema).toEqual({
+      type: "object",
+      title: "get_rows input",
+      properties: {
+        q: {
+          type: "string",
+          title: "get_rows",
+          description: "See demo_get_rows.",
+        },
+      },
+      additionalProperties: false,
+    });
+  });
+
+  it("rejects an item that is not a tool", () => {
+    expect(() =>
+      prefixTools(["get_rows"] as unknown as OCTool[], "demo_"),
+    ).toThrow(OCToolError);
+  });
+});
+
+describe("validateNamespace", () => {
+  it.each([
+    ["other_rows", 'does not start with "demo_"'],
+    ["demo_", 'the name after "demo_"'],
+    ["demo__rows", 'the name after "demo_"'],
+    ["demo_1rows", 'the name after "demo_"'],
+  ])("says which part of %s failed", (name, part) => {
+    const findings = validateNamespace(
+      listing(
+        new OCTool({ ...BASE, name: "demo_rows" }),
+        new OCTool({ ...BASE, name }),
+      ),
+      "demo",
+    );
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({
+      rule: "name_outside_namespace",
+      tool: name,
+    });
+    expect(findings[0]?.message).toContain(part);
   });
 });

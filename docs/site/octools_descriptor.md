@@ -1,6 +1,6 @@
 # The OCTool descriptor
 
-Version: **1.3.1** · Date: 2026-11-01
+Version: **1.4.0** · Date: 2026-11-09
 
 `OCTool` is a frozen descriptor of one capability a library offers to an
 agent runtime: a keyword-only dataclass in Python, a class built with
@@ -19,7 +19,7 @@ subclass in TypeScript). Policy rules (marked
 
 | Field              | Type                              | Default     | Meaning                                                                                                                                                              |
 | ------------------ | --------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`             | `str`                             | required    | Matches `^[a-z][a-z0-9_]{0,47}$`: lowercase snake_case, at most 48 characters, leaving room for a runtime prefix under the tightest common name limit (64).             |
+| `name`             | `str`                             | required    | Matches `^[a-z][a-z0-9_]{0,47}$`: lowercase snake_case, at most 48 characters counting the provider's namespace (`demo_get_rows`), leaving 16 for an agent host's routing prefix under the tightest common name limit (64).             |
 | `description`      | `str`                             | required    | Written for a model to read: what it does, when not to use it, what it returns, one caveat. Two to four sentences (*validator*); avoid abbreviations such as `e.g.`, the sentence counter splits on `.` followed by a space. |
 | `input_schema`     | `Mapping[str, Any]`               | required    | JSON Schema 2020-12 with an object root, generated from a pydantic model by `input_schema_for`. Must be strict-clean (*validator*).                                    |
 | `func`             | `Callable[..., Any]`              | required    | `func(dependency, **args)`: the injected dependency first (a client, a workspace, a sink), validated keyword arguments after. Returns a JSON object.                   |
@@ -778,7 +778,8 @@ what it loads.
 `select_tools` keeps a tool carrying any given tag, in listing order. It
 returns a provider, so listings, converters and validators work on the result.
 A deprecated alias whose `meta["alias_of"]` target is not selected is dropped,
-so the result passes `validate_provider` without a host pruning it.
+and so is an alias of a dropped alias, so the result passes `validate_provider`
+without a host pruning it. A target is never pulled in.
 To require a tag from each of two sets, nest the calls:
 
 === "Python"
@@ -801,6 +802,28 @@ well-known ones. `validate_tags(provider, allowed={"network"})`
 `TOOL_TAGS` and `allowed` as `unknown_tag`; with no `allowed` it checks against
 `TOOL_TAGS` alone. It is opt-in, and `validate_provider` does not report tags. A
 provider that groups tools with a `meta` key moves that value to `tags`.
+
+## Provider namespaces
+
+A provider publishes its tools under a namespace: the product's name, matching
+`NAMESPACE_RE` (`^[a-z][a-z0-9]{0,15}$`), then one underscore, then the tool
+name (`demo_get_rows`). Providers built for one product share its namespace.
+A provider keeps short names in its own tables and applies the namespace once
+when it builds its listing, with `prefix_tools(tools, "demo")`
+(`prefixTools`), which also rewrites references to sibling tools in
+descriptions; see the converters page.
+
+`validate_namespace(provider, "demo")` (`validateNamespace`) checks the
+convention:
+
+| Rule                     | Fires when                                                   |
+| ------------------------ | ------------------------------------------------------------ |
+| `namespace_missing`      | the namespace is empty; nothing else is checked              |
+| `namespace_pattern`      | the namespace breaks `NAMESPACE_RE`; nothing else is checked |
+| `name_outside_namespace` | a tool's name does not match `^<namespace>_[a-z][a-z0-9_]*$` (`demo_`, `demo__rows` and `demo_1rows` fail); the message says which part |
+
+It is opt-in, and `validate_provider` does not report namespaces. A consumer
+library that requires a namespace runs it in its own conformance check.
 
 ## Escape conditions
 

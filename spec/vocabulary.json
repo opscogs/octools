@@ -7,6 +7,7 @@
     "MCP_META_NAMESPACE": "com.opscogs.octools/",
     "MCP_NAME_RE": "^[A-Za-z0-9_.-]{1,128}$",
     "MIN_SENTENCES": 2,
+    "NAMESPACE_RE": "^[a-z][a-z0-9]{0,15}$",
     "NAME_RE": "^[a-z][a-z0-9_]{0,47}$",
     "SCHEMA_DIALECT": "https://json-schema.org/draft/2020-12/schema",
     "SCHEMA_ESCAPE_KEY": "schema_escape",

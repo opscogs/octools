@@ -1,0 +1,70 @@
+{
+  "description": "A sibling name with an underscore is rewritten as a whole word anywhere, in prose or in a code span.",
+  "input": {
+    "tools": [
+      {
+        "name": "get_rows",
+        "description": "Return rows of one table. Use it after list_tables.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "list_tables",
+        "description": "List every table. Call get_rows or `get_rows` next.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_get_rows",
+      "description": "Return rows of one table. Use it after acme_list_tables.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_list_tables",
+      "description": "List every table. Call acme_get_rows or `acme_get_rows` next.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

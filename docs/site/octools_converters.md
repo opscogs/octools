@@ -1,6 +1,6 @@
 # Converters
 
-Version: **1.3.1** · Date: 2026-11-01
+Version: **1.4.0** · Date: 2026-11-09
 
 The converters turn an `OCTool` into the registration object a target
 expects, as plain data: dicts in Python, plain objects in TypeScript. No
@@ -35,6 +35,74 @@ The tables below name the Python descriptor fields; the TypeScript
 `inputSchema`, `read_only_hint` is `readOnlyHint`). The output keys are
 identical in both. A prefixed name that breaks the target's pattern raises
 `OCToolError` in both packages.
+
+## Publishing behind a prefix: `prefix_tools(tools, name_prefix)`
+
+TypeScript: `prefixTools(tools, namePrefix)`.
+
+A provider publishes its tools under its namespace (`demo_get_rows`), and a
+host that adds a prefix of its own does it once, before converting, with
+`prefix_tools`. It returns renamed copies, each keeping its own `func`, so the
+host registers and dispatches by the names the agent sees.
+
+=== "Python"
+
+    ```python
+    from octools import prefix_tools, to_anthropic_tool, to_mcp_tool
+
+    published = prefix_tools(merged.all_tools(), "acme_")
+    mcp_tools = [to_mcp_tool(tool) for tool in published]
+    anthropic_tools = [to_anthropic_tool(tool) for tool in published]
+    handlers = {tool.name: tool.func for tool in published}
+    ```
+
+=== "TypeScript"
+
+    ```ts
+    import { prefixTools, toAnthropicTool, toMcpTool } from "@opscogs/octools";
+
+    const published = prefixTools(merged.allTools(), "acme_");
+    const mcpTools = published.map((tool) => toMcpTool(tool));
+    const anthropicTools = published.map((tool) => toAnthropicTool(tool));
+    ```
+
+- The prefix is lowercased, and one without a trailing underscore gets one,
+  so `"Acme"`, `"acme"` and `"acme_"` give the same names.
+- A name that already starts with the prefix counts as published and is
+  kept, so applying it twice changes nothing, and a host prefix equal to the
+  provider's namespace is a no-op. Keep bare names free of your own
+  namespace: `demo_mode_status` under `demo_` would be taken as published.
+- An empty prefix renames nothing.
+- `meta["alias_of"]` is prefixed the same way, so a deprecated alias still
+  names its target.
+- Each whole-word reference to a sibling in `description`, and in any
+  `description` inside `input_schema` or `output_schema`, becomes the
+  sibling's published name: "use `describe_table` for one table's columns"
+  becomes "use `acme_describe_table` ...". For a sibling already published,
+  its bare form counts as a reference too, so `get_rows` becomes
+  `acme_get_rows` when the listing holds `acme_get_rows`. A word is a run of
+  letters, digits and underscores, so an occurrence already prefixed, or part
+  of a longer name, is left alone, as are words that name no sibling.
+- A name with an underscore (`get_rows`) is rewritten wherever it stands as a
+  word. A one-word name (`ping`, `status`) is rewritten only inside a code
+  span, between single backticks, so "ping the server" stays as written and
+  `` `ping` `` becomes `` `acme_ping` ``. Write a one-word sibling name in
+  backticks.
+- Only descriptions are rewritten: the tool's `description` and every
+  `description` in its input and output schemas. Titles, schema `title`
+  keywords, instance data (`const`, `default`, `enum`, `examples`), property
+  names and `meta` values other than `alias_of` are not; rename a sibling
+  named there yourself.
+- A published name longer than 48 characters, or otherwise breaking
+  `NAME_RE`, raises `OCToolError`, and so do two tools that would publish
+  under one name (`get_rows` and `acme_get_rows`).
+
+The published names are unique, and every whole-word sibling reference, bare
+or prefixed, names a published tool.
+
+Call it on the whole listing a host publishes, merged providers included, so
+references between them are rewritten too. The converters' `name_prefix`
+stays plain concatenation, for a wire name only.
 
 ## MCP: `to_mcp_tool(tool, *, name_prefix="")`
 
@@ -96,8 +164,10 @@ Example:
 `name_prefix` (`namePrefix`) has the same meaning as on `to_anthropic_tool`: a server
 that publishes one provider against two targets passes a different
 prefix per target (`site_a_`, `site_b_`) so the names do not collide.
-The prefix is not recorded in `_meta`; the server that added it strips
-it before dispatching to `func`.
+The prefix is not recorded in `_meta`, and descriptions are left as they
+are. To keep sibling references and dispatch names in step with the
+published names, call `prefix_tools` instead and convert its result with no
+`name_prefix`.
 
 The reverse mapping is mechanical, and the test suite proves it: an
 `OCTool` rebuilt from `to_mcp_tool(tool)` plus the original `func`
@@ -125,9 +195,10 @@ Produces a Messages API `tools[]` entry with exactly three keys.
 | `description`  | `description`                                                                                                                     |
 | `input_schema` | `input_schema`, with every `title` and `x-` key stripped at schema level and `additionalProperties: false` added to the root if missing |
 
-The runtime supplies the namespace prefix (`demo_`, for example), which
-is why descriptor names stop at 48 characters. Property names are never
-altered, even one literally called `title`.
+A descriptor name, provider namespace included, stops at 48 characters, so
+an agent host's own routing prefix still fits under the tightest common
+limit, 64. Property names are never altered, even one literally called
+`title`.
 
 Dropped, because the API has no slot for them: `title`, `output_schema`,
 the three hints, `access` and `target`, `result_kind`, `deprecated`,

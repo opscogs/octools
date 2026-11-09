@@ -10,6 +10,7 @@ from octools import (
     OCTool,
     count_sentences,
     example,
+    validate_namespace,
     validate_provider,
     validate_tool,
 )
@@ -167,3 +168,22 @@ def test_provider_collects_tool_findings():
     assert [(f.rule, f.tool) for f in findings] == [
         ("description_sentences", "sample_tool")
     ]
+
+
+@pytest.mark.parametrize(
+    ("name", "part"),
+    [
+        ("other_rows", "does not start with 'demo_'"),
+        ("demo_", "the name after 'demo_'"),
+        ("demo__rows", "the name after 'demo_'"),
+        ("demo_1rows", "the name after 'demo_'"),
+    ],
+)
+def test_validate_namespace_says_which_part_failed(name, part):
+    class Listing:
+        def all_tools(self):
+            return (make(name="demo_rows"), make(name=name))
+
+    (finding,) = validate_namespace(Listing(), "demo")
+    assert (finding.rule, finding.tool) == ("name_outside_namespace", name)
+    assert part in finding.message

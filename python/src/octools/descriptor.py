@@ -14,8 +14,8 @@ from __future__ import annotations
 import inspect
 import re
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from dataclasses import dataclass, field
-from typing import Any, Literal, Protocol, get_args, runtime_checkable
+from dataclasses import dataclass, field, replace
+from typing import Any, Literal, Protocol, cast, get_args, runtime_checkable
 
 from octools.findings import Finding
 
@@ -30,8 +30,15 @@ the meaning of a field or value needs a new major.
 NAME_RE = re.compile(r"^[a-z][a-z0-9_]{0,47}$")
 """Tool names: lowercase snake_case, at most 48 characters.
 
-The tightest common tool-name limit is 64 characters; the 16 spare leave
-room for the runtime's namespace prefix (for example ``demo_``).
+The 48 count the provider's namespace (``demo_get_rows``). The tightest
+common tool-name limit is 64 characters; the 16 spare leave room for the
+prefix an agent host adds when it routes to a server.
+"""
+NAMESPACE_RE = re.compile(r"^[a-z][a-z0-9]{0,15}$")
+"""Provider namespaces: lowercase letters and digits, at most 16 characters.
+
+A published name is ``<namespace>_<name>``; the namespace holds no
+underscore, so the first underscore ends it.
 """
 ResultKind = Literal["records", "artifact"]
 Access = Literal["local", "remote"]
@@ -218,8 +225,12 @@ class _SelectedProvider:
             for tool in self.provider.all_tools()
             if isinstance(tool, OCTool) and self.tags.intersection(tool.tags)
         ]
-        names = {tool.name for tool in matched}
-        return tuple(tool for tool in matched if not _stranded(tool, names))
+        while True:
+            names = {tool.name for tool in matched}
+            kept = [tool for tool in matched if not _stranded(tool, names)]
+            if len(kept) == len(matched):
+                return tuple(kept)
+            matched = kept
 
 
 def _stranded(tool: OCTool, names: set[str]) -> bool:
@@ -235,11 +246,162 @@ def select_tools(provider: ToolProvider, *, tags: Iterable[str]) -> ToolProvider
     key: ``select_tools(merged, tags={"recommended"})``. Order is kept, and
     the result reads the underlying provider on every ``all_tools()`` call.
     A deprecated alias whose ``meta["alias_of"]`` target is not selected is
-    dropped, so the result passes ``validate_provider``. A bare string raises
+    dropped, and so is an alias of a dropped alias, until every kept alias
+    names a kept tool, so the result passes ``validate_provider``. A target
+    is never pulled in. A bare string raises
     ``OCToolError``, since it would match by character.
     """
     _require(not isinstance(tags, str), "tags must be an iterable of strings")
     return _SelectedProvider(provider, frozenset(tags))
+
+
+_DATA_KEYWORDS = frozenset({"const", "default", "enum", "examples"})
+"""Schema keywords whose values are instance data, never rewritten."""
+_NAME_MAPS = frozenset(
+    {"$defs", "definitions", "dependentSchemas", "patternProperties", "properties"}
+)
+"""Schema keywords whose keys are names and whose values are schemas."""
+
+
+def _rewrite_schema(node: object, rewrite: Callable[[str], str]) -> object:
+    """Return a copy of schema ``node`` with every ``description`` rewritten."""
+    if isinstance(node, Mapping):
+        out: dict[str, object] = {}
+        for key, value in node.items():
+            if key == "description" and isinstance(value, str):
+                out[key] = rewrite(value)
+            elif key in _NAME_MAPS and isinstance(value, Mapping):
+                out[key] = {
+                    name: _rewrite_schema(sub, rewrite) for name, sub in value.items()
+                }
+            elif key in _DATA_KEYWORDS:
+                out[key] = value
+            else:
+                out[key] = _rewrite_schema(value, rewrite)
+        return out
+    if isinstance(node, list | tuple):
+        return [_rewrite_schema(sub, rewrite) for sub in node]
+    return node
+
+
+_CODE_SPAN = r"`[^`]*`"
+"""A Markdown code span: text between single backticks."""
+
+
+def _word_pattern(names: Sequence[str]) -> str:
+    """Return a pattern matching any of ``names`` as a whole word, longest first."""
+    words = "|".join(re.escape(name) for name in sorted(names, key=len, reverse=True))
+    return rf"(?<![A-Za-z0-9_])(?:{words})(?![A-Za-z0-9_])"
+
+
+def _renamer(renames: Mapping[str, str]) -> Callable[[str], str]:
+    """Return a function replacing each whole-word key of ``renames`` in text.
+
+    A word is a run of ASCII letters, digits and underscores, so an occurrence
+    inside a longer name (``demo_get_rows``, ``get_rows_all``) is left alone.
+    A key holding an underscore (``get_rows``) is replaced anywhere; a key
+    without one (``ping``) only inside a code span, so a common word in prose
+    is never rewritten.
+    """
+    changed = [old for old, new in renames.items() if old != new]
+    if not changed:
+        return lambda text: text
+    everywhere = [name for name in changed if "_" in name]
+    in_code = re.compile(_word_pattern(changed))
+    scan = re.compile(
+        "|".join([_CODE_SPAN, *([_word_pattern(everywhere)] if everywhere else [])])
+    )
+
+    def replace(match: re.Match[str]) -> str:
+        """Rewrite one code span, or one name found in prose."""
+        token = match.group()
+        if token.startswith("`"):
+            return in_code.sub(lambda word: renames[word.group()], token)
+        return renames[token]
+
+    return lambda text: scan.sub(replace, text)
+
+
+def _with_prefix(name: str, name_prefix: str) -> str:
+    """Return ``name`` with ``name_prefix`` prepended unless it already starts so."""
+    return name if name.startswith(name_prefix) else f"{name_prefix}{name}"
+
+
+def prefix_tools(tools: Iterable[OCTool], name_prefix: str) -> tuple[OCTool, ...]:
+    """Return copies of ``tools`` published under ``name_prefix``.
+
+    The prefix is lowercased, and one without a trailing underscore gets one,
+    so ``"Demo"``, ``"demo"`` and ``"demo_"`` are the same prefix; ``""``
+    renames nothing. Each copy keeps its own ``func``. A name already
+    starting with the prefix counts as published and is kept, so applying it
+    twice changes nothing; a bare name must therefore not start with its own
+    namespace. ``meta["alias_of"]`` is prefixed the same way.
+
+    Every whole-word reference to a sibling, in ``description`` and in any
+    ``description`` of ``input_schema`` or ``output_schema`` (instance data
+    such as ``enum`` and ``default`` excepted), becomes the sibling's
+    published name. A reference may use the sibling's listed name or, for a
+    sibling already published, its bare form (``get_rows`` for
+    ``demo_get_rows``); an occurrence already prefixed and words that name no
+    sibling stay as they are. The published names are therefore unique, and
+    every whole-word sibling reference names a published tool.
+
+    Raises ``OCToolError`` when two tools would publish under one name, when a
+    published name is longer than 48 characters or otherwise breaks
+    ``NAME_RE``, or when an item is not an ``OCTool``. A host dispatches by
+    the returned descriptors' names.
+    """
+    name_prefix = name_prefix.lower()
+    if name_prefix and not name_prefix.endswith("_"):
+        name_prefix = f"{name_prefix}_"
+    listed = tuple(tools)
+    for item in listed:
+        _require(isinstance(item, OCTool), f"{item!r} is not an OCTool")
+    sources: dict[str, str] = {}
+    for tool in listed:
+        name = _with_prefix(tool.name, name_prefix)
+        _require(
+            bool(NAME_RE.fullmatch(name)),
+            f"tool name {name!r} does not match {NAME_RE.pattern}",
+        )
+        _require(
+            name not in sources,
+            f"tools {sources.get(name)!r} and {tool.name!r} both publish as {name!r}",
+        )
+        sources[name] = tool.name
+    renames = {source: name for name, source in sources.items()}
+    for name in sources:
+        bare = name.removeprefix(name_prefix)
+        if name_prefix and bare:
+            renames.setdefault(bare, name)
+    rename = _renamer(renames)
+    return tuple(_prefixed(tool, renames, rename, name_prefix) for tool in listed)
+
+
+def _prefixed(
+    tool: OCTool,
+    renames: Mapping[str, str],
+    rename: Callable[[str], str],
+    name_prefix: str,
+) -> OCTool:
+    """Return ``tool`` renamed, with its references and alias target rewritten."""
+    meta = tool.meta
+    alias = meta.get(ALIAS_OF_KEY)
+    if isinstance(alias, str):
+        meta = {**meta, ALIAS_OF_KEY: _with_prefix(alias, name_prefix)}
+    output_schema = tool.output_schema
+    if output_schema is not None:
+        output_schema = cast(Mapping[str, Any], _rewrite_schema(output_schema, rename))
+    return replace(
+        tool,
+        name=renames[tool.name],
+        description=rename(tool.description),
+        input_schema=cast(
+            Mapping[str, Any], _rewrite_schema(tool.input_schema, rename)
+        ),
+        output_schema=output_schema,
+        meta=meta,
+    )
 
 
 def _listed_names(provider: ToolProvider) -> list[str]:
@@ -284,6 +446,7 @@ def check_tool_listing(provider: ToolProvider) -> list[Finding]:
 __all__ = [
     "ACCESS_FALLBACK",
     "ACCESS_KINDS",
+    "NAMESPACE_RE",
     "NAME_RE",
     "RESULT_KINDS",
     "RESULT_KIND_FALLBACK",
@@ -298,5 +461,6 @@ __all__ = [
     "ToolTag",
     "check_tool_listing",
     "merge_providers",
+    "prefix_tools",
     "select_tools",
 ]

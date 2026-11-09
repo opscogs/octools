@@ -1,0 +1,70 @@
+{
+  "description": "A sibling name without an underscore is left alone in prose, so a common word is never rewritten.",
+  "input": {
+    "tools": [
+      {
+        "name": "ping",
+        "description": "Check that the cluster answers. Use it first.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "status",
+        "description": "Report the cluster state. Call it after ping to confirm status.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_ping",
+      "description": "Check that the cluster answers. Use it first.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_status",
+      "description": "Report the cluster state. Call it after ping to confirm status.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "description": "The same name listed twice is a collision too.",
+  "input": {
+    "tools": [
+      {
+        "name": "get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": {
+    "error": "duplicate_name"
+  }
+}

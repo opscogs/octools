@@ -1,0 +1,21 @@
+{
+  "description": "A prefix that breaks the descriptor name rule is an error.",
+  "input": {
+    "tools": [
+      {
+        "name": "list_tables",
+        "description": "List every table in the catalog. Use describe_table for one table's columns.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "Acme-"
+  },
+  "expected": {
+    "error": "invalid_name"
+  }
+}

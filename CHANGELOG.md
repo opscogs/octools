@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2026-11-09
+
+### Added 1.4.0
+
+- `prefix_tools` publishes tools under a prefix, in any case and with or without its underscore (`Demo`, `demo_`), idempotently, keeping each `func`, prefixing `meta["alias_of"]` and rewriting whole-word sibling references, bare or prefixed, in descriptions and in input- and output-schema descriptions (a one-word name only inside a backtick code span), and raising on two tools that would publish under one name, per OCTL-0010 (OCI-709) (OCNT-UR-0164)
+- `NAMESPACE_RE` and the opt-in `validate_namespace`, reporting `namespace_missing`, `namespace_pattern` and `name_outside_namespace`, per OCTL-0010 (OCI-709)
+
+### Fixed 1.4.0
+
+- Releases publish to PyPI with `pypa/gh-action-pypi-publish` 1.14.3, whose Sigstore chain for Trusted Publishing and attestations no longer includes a revoked CA (OCI-709)
+- `select_tools` also drops a deprecated alias of a dropped alias, so a chain of aliases whose root is not selected passes `validate_provider` (OCI-709) (OCSC-UR-0009)
+
 ## [1.3.1] - 2026-11-01
 
 ### Added 1.3.1

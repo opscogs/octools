@@ -26,6 +26,7 @@ export {
   type ToolProvider,
   checkToolListing,
   mergeProviders,
+  prefixTools,
   selectTools,
 } from "./descriptor.js";
 export {
@@ -80,6 +81,7 @@ export {
 export {
   type ValidateTagsOptions,
   countSentences,
+  validateNamespace,
   validateProvider,
   validateTags,
   validateTool,
@@ -99,6 +101,7 @@ export {
   MCP_NAME_RE,
   MIN_SENTENCES,
   NAME_RE,
+  NAMESPACE_RE,
   RESULT_KIND_FALLBACK,
   RESULT_KINDS,
   SCHEMA_DIALECT,
