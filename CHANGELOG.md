@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed 1.4.0
 
+- Releases publish to PyPI with `pypa/gh-action-pypi-publish` 1.14.3, whose Sigstore chain for Trusted Publishing and attestations no longer includes a revoked CA (OCI-709)
 - `select_tools` also drops a deprecated alias of a dropped alias, so a chain of aliases whose root is not selected passes `validate_provider` (OCI-709) (OCSC-UR-0009)
 
 ## [1.3.1] - 2026-11-01
