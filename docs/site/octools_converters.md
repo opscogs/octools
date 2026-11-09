@@ -93,8 +93,9 @@ host registers and dispatches by the names the agent sees.
   keywords, instance data (`const`, `default`, `enum`, `examples`), property
   names and `meta` values other than `alias_of` are not; rename a sibling
   named there yourself.
-- A published name that breaks `NAME_RE` raises `OCToolError`, and so do two
-  tools that would publish under one name (`get_rows` and `acme_get_rows`).
+- A published name longer than 48 characters, or otherwise breaking
+  `NAME_RE`, raises `OCToolError`, and so do two tools that would publish
+  under one name (`get_rows` and `acme_get_rows`).
 
 The published names are unique, and every whole-word sibling reference, bare
 or prefixed, names a published tool.

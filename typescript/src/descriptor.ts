@@ -442,9 +442,10 @@ function withPrefix(name: string, namePrefix: string): string {
  * published names are therefore unique, and every whole-word sibling
  * reference names a published tool.
  *
- * Throws {@link OCToolError} when an item is not an `OCTool`, a published
- * name breaks {@link NAME_RE}, or two tools would publish under one name. A
- * host dispatches by the returned descriptors' names.
+ * Throws {@link OCToolError} when two tools would publish under one name,
+ * when a published name is longer than 48 characters or otherwise breaks
+ * {@link NAME_RE}, or when an item is not an `OCTool`. A host dispatches by
+ * the returned descriptors' names.
  */
 export function prefixTools(
   tools: Iterable<OCTool>,

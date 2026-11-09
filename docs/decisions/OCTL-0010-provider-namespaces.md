@@ -102,8 +102,10 @@ renamed descriptors.
     `demo_get_rows` under `demo_`) raise `OCToolError` naming both. A host
     prefixes after merging, so `merge_providers` does not see this
     collision; `prefix_tools` must.
-  - A published name that breaks `NAME_RE`, or an item that is not an
-    `OCTool`, raises `OCToolError`.
+  - A published name longer than 48 characters, or otherwise breaking
+    `NAME_RE`, raises `OCToolError`, as does an item that is not an
+    `OCTool`. A collision and an over-long published name are the two ways
+    publishing a valid listing can fail.
   - The guarantee: the published names are unique, and every whole-word
     sibling reference, bare or prefixed, names a published tool.
 - A host that publishes a provider behind its own prefix calls
