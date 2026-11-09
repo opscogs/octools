@@ -1,0 +1,183 @@
+/* ================================================================
+   OPSCOGS BRAND THEME — Material for MkDocs
+
+   Brand colors:
+   - Midnight Blue:  #293145 (primary)
+   - Solid Brass:    #B08D57 (accent)
+   - Muted Metal:    #D8DDE3 (neutral)
+   - Steel Grey:     #B7BCC2 (secondary)
+   - Soft Silver:    #EEF0F5 (light bg)
+   - Carbon:         #000000 (black)
+
+   Brand Typography (presentations/collateral only):
+   - Headings: Roboto Slab Bold (NOT used in docs or callout displays)
+   - Body: Source Sans 3 (used in docs site via mkdocs.yml, NOT in callout displays)
+   - Code: Roboto Mono (used in docs site via mkdocs.yml)
+   ================================================================ */
+
+/* ================================================================
+   LIGHT MODE — Midnight Blue header, Brass accents
+   ================================================================ */
+
+[data-md-color-scheme="default"] {
+  /* Primary: Midnight Blue — header bar, nav highlights */
+  --md-primary-fg-color: #293145;
+  --md-primary-fg-color--light: #354158;
+  --md-primary-fg-color--dark: #1f2637;
+  --md-primary-bg-color: #ffffff;
+  --md-primary-bg-color--light: #f8f9fa;
+
+  /* Accent: Solid Brass — links, hover, selected items */
+  --md-accent-fg-color: #b08d57;
+  --md-accent-fg-color--transparent: rgba(176, 141, 87, 0.1);
+  --md-accent-bg-color: #ffffff;
+  --md-accent-bg-color--light: #fbf8f3;
+}
+
+/* ================================================================
+   DARK MODE (SLATE) — Midnight Blue header, Brass accents
+   ================================================================ */
+
+[data-md-color-scheme="slate"] {
+  /* Primary: Midnight Blue — stays consistent across modes */
+  --md-primary-fg-color: #293145;
+  --md-primary-fg-color--light: #354158;
+  --md-primary-fg-color--dark: #1f2637;
+  --md-primary-bg-color: #f1f5f9;
+  --md-primary-bg-color--light: #cbd5e1;
+
+  /* Accent: Brass — lighter variant for dark bg readability */
+  --md-accent-fg-color: #c9a96e;
+  --md-accent-fg-color--transparent: rgba(201, 169, 110, 0.1);
+
+  /* Override Material's default slate background with our neutral gray */
+  --md-default-bg-color: #1e1e1e;
+  --md-default-bg-color--light: #2a2a2a;
+  --md-default-bg-color--lighter: #2a2a2a;
+  --md-default-bg-color--lightest: #3d3d3d;
+}
+
+/* ================================================================
+   TYPOGRAPHY
+   Source Sans 3 for both headings and body — set in mkdocs.yml
+   Roboto Slab reserved for brand presentations, not docs
+   ================================================================ */
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  font-weight: 700;
+  margin-top: 0.8em;
+  margin-bottom: 0.3em;
+}
+
+.md-typeset h1 {
+  color: #111827;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* Reduce gap between header bar and page content */
+.md-main__inner {
+  margin-top: 0;
+}
+.md-content__inner {
+  padding-top: 0.5rem;
+}
+
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  color: #374151;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: #f5f5f5;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3,
+[data-md-color-scheme="slate"] .md-typeset h4,
+[data-md-color-scheme="slate"] .md-typeset h5,
+[data-md-color-scheme="slate"] .md-typeset h6 {
+  color: #d4d4d4;
+}
+
+/* ================================================================
+   CATEGORY-COLORED INLINE ICONS
+   Usage: :material-lightbulb-outline:{ .co-icon-insight }
+   ================================================================ */
+
+.co-icon-insight {
+  color: #4f46e5;
+}
+.co-icon-question {
+  color: #0891b2;
+}
+.co-icon-guidance {
+  color: #7c3aed;
+}
+.co-icon-action {
+  color: #ea580c;
+}
+.co-icon-alert {
+  color: #b91c1c;
+}
+
+[data-md-color-scheme="slate"] .co-icon-insight {
+  color: #818cf8;
+}
+[data-md-color-scheme="slate"] .co-icon-question {
+  color: #22d3ee;
+}
+[data-md-color-scheme="slate"] .co-icon-guidance {
+  color: #a78bfa;
+}
+[data-md-color-scheme="slate"] .co-icon-action {
+  color: #fb923c;
+}
+[data-md-color-scheme="slate"] .co-icon-alert {
+  color: #f87171;
+}
+
+/* ================================================================
+   LINKS — Blue for readability, brass on hover
+   ================================================================ */
+
+.md-typeset a {
+  color: #2563eb;
+}
+.md-typeset a:hover {
+  color: #b08d57;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a {
+  color: #60a5fa;
+}
+[data-md-color-scheme="slate"] .md-typeset a:hover {
+  color: #c9a96e;
+}
+
+/* ================================================================
+   BRAND REFINEMENTS
+   ================================================================ */
+
+/* Slightly warm the footer to match brand tone */
+.md-footer {
+  background-color: #293145;
+}
+
+/* Nav sidebar active indicator uses brass */
+.md-nav__link--active {
+  color: #b08d57;
+}
+
+/* Tab indicator */
+.md-tabs__link--active {
+  border-bottom-color: #b08d57;
+}
