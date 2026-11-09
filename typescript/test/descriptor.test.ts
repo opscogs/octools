@@ -243,6 +243,16 @@ describe("prefixTools", () => {
     }
   });
 
+  it.each([[["get_rows", "demo_get_rows"]], [["echo", "echo"]]])(
+    "names both sources of a collision: %j",
+    (names) => {
+      const listed = names.map((name) => new OCTool({ ...BASE, name }));
+      expect(() => prefixTools(listed, "demo")).toThrow(
+        new RegExp(names.map((name) => `"${name}"`).join(".*")),
+      );
+    },
+  );
+
   it("rejects an item that is not a tool", () => {
     expect(() =>
       prefixTools(["get_rows"] as unknown as OCTool[], "demo_"),

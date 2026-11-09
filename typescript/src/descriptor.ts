@@ -408,18 +408,23 @@ function withPrefix(name: string, namePrefix: string): string {
  *
  * The prefix is lowercased, and one without a trailing underscore gets one,
  * so `"Demo"`, `"demo"` and `"demo_"` are the same prefix; `""` renames
- * nothing. Each copy keeps its own
- * `func`. A name already starting with the prefix counts as published and
- * is kept, so applying it twice changes nothing; a bare name must therefore
- * not start with its own namespace.
- * `meta["alias_of"]` is prefixed the same way. Every whole-word occurrence
- * of a sibling's name, in `description` and in any `description` of
- * `inputSchema` or `outputSchema` (instance data such as `enum` and
- * `default` excepted),
- * becomes the sibling's published name; an occurrence already prefixed and
- * words that name no sibling stay as they are. A prefixed name that breaks
- * {@link NAME_RE}, or an item that is not an `OCTool`, throws
- * {@link OCToolError}. A host dispatches by the returned descriptors' names.
+ * nothing. Each copy keeps its own `func`. A name already starting with the
+ * prefix counts as published and is kept, so applying it twice changes
+ * nothing; a bare name must therefore not start with its own namespace.
+ * `meta["alias_of"]` is prefixed the same way.
+ *
+ * Every whole-word reference to a sibling, in `description` and in any
+ * `description` of `inputSchema` or `outputSchema` (instance data such as
+ * `enum` and `default` excepted), becomes the sibling's published name. A
+ * reference may use the sibling's listed name or, for a sibling already
+ * published, its bare form (`get_rows` for `demo_get_rows`); an occurrence
+ * already prefixed and words that name no sibling stay as they are. The
+ * published names are therefore unique, and every whole-word sibling
+ * reference names a published tool.
+ *
+ * Throws {@link OCToolError} when an item is not an `OCTool`, a published
+ * name breaks {@link NAME_RE}, or two tools would publish under one name. A
+ * host dispatches by the returned descriptors' names.
  */
 export function prefixTools(
   tools: Iterable<OCTool>,
@@ -433,14 +438,25 @@ export function prefixTools(
   }
   const octools = listed as readonly OCTool[];
   const names = octools.map((tool) => withPrefix(tool.name, prefix));
-  const renames = new Map(
-    octools.map((tool, index) => [tool.name, String(names[index])]),
-  );
-  for (const name of names) {
+  const sources = new Map<string, string>();
+  octools.forEach((tool, index) => {
+    const name = String(names[index]);
     ensure(
       NAME_RE.test(name),
       `tool name ${show(name)} does not match ${NAME_RE.source}`,
     );
+    ensure(
+      !sources.has(name),
+      `tools ${show(sources.get(name))} and ${show(tool.name)} both publish as ${show(name)}`,
+    );
+    sources.set(name, tool.name);
+  });
+  const renames = new Map([...sources].map(([name, source]) => [source, name]));
+  for (const name of sources.keys()) {
+    const bare = name.slice(prefix.length);
+    if (prefix !== "" && bare !== "" && !renames.has(bare)) {
+      renames.set(bare, name);
+    }
   }
   const rename = renamer(renames);
   return Object.freeze(

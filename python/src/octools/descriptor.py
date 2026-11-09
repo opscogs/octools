@@ -308,17 +308,23 @@ def prefix_tools(tools: Iterable[OCTool], name_prefix: str) -> tuple[OCTool, ...
 
     The prefix is lowercased, and one without a trailing underscore gets one,
     so ``"Demo"``, ``"demo"`` and ``"demo_"`` are the same prefix; ``""``
-    renames nothing. Each copy
-    keeps its own ``func``. A name already starting with the prefix counts as
-    published and is kept, so applying it twice changes nothing; a bare name
-    must therefore not start with its own namespace. ``meta["alias_of"]`` is
-    prefixed the same way. Every whole-word occurrence of a sibling's name,
-    in ``description`` and in any ``description`` of ``input_schema`` or
-    ``output_schema`` (instance data such as ``enum`` and ``default``
-    excepted), becomes the sibling's published name; an occurrence already
-    prefixed and words that name no sibling stay as they are. A prefixed name
-    that breaks ``NAME_RE``, or an item that is not an ``OCTool``, raises
-    ``OCToolError``. A host dispatches by the returned descriptors' names.
+    renames nothing. Each copy keeps its own ``func``. A name already
+    starting with the prefix counts as published and is kept, so applying it
+    twice changes nothing; a bare name must therefore not start with its own
+    namespace. ``meta["alias_of"]`` is prefixed the same way.
+
+    Every whole-word reference to a sibling, in ``description`` and in any
+    ``description`` of ``input_schema`` or ``output_schema`` (instance data
+    such as ``enum`` and ``default`` excepted), becomes the sibling's
+    published name. A reference may use the sibling's listed name or, for a
+    sibling already published, its bare form (``get_rows`` for
+    ``demo_get_rows``); an occurrence already prefixed and words that name no
+    sibling stay as they are. The published names are therefore unique, and
+    every whole-word sibling reference names a published tool.
+
+    Raises ``OCToolError`` when an item is not an ``OCTool``, a published name
+    breaks ``NAME_RE``, or two tools would publish under one name. A host
+    dispatches by the returned descriptors' names.
     """
     name_prefix = name_prefix.lower()
     if name_prefix and not name_prefix.endswith("_"):
@@ -326,12 +332,23 @@ def prefix_tools(tools: Iterable[OCTool], name_prefix: str) -> tuple[OCTool, ...
     listed = tuple(tools)
     for item in listed:
         _require(isinstance(item, OCTool), f"{item!r} is not an OCTool")
-    renames = {tool.name: _with_prefix(tool.name, name_prefix) for tool in listed}
-    for name in renames.values():
+    sources: dict[str, str] = {}
+    for tool in listed:
+        name = _with_prefix(tool.name, name_prefix)
         _require(
             bool(NAME_RE.fullmatch(name)),
             f"tool name {name!r} does not match {NAME_RE.pattern}",
         )
+        _require(
+            name not in sources,
+            f"tools {sources.get(name)!r} and {tool.name!r} both publish as {name!r}",
+        )
+        sources[name] = tool.name
+    renames = {source: name for name, source in sources.items()}
+    for name in sources:
+        bare = name.removeprefix(name_prefix)
+        if name_prefix and bare:
+            renames.setdefault(bare, name)
     rename = _renamer(renames)
     return tuple(_prefixed(tool, renames, rename, name_prefix) for tool in listed)
 

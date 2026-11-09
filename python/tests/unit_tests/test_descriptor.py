@@ -320,6 +320,14 @@ def test_prefix_tools_leaves_the_source_untouched():
     assert schema["properties"]["q"]["description"] == "See echo."
 
 
+@pytest.mark.parametrize("names", [("get_rows", "demo_get_rows"), ("echo", "echo")])
+def test_prefix_tools_names_both_sources_of_a_collision(names):
+    tools = [make(name=name) for name in names]
+    with pytest.raises(OCToolError) as error:
+        prefix_tools(tools, "demo")
+    assert all(repr(name) in str(error.value) for name in names)
+
+
 def test_prefix_tools_rejects_an_item_that_is_not_a_tool():
     with pytest.raises(OCToolError, match="not an OCTool"):
         prefix_tools([ECHO_RECORDS, "echo"], "demo_")

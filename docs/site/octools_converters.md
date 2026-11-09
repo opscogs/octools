@@ -75,14 +75,20 @@ host registers and dispatches by the names the agent sees.
 - An empty prefix renames nothing.
 - `meta["alias_of"]` is prefixed the same way, so a deprecated alias still
   names its target.
-- Each whole-word occurrence of a sibling's name in `description`, and in any
-  `description` inside `input_schema` or `output_schema`, becomes the sibling's published name:
-  "use `describe_table` for one table's columns" becomes "use
-  `acme_describe_table` ...". A word is a run of letters, digits and
+- Each whole-word reference to a sibling in `description`, and in any
+  `description` inside `input_schema` or `output_schema`, becomes the
+  sibling's published name: "use `describe_table` for one table's columns"
+  becomes "use `acme_describe_table` ...". For a sibling already published,
+  its bare form counts as a reference too, so `get_rows` becomes
+  `acme_get_rows` when the listing holds `acme_get_rows`. A word is a run of letters, digits and
   underscores, so an occurrence already prefixed, or part of a longer name, is
   left alone, as are words that name no sibling. Instance data (`const`,
   `default`, `enum`, `examples`) and property names are never rewritten.
-- A published name that breaks `NAME_RE` raises `OCToolError`.
+- A published name that breaks `NAME_RE` raises `OCToolError`, and so do two
+  tools that would publish under one name (`get_rows` and `acme_get_rows`).
+
+The published names are unique, and every whole-word sibling reference, bare
+or prefixed, names a published tool.
 
 Call it on the whole listing a host publishes, merged providers included, so
 references between them are rewritten too. The converters' `name_prefix`

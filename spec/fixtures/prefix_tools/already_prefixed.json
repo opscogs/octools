@@ -1,10 +1,10 @@
 {
-  "description": "A name that already carries the prefix is kept, and an occurrence already prefixed is not prefixed again, so applying it twice changes nothing.",
+  "description": "A name that already carries the prefix is kept, and a bare reference to it is rewritten to that name, in descriptions and schema descriptions alike.",
   "input": {
     "tools": [
       {
         "name": "acme_list_tables",
-        "description": "List every table in the catalog. Use acme_describe_table for one table's columns.",
+        "description": "List every table in the catalog. Use describe_table for one table's columns.",
         "input_schema": {
           "type": "object",
           "properties": {},
@@ -14,10 +14,16 @@
       },
       {
         "name": "describe_table",
-        "description": "Return one table's columns. Call acme_list_tables, not list_tables, first.",
+        "description": "Return one table's columns. Call list_tables, or acme_list_tables, first.",
         "input_schema": {
           "type": "object",
-          "properties": {},
+          "properties": {
+            "table": {
+              "type": "string",
+              "description": "A name list_tables returns."
+            }
+          },
+          "required": ["table"],
           "additionalProperties": false
         },
         "access": "local"
@@ -48,10 +54,16 @@
     },
     {
       "name": "acme_describe_table",
-      "description": "Return one table's columns. Call acme_list_tables, not list_tables, first.",
+      "description": "Return one table's columns. Call acme_list_tables, or acme_list_tables, first.",
       "input_schema": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "table": {
+            "type": "string",
+            "description": "A name acme_list_tables returns."
+          }
+        },
+        "required": ["table"],
         "additionalProperties": false
       },
       "access": "local",

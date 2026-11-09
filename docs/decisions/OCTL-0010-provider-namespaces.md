@@ -69,19 +69,29 @@ renamed descriptors.
   - An empty prefix renames nothing. A malformed prefix (`demo-`, `_`)
     yields names that break `NAME_RE` and raises `OCToolError`.
   - `meta["alias_of"]` is prefixed the same way.
-  - Every whole-word occurrence of a sibling's original name in `description`
-    and in any `description` inside `input_schema` or `output_schema` becomes
-    the sibling's published name. The output schema is covered because the
-    MCP converter publishes it, and its field descriptions point an agent at
-    the next call as often as the input's do. A word is a run of ASCII letters, digits and underscores,
-    so an occurrence that is already prefixed, or part of a longer name, is
+  - Every whole-word reference to a sibling in `description` and in any
+    `description` inside `input_schema` or `output_schema` becomes the
+    sibling's published name. A reference is the sibling's listed name or,
+    for a sibling already published, its bare form (`get_rows` for
+    `demo_get_rows`), so a listing that mixes published and bare tools,
+    such as a merge, ends with no reference to a tool that is not offered.
+    The output schema is covered because the MCP converter publishes it, and
+    its field descriptions point an agent at the next call as often as the
+    input's do. A word is a run of ASCII letters, digits and underscores, so
+    an occurrence that is already prefixed, or part of a longer name, is
     left alone, as are words that name no sibling.
   - Instance data in the schema (`const`, `default`, `enum`, `examples`) is
     never rewritten; under `properties`, `$defs`, `definitions`,
     `patternProperties` and `dependentSchemas` the keys are names and are
     never rewritten either.
+  - Two tools that would publish under one name (`get_rows` and
+    `demo_get_rows` under `demo_`) raise `OCToolError` naming both. A host
+    prefixes after merging, so `merge_providers` does not see this
+    collision; `prefix_tools` must.
   - A published name that breaks `NAME_RE`, or an item that is not an
     `OCTool`, raises `OCToolError`.
+  - The guarantee: the published names are unique, and every whole-word
+    sibling reference, bare or prefixed, names a published tool.
 - A host that publishes a provider behind its own prefix calls
   `prefix_tools` on the listing and registers and dispatches by the returned
   names. The converters' `name_prefix` stays plain concatenation with the
