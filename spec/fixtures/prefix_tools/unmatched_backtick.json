@@ -1,0 +1,70 @@
+{
+  "description": "Backticks pair left to right; an unpaired backtick opens no code span, so a one-word name after it stays prose while an underscore name is rewritten anywhere.",
+  "input": {
+    "tools": [
+      {
+        "name": "ping",
+        "description": "Run `ping` before `get_rows`, not `ping_all`. Odd ` text `ping here. An unclosed ` ping or get_rows stays prose.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "get_rows",
+        "description": "Return rows of one table. Use it once.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_ping",
+      "description": "Run `acme_ping` before `acme_get_rows`, not `ping_all`. Odd ` text `ping here. An unclosed ` ping or acme_get_rows stays prose.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_get_rows",
+      "description": "Return rows of one table. Use it once.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

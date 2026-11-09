@@ -1,0 +1,92 @@
+{
+  "description": "A title, a schema title and a meta value other than alias_of that name a sibling pass through unchanged; only descriptions are rewritten.",
+  "input": {
+    "tools": [
+      {
+        "name": "get_rows",
+        "description": "Return rows of one table. Call list_tables first.",
+        "input_schema": {
+          "type": "object",
+          "title": "list_tables input",
+          "properties": {
+            "table": {
+              "type": "string",
+              "title": "list_tables",
+              "description": "A name from list_tables."
+            }
+          },
+          "required": ["table"],
+          "additionalProperties": false
+        },
+        "access": "local",
+        "title": "Rows after list_tables",
+        "meta": {
+          "note": "pairs with list_tables"
+        }
+      },
+      {
+        "name": "list_tables",
+        "description": "List every table. Use it first.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_get_rows",
+      "description": "Return rows of one table. Call acme_list_tables first.",
+      "input_schema": {
+        "type": "object",
+        "title": "list_tables input",
+        "properties": {
+          "table": {
+            "type": "string",
+            "title": "list_tables",
+            "description": "A name from acme_list_tables."
+          }
+        },
+        "required": ["table"],
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": "Rows after list_tables",
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {
+        "note": "pairs with list_tables"
+      },
+      "tags": []
+    },
+    {
+      "name": "acme_list_tables",
+      "description": "List every table. Use it first.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}

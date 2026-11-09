@@ -1,0 +1,70 @@
+{
+  "description": "Siblings whose names overlap are each rewritten to their own published name, longest match first.",
+  "input": {
+    "tools": [
+      {
+        "name": "get_row",
+        "description": "Return one row. Use get_rows for many, or `get_rows` in code; get_rows_all is no tool.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      },
+      {
+        "name": "get_rows",
+        "description": "Return many rows. Use get_row for one, not get_row_by_id.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "access": "local"
+      }
+    ],
+    "name_prefix": "acme_"
+  },
+  "expected": [
+    {
+      "name": "acme_get_row",
+      "description": "Return one row. Use acme_get_rows for many, or `acme_get_rows` in code; get_rows_all is no tool.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    },
+    {
+      "name": "acme_get_rows",
+      "description": "Return many rows. Use acme_get_row for one, not get_row_by_id.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "access": "local",
+      "target": null,
+      "output_schema": null,
+      "result_kind": "records",
+      "title": null,
+      "read_only_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "deprecated": false,
+      "meta": {},
+      "tags": []
+    }
+  ]
+}
