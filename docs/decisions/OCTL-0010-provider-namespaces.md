@@ -49,6 +49,10 @@ renamed descriptors.
   first underscore ends it. Providers built for one product share its
   namespace; a collision between them is a `duplicate_name` finding on their
   merge ([OCTL-0004](./OCTL-0004-merge-providers.md)).
+- The namespace names the product. A consumer may qualify it with a vendor
+  outside tool names, as `<vendor>_<namespace>`, which is also the prefix a
+  host applies with `prefix_tools` to settle a namespace collision
+  (`acme_demo_get_rows`).
 - `NAME_RE` (48 characters) applies to the published name, namespace
   included. The 16 characters to the 64 limit stay for the prefix an agent
   host adds when it routes to a server.
@@ -57,8 +61,14 @@ renamed descriptors.
   - A prefix without a trailing underscore gets one, so a host passes the
     bare namespace (`demo`) or the namespace with its underscore (`demo_`)
     and gets the same names.
-  - A name that already starts with the prefix is kept, so applying the
-    prefix twice changes nothing.
+  - A name that already starts with the prefix counts as published and is
+    kept, so applying the prefix twice changes nothing. A bare name that
+    happens to start with the prefix (`demo_mode_status` under `demo_`) is
+    therefore indistinguishable from a published one; a provider keeps its
+    bare names free of its own namespace, which octools cannot check after
+    publication.
+  - An empty prefix renames nothing. A malformed prefix (`Demo`, `demo-`)
+    yields names that break `NAME_RE` and raises `OCToolError`.
   - `meta["alias_of"]` is prefixed the same way.
   - Every whole-word occurrence of a sibling's original name in `description`
     and in any `description` inside `input_schema` or `output_schema` becomes

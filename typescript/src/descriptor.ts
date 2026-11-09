@@ -407,8 +407,10 @@ function withPrefix(name: string, namePrefix: string): string {
  * Return copies of `tools` published under `namePrefix`.
  *
  * A prefix without a trailing underscore gets one, so `"demo"` and `"demo_"`
- * are the same prefix. Each copy keeps its own `func`; a name already
- * starting with the prefix is kept, so applying it twice changes nothing.
+ * are the same prefix, and `""` renames nothing. Each copy keeps its own
+ * `func`. A name already starting with the prefix counts as published and
+ * is kept, so applying it twice changes nothing; a bare name must therefore
+ * not start with its own namespace.
  * `meta["alias_of"]` is prefixed the same way. Every whole-word occurrence
  * of a sibling's name, in `description` and in any `description` of
  * `inputSchema` or `outputSchema` (instance data such as `enum` and
