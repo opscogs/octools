@@ -8,7 +8,7 @@
     "node": ">=22.18.0"
   },
   "dependencies": {
-    "cspell": "^10.4.0",
-    "prettier": "^3.9.10"
+    "cspell": "^10.4.1",
+    "prettier": "^3.10.1"
   }
 }
