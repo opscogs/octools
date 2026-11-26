@@ -38,12 +38,12 @@ Changelog = "https://github.com/opscogs/octools/blob/main/CHANGELOG.md"
 [project.optional-dependencies]
 dev = [
     "build == 1.6.1",
-    "ruff == 0.17.3",
+    "ruff == 0.17.4",
     "black == 26.10.1",
     "mypy == 2.4.1",
 ]
 doc = [
-    "mkdocs-material == 9.8.0",
+    "mkdocs-material == 9.8.1",
     "mkdocs-awesome-pages-plugin == 2.10.1",
     "mkdocs-macros-plugin == 1.5.0",
 ]
